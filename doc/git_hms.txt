@@ -1,0 +1,8 @@
+git@github.com:pufm2/hms.git
+https://pufm2@github.com/pufm2/hms.git
+read only : git://github.com/pufm2/hms.git
+
+github acc:
+pufm2/changeit123
+puf.se.m2@gmail.com/changeit123
+api token: 267ab2a636862c1d3a14c7b28c7f7300
