@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import puf.m2.hms.db.DatabaseAbstract;
+import puf.m2.hms.db.DatabaseImpl;
 import puf.m2.hms.model.*;
 
 public class Patient {

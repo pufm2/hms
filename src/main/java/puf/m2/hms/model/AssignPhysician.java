@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import puf.m2.hms.db.DatabaseAbstract;
+import puf.m2.hms.db.DatabaseImpl;
+
 
 public class AssignPhysician {
 

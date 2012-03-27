@@ -1,4 +1,4 @@
-package puf.m2.hms.model;
+package puf.m2.hms.db;
 
 public interface Database {
 

@@ -2,6 +2,9 @@ package puf.m2.hms.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import puf.m2.hms.db.DatabaseAbstract;
+import puf.m2.hms.db.DatabaseImpl;
 import puf.m2.hms.model.*;
 
 public class User {
