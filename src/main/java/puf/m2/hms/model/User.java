@@ -3,9 +3,8 @@ package puf.m2.hms.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import puf.m2.hms.db.DatabaseAbstract;
+import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
-import puf.m2.hms.model.*;
 
 public class User {
 
@@ -28,7 +27,7 @@ public class User {
 
         boolean result = false;
 
-        DatabaseAbstract db = new DatabaseImpl();
+        Database db = new DatabaseImpl();
         try {
             db.createConnection();
             db.createStatement();

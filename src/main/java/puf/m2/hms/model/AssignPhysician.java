@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
-import puf.m2.hms.db.DatabaseAbstract;
+import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
 
 
@@ -18,14 +18,14 @@ public class AssignPhysician {
     private Date startTime;
     private Date endDate;
 
-    DatabaseAbstract db;
+    Database db;
     Statement st;
     String query;
 
 
     public AssignPhysician(int assignID, int patientID, int physicianID,
             Date startDate, Date endTime, Date startTime, Date endDate,
-            DatabaseAbstract db, Statement st, String query) {
+            Database db, Statement st, String query) {
 
         this.assignID = assignID;
         this.patientID = patientID;
@@ -46,7 +46,7 @@ public class AssignPhysician {
     }
 
 
-    public AssignPhysician(DatabaseAbstract db, Statement st, String query) {
+    public AssignPhysician(Database db, Statement st, String query) {
 
         this.db = db;
         this.st = st;

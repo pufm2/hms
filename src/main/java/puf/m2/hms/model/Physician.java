@@ -3,17 +3,17 @@ package puf.m2.hms.model;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import puf.m2.hms.db.DatabaseAbstract;
+import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
 
 
 public class Physician {
 
-    DatabaseAbstract db;
+    Database db;
     Statement st;
     String query;
 
-    public Physician(DatabaseAbstract db) {
+    public Physician(Database db) {
         this.db = db;
         query = "";
     }
