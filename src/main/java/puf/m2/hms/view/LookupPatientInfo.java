@@ -94,14 +94,12 @@ public class LookupPatientInfo extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if ("btnLookup".equals(e.getActionCommand())) {
-			// Create patient object
-			Patient patient = new Patient();
 			// Return patient ResulSet
 			int patientID = Integer.parseInt(txtPatientID.getText());
 			String patientName = txtFullname.getText();
 			
 			try {
-				ResultSet rs = patient.lookupPatient(patientID, patientName);
+				ResultSet rs = Patient.lookupPatient(patientID, patientName);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

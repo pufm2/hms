@@ -6,9 +6,6 @@ import java.sql.Statement;
 
 public interface Database {
 
-    // Get connection to database
-    public void createConnection(String jdbcDriver, String dbUrl) throws SQLException;
-
     public void createConnection() throws SQLException;
 
     // Get statement object from connection

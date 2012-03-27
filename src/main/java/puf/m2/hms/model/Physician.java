@@ -9,20 +9,7 @@ import puf.m2.hms.db.DatabaseImpl;
 
 public class Physician {
 
-    Database db;
-    Statement st;
-    String query;
-
-    public Physician(Database db) {
-        this.db = db;
-        query = "";
-    }
-
-    public Physician() {
-
-        this.db = new DatabaseImpl();
-        query = "";
-    }
+    private static Database db = DatabaseImpl.defaultDb;
 
     public int updateStatus(String physician) throws SQLException {
 
@@ -30,8 +17,8 @@ public class Physician {
         int physicianID = Integer.parseInt(physician);
         // Update physician avaiable
         db.createConnection();
-        st = db.createStatement();
-        query = "UPDATE Physician" + " SET Avaiable = Not(Avaiable)"
+        Statement st = db.createStatement();
+        String query = "UPDATE Physician" + " SET Avaiable = Not(Avaiable)"
                 + " WHERE PhysicianID = " + physicianID;
         result = st.executeUpdate(query);
         db.closeConnection();

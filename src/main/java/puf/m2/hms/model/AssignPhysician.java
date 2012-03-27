@@ -18,14 +18,11 @@ public class AssignPhysician {
     private Date startTime;
     private Date endDate;
 
-    Database db;
-    Statement st;
-    String query;
+    private static Database db = DatabaseImpl.defaultDb;
 
 
     public AssignPhysician(int assignID, int patientID, int physicianID,
-            Date startDate, Date endTime, Date startTime, Date endDate,
-            Database db, Statement st, String query) {
+            Date startDate, Date endTime, Date startTime, Date endDate) {
 
         this.assignID = assignID;
         this.patientID = patientID;
@@ -34,30 +31,17 @@ public class AssignPhysician {
         this.endTime = endTime;
         this.startTime = startTime;
         this.endDate = endDate;
-        this.db = db;
-        this.st = st;
-        this.query = query;
     }
 
     public AssignPhysician() {
-
-        db = new DatabaseImpl();
-        query = "";
-    }
-
-
-    public AssignPhysician(Database db, Statement st, String query) {
-
-        this.db = db;
-        this.st = st;
-        this.query = query;
+        
     }
 
     public int insertNewAssign(String patientID, String physicianID) throws SQLException {
         
         db.createConnection();
-        st = db.createStatement();
-        query = "INSERT INTO Assign (PatientID, PhysicianID) " + " VALUES ( "
+        Statement st = db.createStatement();
+        String query = "INSERT INTO Assign (PatientID, PhysicianID) " + " VALUES ( "
                 + patientID + "," + physicianID + ")";
         int result = st.executeUpdate(query);
 

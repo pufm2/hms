@@ -7,31 +7,22 @@ import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
 
 public class User {
-
-    ResultSet rs;
-
+    
+    private static Database db = DatabaseImpl.defaultDb;
+    
     private String username;
     private String password;
     private String useremail;
     private String usertypeCode;
-    
-    public User(ResultSet rs) {
-        this.rs = rs;
-    }
-
-    public User() {
-
-    }
 
     public boolean login(String username, String password) {
 
         boolean result = false;
 
-        Database db = new DatabaseImpl();
         try {
             db.createConnection();
             db.createStatement();
-            rs = db.getResultSet("SELECT username FROM User WHERE username='"
+            ResultSet rs = db.getResultSet("SELECT username FROM User WHERE username='"
                     + username + "' " + "and password = '" + password + "'");
 
             db.closeConnection();

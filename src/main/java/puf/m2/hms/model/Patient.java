@@ -12,76 +12,58 @@ import puf.m2.hms.db.DatabaseImpl;
 
 public class Patient {
 
-    Database db;
-    ResultSet rs;
-    String query = "";
+    private static Database db = DatabaseImpl.defaultDb;
+    
+    private ResultSet rs;
+    private String query;
 
-    int patientID;
-    String patientName;
-    String patientBirthdate;
-    String patientAddress;
-    int patientSex;
-    String patientPhone;
-    String patientBiographicHealth;
+    private int id;
+    private String name;
+    private String dateOfBirth;
+    private String address;
+    private int sex;
+    private String phone;
+    private String biographicHealth;
 
-    public Patient(int patientID, String patientName,
-            String patientBirthdate, String patientAddress, int patientSex,
-            String patientPhone, String patientBiographicHealth) {
-
-        this.patientID = patientID;
-        this.patientName = patientName;
-        this.patientBirthdate = patientBirthdate;
-        this.patientAddress = patientAddress;
-        this.patientSex = patientSex;
-        this.patientPhone = patientPhone;
-        this.patientBiographicHealth = patientBiographicHealth;
-
-        db = new DatabaseImpl();
-    }
-
-    // Constructor
-    public Patient() {
-
-        this.patientID = 0;
-        this.patientName = "";
-        this.patientBirthdate = "";
-        this.patientAddress = "";
-        this.patientSex = 0;
-        this.patientPhone = "";
-        this.patientBiographicHealth = "";
-
-        db = new DatabaseImpl();
+    public Patient(int id,
+            String name, String dateOfBirth, String address, int sex,
+            String phone, String biographicHealth) {
+        this.id = id;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.sex = sex;
+        this.phone = phone;
+        this.biographicHealth = biographicHealth;
     }
 
     public int registerNewPatient() throws SQLException {
 
         int result = 0;
-
         db.createConnection();
         Statement st = db.createStatement();
 
         // Check if PatientID exist in database or not
-        if (checkExistPatient(patientID))
+        if (checkExistPatient(id))
             // patientID already exists in database
             return -1;
         else {
             // insert new patient to database
-            query = "INSERT INTO Patient (patientID, patientName, patientBirthdate, patientAddress,"
-                    + "patientSex, patientPhone, patientBiographicHealth) VALUES ("
-                    + this.patientID
+            query = "INSERT INTO Patient (id, name, dateOfBirth, address,"
+                    + "sex, phone, biographicHealth) VALUES ("
+                    + this.id
                     + ",'"
-                    + this.patientName
+                    + this.name
                     + "','"
-                    + this.patientBirthdate
+                    + this.dateOfBirth
                     + "','"
-                    + this.patientAddress
+                    + this.address
                     + "',"
-                    + this.patientSex
+                    + this.sex
                     + ",'"
-                    + this.patientPhone
+                    + this.phone
                     + "','"
-                    + this.patientBiographicHealth + "')";
-            // System.out.println(query);
+                    + this.biographicHealth + "')";
             result = st.executeUpdate(query); // result != 0 is sucess
         }
 
@@ -114,8 +96,7 @@ public class Patient {
         db.createConnection();
         db.createStatement();
 
-        query = "SELECT * FROM Patient WHERE PatientID = " + patientID + ")";
-        System.out.println(query);
+        query = "SELECT * FROM Patient WHERE PatientID = " + id + ")";
         rs = db.getResultSet(query);
 
         // PatientID exist in database
@@ -155,18 +136,18 @@ public class Patient {
     }
 
     public void setPatientID(int newPatientID) {
-        this.patientID = newPatientID;
+        this.id = newPatientID;
     }
 
     public int getPatientID() {
-        return patientID;
+        return id;
     }
 
-    public ResultSet lookupPatient(int patientID, String patientName) throws SQLException {
+    public static ResultSet lookupPatient(int patientID, String patientName) throws SQLException {
 
         ResultSet result = null;
 
-        query = "SELECT * FROM Patient WHERE PatientID = " + patientID
+        final String query = "SELECT * FROM Patient WHERE PatientID = " + patientID
                 + " AND PatientName = '" + patientName + "'";
 
         // MUST BE CHANGED

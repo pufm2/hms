@@ -22,9 +22,9 @@ public class AssignNurse extends JPanel implements ActionListener{
 	private JComboBox cboPatientID, cboAvaiableNurse;
 	private JButton btnMakeAssign;
 
-	Database db = new DatabaseImpl();
-	ResultSet rs = null;
-	String query = "";
+	private static Database db = DatabaseImpl.defaultDb;
+	private ResultSet rs = null;
+	private String query;
 	
 	public AssignNurse(){
 		
