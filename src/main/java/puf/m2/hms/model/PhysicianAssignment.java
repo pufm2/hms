@@ -8,7 +8,7 @@ import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
 
 
-public class AssignPhysician {
+public class PhysicianAssignment {
 
     private int assignID;
     private int patientID;
@@ -21,7 +21,7 @@ public class AssignPhysician {
     private static Database db = DatabaseImpl.defaultDb;
 
 
-    public AssignPhysician(int assignID, int patientID, int physicianID,
+    public PhysicianAssignment(int assignID, int patientID, int physicianID,
             Date startDate, Date endTime, Date startTime, Date endDate) {
 
         this.assignID = assignID;
@@ -33,7 +33,7 @@ public class AssignPhysician {
         this.endDate = endDate;
     }
 
-    public AssignPhysician() {
+    public PhysicianAssignment() {
         
     }
 

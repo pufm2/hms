@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
-import puf.m2.hms.model.AssignPhysician;
+import puf.m2.hms.model.PhysicianAssignment;
 import puf.m2.hms.model.Physician;
 
 public class AssignNurse extends JPanel implements ActionListener{
@@ -112,7 +112,7 @@ public class AssignNurse extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		if ("Make assign".equals(e.getActionCommand())) {
-			AssignPhysician assignPhysician = new AssignPhysician();
+			PhysicianAssignment assignPhysician = new PhysicianAssignment();
 			int insertResult=-1;
 			int updateResult=-1;
 			
