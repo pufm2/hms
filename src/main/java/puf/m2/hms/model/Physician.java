@@ -1,32 +1,27 @@
-package puf.m2.hms.controller;
+package puf.m2.hms.model;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import puf.m2.hms.model.DatabaseAbstract;
-import puf.m2.hms.model.DatabaseImpl;
 
-public class PhysicianImpl extends PhysicianAbstract {
+public class Physician {
 
     DatabaseAbstract db;
     Statement st;
     String query;
 
-    public PhysicianImpl(DatabaseAbstract db) {
-        super();
+    public Physician(DatabaseAbstract db) {
         this.db = db;
         query = "";
     }
 
-    public PhysicianImpl() {
-        super();
+    public Physician() {
+
         this.db = new DatabaseImpl();
         query = "";
     }
 
-    @Override
-    public int updateStatus(String physician) throws ClassNotFoundException,
-            SQLException {
+    public int updateStatus(String physician) throws SQLException {
 
         int result = -1;
         int physicianID = Integer.parseInt(physician);

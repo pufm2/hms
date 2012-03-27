@@ -1,4 +1,4 @@
-package puf.m2.hms.controller;
+package puf.m2.hms.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import puf.m2.hms.model.*;
 
-public class PatientImpl extends PatientAbstract {
+public class Patient {
 
     DatabaseAbstract db;
     ResultSet rs;
@@ -23,11 +23,10 @@ public class PatientImpl extends PatientAbstract {
     String patientPhone;
     String patientBiographicHealth;
 
-    // Constructor
-    public PatientImpl(int patientID, String patientName,
+    public Patient(int patientID, String patientName,
             String patientBirthdate, String patientAddress, int patientSex,
             String patientPhone, String patientBiographicHealth) {
-        super();
+
         this.patientID = patientID;
         this.patientName = patientName;
         this.patientBirthdate = patientBirthdate;
@@ -40,8 +39,8 @@ public class PatientImpl extends PatientAbstract {
     }
 
     // Constructor
-    public PatientImpl() {
-        super();
+    public Patient() {
+
         this.patientID = 0;
         this.patientName = "";
         this.patientBirthdate = "";
@@ -53,8 +52,7 @@ public class PatientImpl extends PatientAbstract {
         db = new DatabaseImpl();
     }
 
-    @Override
-    public int registerNewPatient() throws ClassNotFoundException, SQLException {
+    public int registerNewPatient() throws SQLException {
 
         int result = 0;
 
@@ -90,8 +88,7 @@ public class PatientImpl extends PatientAbstract {
         return result; // 0 is okey
     }
 
-    protected boolean checkExistPatient(int patientID)
-            throws ClassNotFoundException, SQLException {
+    public boolean checkExistPatient(int patientID) throws SQLException {
 
         boolean result = false;
         String query = "";
@@ -110,9 +107,7 @@ public class PatientImpl extends PatientAbstract {
         return result;
     }
 
-    @Override
-    protected ArrayList<Object> lookupPatientInformation(int PatientID)
-            throws ClassNotFoundException, SQLException {
+    public ArrayList<Object> lookupPatientInformation(int PatientID) throws SQLException {
 
         ArrayList<Object> result = null;
         db.createConnection();
@@ -140,7 +135,7 @@ public class PatientImpl extends PatientAbstract {
         return result;
     }
 
-    public int getNewPatientID() throws ClassNotFoundException, SQLException {
+    public int getNewPatientID() throws SQLException {
 
         int result = 0;
         db.createConnection();
@@ -166,8 +161,7 @@ public class PatientImpl extends PatientAbstract {
         return patientID;
     }
 
-    public ResultSet lookupPatient(int patientID, String patientName)
-            throws SQLException, ClassNotFoundException {
+    public ResultSet lookupPatient(int patientID, String patientName) throws SQLException {
 
         ResultSet result = null;
 

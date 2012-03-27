@@ -1,16 +1,14 @@
-package puf.m2.hms.controller;
+package puf.m2.hms.model;
 
-public abstract class UserTypeAbstract implements UserType {
+public class UserType {
 
     private String userTypeCode;
     private String userTypeName;
+    
+    public UserType(String userTypeCode, String userTypeName) {
 
-    public UserTypeAbstract(String userTypeCode, String userTypeName) {
-        super();
-        this.userTypeCode = userTypeCode;
-        this.userTypeName = userTypeName;
     }
-
+    
     public String getUserTypeCode() {
         return userTypeCode;
     }
