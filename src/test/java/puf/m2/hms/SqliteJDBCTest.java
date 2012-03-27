@@ -9,11 +9,18 @@ import java.sql.Statement;
 import org.junit.Test;
 
 public class SqliteJDBCTest {
+    static {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
     
     @Test
     public void testExsitingDb() throws ClassNotFoundException {
         // load the sqlite-JDBC driver using the current class loader
-        Class.forName("org.sqlite.JDBC");
+        //Class.forName("org.sqlite.JDBC");
 
         Connection connection = null;
         try {
