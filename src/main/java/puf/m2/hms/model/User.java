@@ -17,8 +17,6 @@ public class User {
 
     public boolean login(String username, String password) {
 
-        boolean result = false;
-
         try {
             db.createConnection();
             db.createStatement();
@@ -27,11 +25,12 @@ public class User {
 
             db.closeConnection();
             // if (rs==null) then login unsucessful
-            return (rs != null);
+            while (rs.next())
+            	return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
+        return false;
     }
     
     public String getUsername() {

@@ -88,7 +88,7 @@ public class LoginPanel extends JPanel implements ActionListener{
 			}
 			else{
 				// login unsuccessful
-				System.out.println("Unsucessful");
+				JOptionPane.showMessageDialog(null, "Login fail, please retype username and password");
 			}
 		}
 	}
