@@ -82,7 +82,7 @@ public class LoginPanel extends JPanel implements ActionListener{
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Receptionist role", new MainView());
+						Utils.createAndShowGUI("Receptionist role", new MainViewTab());
 					}
 				});
 			}
