@@ -146,7 +146,7 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 
 	public int deleteMedicalRecord(){
 		/*
-		 * Return 1 if deelete successful
+		 * Return 1 if delete successful
 		 * Otherwise, return 0
 		 */
 		int result = 0;
