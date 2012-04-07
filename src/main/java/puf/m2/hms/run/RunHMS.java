@@ -17,6 +17,7 @@ public class RunHMS {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Utils.createAndShowGUI("Login", new LoginPanel());
+				//Utils.createAndShowGUI("Login", new NurseView());
 			}
 		});
 	}

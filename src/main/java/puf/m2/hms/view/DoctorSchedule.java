@@ -7,14 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.view.datechooser.JDateChooser;
 
-
-
-public class RegisterNewPatient extends JPanel implements ActionListener{
+public class DoctorSchedule extends JPanel implements ActionListener{
 	/**
 	 * 
 	 */
@@ -27,7 +32,7 @@ public class RegisterNewPatient extends JPanel implements ActionListener{
 	private JRadioButton rbMale, rbFemale;
 	private JDateChooser dateChooser = new JDateChooser();
 
-	public RegisterNewPatient(){
+	public DoctorSchedule(){
 
 		this.lblPatientName = new JLabel("Full name:");
 		this.lblPatientBirthDate = new JLabel("Birthdate:");
@@ -79,6 +84,7 @@ public class RegisterNewPatient extends JPanel implements ActionListener{
 		c.gridy = 2; // row 2
 		this.add(this.lblPatientBirthDate, c);
 
+		   //---------------Them vao phan combo box sau
 	    c.gridwidth = 1;
 	    c.gridx = 1; // column 0
 	    c.gridy = 2; // row 2
@@ -143,36 +149,6 @@ public class RegisterNewPatient extends JPanel implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Register".equals(e.getActionCommand())){
-
-			int patientSex;
-			patientSex = "Male".equals(e.getActionCommand())?0:1; //If Male then 0
-			
-			// Create Patient object
-			Patient patient = new Patient(0, txtPatientName.getText(), txtPatientBirthDate.getText(), 
-					txtPatientAddress.getText(), patientSex, txtPatientPhone.getText(), txtBiographicHealth.getText());
-			
-			// Generate new patientID
-			int newPatientID = -1;
-			try {
-				newPatientID = patient.getNewPatientID();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			patient.setPatientID(newPatientID); 
-
-			// Save patient information to database
-			int regiterSuccess=-1;
-			try {
-				regiterSuccess = patient.registerNewPatient();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if (regiterSuccess!=0)
-				JOptionPane.showMessageDialog(null, "Saved patient's information with new patient ID is " + patient.getPatientID());
-			else
-				JOptionPane.showMessageDialog(null, "Can not save patient's information");
-		}
+		
 	}
 }

@@ -36,6 +36,10 @@ public class Patient {
         this.phone = phone;
         this.biographicHealth = biographicHealth;
     }
+    
+    public Patient(int id){
+    	this.id = id;
+    }
 
     public int registerNewPatient() throws SQLException {
 
@@ -161,5 +165,10 @@ public class Patient {
         db.closeConnection();
         return result;
     }
+
+	public boolean isExist() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

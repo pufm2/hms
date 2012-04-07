@@ -1,110 +1,86 @@
 package puf.m2.hms.model;
 
-import java.util.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import puf.m2.hms.db.Database;
+import puf.m2.hms.db.DatabaseImpl;
 
 public class MedicalRecord {
 
     private int recordID;
     private int patientID;
-    private String patientName;
-    private String patientSex;
-    private String patientAddress;
-    private Date patientBirthDate;
-    private String patientPhone;
-    private String patientBiographicHealth;
+    private String dateAffect;
+    private String recordDetail;
     
-    public MedicalRecord(int recordID, int patientID, String patientName,
-            String patientSex, String patientAddress, Date patientBirthDate,
-            String patientPhone, String patientBiographicHealth) {
-        this.recordID = recordID;
-        this.patientID = patientID;
-        this.patientName = patientName;
-        this.patientSex = patientSex;
-        this.patientAddress = patientAddress;
-        this.patientBirthDate = patientBirthDate;
-        this.patientPhone = patientPhone;
-        this.patientBiographicHealth = patientBiographicHealth;
+    Database db = DatabaseImpl.defaultDb;
+	String query = "";
+	ResultSet rs;
+
+	public MedicalRecord(int patientID, String dateAffect, String recordDetail) {
+        // recordId is auto number
+    	this.patientID = patientID;
+        this.dateAffect = dateAffect;
+        this.recordDetail = recordDetail;
     }
 
-    public int getRecordID() {
-        return recordID;
+    public MedicalRecord() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public int insertMedicalRecord() throws SQLException {
+    	int result = 0;
+    	
+    	db.createConnection();
+		db.createStatement();
+		Statement st = db.createStatement();
+		
+		query = " INSERT INTO MedicalRecord (PatientID, DateAffect, RecordDetail)" +
+				" VALUES (" + patientID + ",'" + dateAffect + "','" + recordDetail + "')";
+		
+		st.executeUpdate(query);
+		db.closeConnection();
+		// Add more statement to check status of insert
+		
+		
+		return result;
     }
 
-    public int getPatientID() {
-        return patientID;
+    public int updateMedicalRecord() throws SQLException {
+    	int result = 0;
+    	
+    	db.createConnection();
+		db.createStatement();
+		Statement st = db.createStatement();
+		
+		query = " UPDATE MedicalRecord " +
+				" SET 	dateAffect = " + dateAffect + "," +
+				" 		recordDetail = " + recordDetail +
+				" WHERE recordID = " + recordID +
+					" AND patientID = " + patientID;
+		
+		st.executeUpdate(query);
+		// Add more statement to check status of update
+		db.closeConnection();
+		
+		
+		return result;
     }
 
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public String getPatientSex() {
-        return patientSex;
-    }
-
-    public String getPatientAddress() {
-        return patientAddress;
-    }
-
-    public Date getPatientBirthDate() {
-        return patientBirthDate;
-    }
-
-    public String getPatientPhone() {
-        return patientPhone;
-    }
-
-    public String getPatientBiographicHealth() {
-        return patientBiographicHealth;
-    }
-
-    public void setRecordID(int recordID) {
-        this.recordID = recordID;
-    }
-
-    public void setPatientID(int patientID) {
-        this.patientID = patientID;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public void setPatientSex(String patientSex) {
-        this.patientSex = patientSex;
-    }
-
-    public void setPatientAddress(String patientAddress) {
-        this.patientAddress = patientAddress;
-    }
-
-    public void setPatientBirthDate(Date patientBirthDate) {
-        this.patientBirthDate = patientBirthDate;
-    }
-
-    public void setPatientPhone(String patientPhone) {
-        this.patientPhone = patientPhone;
-    }
-
-    public void setPatientBiographicHealth(String patientBiographicHealth) {
-        this.patientBiographicHealth = patientBiographicHealth;
-    }
-
-    public void save() {
+    public int deleteMedicalRecord() {
+        int result = 0;
+		// Add more statement to check status of update
         
-        
-    }
-
-    public void update() {
-        
-        
-    }
-
-    public void remove() {
-        
-        
+		return result;
     }
     
-    
-    
+    public ResultSet loadListOfPatient() throws SQLException{
+    	db.createConnection();
+		db.createStatement();
+		
+		query = "SELECT Distinct(PatientID) FROM Patient";
+		rs = db.getResultSet(query);
+				
+		return rs;
+	}    
 }

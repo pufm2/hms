@@ -14,6 +14,7 @@ public class DatabaseImpl implements Database {
     private static final String DB_URL = "jdbc:sqlite:HMS.db";
     
     private static Map<String, Database> databasePool;
+    
     public static Database defaultDb;
     static {
         databasePool = new HashMap<String, Database>();

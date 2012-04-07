@@ -15,22 +15,26 @@ public class User {
     private String useremail;
     private String usertypeCode;
 
-    public boolean login(String username, String password) {
-
+    public String login(String username, String password) {
+    	
+    	String result = "";
         try {
             db.createConnection();
             db.createStatement();
-            ResultSet rs = db.getResultSet("SELECT username FROM User WHERE username='"
+            ResultSet rs = db.getResultSet("SELECT usertypecode FROM User WHERE username='"
                     + username + "' " + "and password = '" + password + "'");
 
-            db.closeConnection();
+            
             // if (rs==null) then login unsucessful
             while (rs.next())
-            	return true;
+            	result = rs.getString("usertypecode");
+            
+            db.closeConnection();           
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+         
+        return result;
     }
     
     public String getUsername() {

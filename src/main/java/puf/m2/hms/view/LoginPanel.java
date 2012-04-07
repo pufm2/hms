@@ -77,16 +77,38 @@ public class LoginPanel extends JPanel implements ActionListener{
 			String password = this.txtPassword.getText();
 
 			User userImpl = new User();
-			if (userImpl.login(username, password)){
-				// login successful, show "Main view" form
+			
+			String userType = "";
+			userType = userImpl.login(username, password);
+			
+			if (userType.equals("receptionist")){
+				// login successful, show "Main view" form of receptionist
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Receptionist role", new MainViewTab());
+						Utils.createAndShowGUI("Receptionist role", new ReceptionistView());
 					}
 				});
 			}
-			else{
+			else if (userType.equals("nurse")){
+				// login successful, show "Main view" form of nurse
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						UIManager.put("swing.boldMetal", Boolean.FALSE);
+						Utils.createAndShowGUI("Nurse role", new NurseView());
+					}
+				});
+			}
+			else if (userType.equals("doctor")){
+				// login successful, show "Main view" form of doctor
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						UIManager.put("swing.boldMetal", Boolean.FALSE);
+						Utils.createAndShowGUI("Doctor role", new DoctorView());
+					}
+				});
+			}
+			else {
 				// login unsuccessful
 				JOptionPane.showMessageDialog(null, "Login fail, please retype username and password");
 			}

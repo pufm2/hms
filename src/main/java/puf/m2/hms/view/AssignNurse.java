@@ -91,9 +91,11 @@ public class AssignNurse extends JPanel implements ActionListener{
 		db.createStatement();
 		
 		query = "SELECT Distinct(PatientID) FROM Patient";
+		String patientID;
 		rs = db.getResultSet(query);
 		while (rs.next()){
-			cboPatientID.addItem(rs.getString("PatientID"));
+			patientID = rs.getString("PatientID");
+			cboPatientID.addItem(patientID);
 		}
 
 		// Fill nurseID
@@ -131,7 +133,6 @@ public class AssignNurse extends JPanel implements ActionListener{
 				physicianIDToUpdate = cboAvaiableNurse.getSelectedItem().toString();
 				updateResult = physician.updateStatus(physicianIDToUpdate);
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
