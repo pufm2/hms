@@ -27,11 +27,11 @@ public class DatabaseImpl implements Database {
 
 	private String dbUrl;
     
-    private Connection cnn;
+	public Connection cnn;
 	private Statement statement;
 	private ResultSet rs;
     
-    private DatabaseImpl(String dbUrl) {
+  public DatabaseImpl(String dbUrl) {
         super();
         this.dbUrl = dbUrl;
     }
