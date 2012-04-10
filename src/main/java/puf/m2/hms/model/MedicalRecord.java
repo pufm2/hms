@@ -13,9 +13,7 @@ public class MedicalRecord {
     private String dateAffect;
     private String recordDetail;
     
-    Database db = DatabaseImpl.defaultDb;
-	String query = "";
-	ResultSet rs;
+    private Database db = DatabaseImpl.defaultDb;
 
 	public MedicalRecord(int patientID, String dateAffect, String recordDetail) {
         // recordId is auto number
@@ -25,61 +23,45 @@ public class MedicalRecord {
     }
 
     public MedicalRecord() {
-		// TODO Auto-generated constructor stub
+
 	}
 
-	public int insertMedicalRecord() throws SQLException {
-    	int result = 0;
+	public void insertMedicalRecord() throws SQLException {
     	
     	db.createConnection();
-		db.createStatement();
-		Statement st = db.createStatement();
 		
-		query = " INSERT INTO MedicalRecord (PatientID, DateAffect, RecordDetail)" +
+		String query = "INSERT INTO MedicalRecord (PatientID, DateAffect, RecordDetail)" +
 				" VALUES (" + patientID + ",'" + dateAffect + "','" + recordDetail + "')";
 		
-		st.executeUpdate(query);
+		db.executeUpdate(query);
 		db.closeConnection();
-		// Add more statement to check status of insert
-		
-		
-		return result;
+
     }
 
-    public int updateMedicalRecord() throws SQLException {
-    	int result = 0;
-    	
+    public void updateMedicalRecord() throws SQLException {
+
     	db.createConnection();
-		db.createStatement();
-		Statement st = db.createStatement();
 		
-		query = " UPDATE MedicalRecord " +
+		String query = "UPDATE MedicalRecord " +
 				" SET 	dateAffect = " + dateAffect + "," +
 				" 		recordDetail = " + recordDetail +
 				" WHERE recordID = " + recordID +
 					" AND patientID = " + patientID;
 		
-		st.executeUpdate(query);
-		// Add more statement to check status of update
+		db.executeUpdate(query);
 		db.closeConnection();
-		
-		
-		return result;
+
     }
 
-    public int deleteMedicalRecord() {
-        int result = 0;
-		// Add more statement to check status of update
-        
-		return result;
+    public void deleteMedicalRecord() {
+
     }
     
     public ResultSet loadListOfPatient() throws SQLException{
     	db.createConnection();
-		db.createStatement();
 		
-		query = "SELECT Distinct(PatientID) FROM Patient";
-		rs = db.getResultSet(query);
+		String query = "SELECT Distinct(PatientID) FROM Patient";
+		ResultSet rs = db.executeQuery(query);
 				
 		return rs;
 	}    

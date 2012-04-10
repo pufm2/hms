@@ -116,32 +116,21 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 		}
 	}
 
-	public int insertMedicalRecord() throws SQLException{
-		/*
-		 * Return 1 if insert successful
-		 * Otherwise, return 0
-		 */
-		int result = 0;
+	public void insertMedicalRecord() throws SQLException{
 		
-		medicalRecord = new MedicalRecord(Integer.parseInt(cboPatientID.getSelectedItem().toString()), txtDateAffect.getText(), txtRecordDetail.getText());
-		result = medicalRecord.insertMedicalRecord();
+		medicalRecord = new MedicalRecord(Integer.parseInt(cboPatientID.getSelectedItem().toString()),
+		        txtDateAffect.getText(), txtRecordDetail.getText());
+		medicalRecord.insertMedicalRecord();
 		
 		JOptionPane.showMessageDialog(null, "Inserted medical record");
-		
-		return result;
+
 	}
 
-	public int updateMedicalRecord() throws SQLException{
-		/*
-		 * Return 1 if update successful
-		 * Otherwise, return 0
-		 */
-		int result = 0;
-		
-		medicalRecord = new MedicalRecord(Integer.parseInt(cboPatientID.getSelectedItem().toString()), txtDateAffect.getText(), this.txtRecordDetail.toString());
-		result = medicalRecord.updateMedicalRecord();
+	public void updateMedicalRecord() throws SQLException {
 
-		return result;
+		medicalRecord = new MedicalRecord(Integer.parseInt(cboPatientID.getSelectedItem().toString()), txtDateAffect.getText(), this.txtRecordDetail.toString());
+		medicalRecord.updateMedicalRecord();
+
 	}
 
 	public int deleteMedicalRecord(){

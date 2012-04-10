@@ -98,12 +98,12 @@ public class LookupPatientInfo extends JPanel implements ActionListener{
 			int patientID = Integer.parseInt(txtPatientID.getText());
 			String patientName = txtFullname.getText();
 			
-			try {
+			/*try {
 				ResultSet rs = Patient.lookupPatient(patientID, patientName);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 			
 			// Notify to result form - Quỳnh chưa viết form này nên không kết nối được
 			/*this.removeAll();

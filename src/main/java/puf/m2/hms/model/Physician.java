@@ -16,7 +16,7 @@ public class Physician {
 	
     }
 
-public Physician(int physicianID){
+    public Physician(int physicianID){
     	
     }
     
@@ -26,10 +26,10 @@ public Physician(int physicianID){
         int physicianID = Integer.parseInt(physician);
         // Update physician avaiable
         db.createConnection();
-        Statement st = db.createStatement();
+        
         String query = "UPDATE Physician" + " SET Avaiable = Not(Avaiable)"
                 + " WHERE PhysicianID = " + physicianID;
-        result = st.executeUpdate(query);
+        result = db.executeUpdate(query);
         db.closeConnection();
 
         return result;

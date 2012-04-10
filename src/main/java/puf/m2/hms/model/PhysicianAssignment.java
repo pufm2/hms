@@ -40,10 +40,9 @@ public class PhysicianAssignment {
     public int insertNewAssign(String patientID, String physicianID) throws SQLException {
         
         db.createConnection();
-        Statement st = db.createStatement();
         String query = "INSERT INTO Assign (PatientID, PhysicianID) " + " VALUES ( "
                 + patientID + "," + physicianID + ")";
-        int result = st.executeUpdate(query);
+        int result = db.executeUpdate(query);
 
         db.closeConnection();
         return result;

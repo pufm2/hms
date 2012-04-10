@@ -88,11 +88,10 @@ public class AssignNurse extends JPanel implements ActionListener{
 	private void fillComboBox() throws ClassNotFoundException, SQLException {
 		// Fill patientID
 		db.createConnection();
-		db.createStatement();
 		
 		query = "SELECT Distinct(PatientID) FROM Patient";
 		String patientID;
-		rs = db.getResultSet(query);
+		rs = db.executeQuery(query);
 		while (rs.next()){
 			patientID = rs.getString("PatientID");
 			cboPatientID.addItem(patientID);
@@ -102,7 +101,7 @@ public class AssignNurse extends JPanel implements ActionListener{
 		query = "SELECT Distinct(PhysicianID) FROM Physician" +
 				" WHERE PhysicianRole = 'Nurse' " +
 				" AND Avaiable = 1";
-		rs = db.getResultSet(query);
+		rs = db.executeQuery(query);
 		while (rs.next()){
 			cboAvaiableNurse.addItem(rs.getString("PhysicianID"));
 		}

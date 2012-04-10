@@ -1,6 +1,9 @@
 package puf.m2.hms.model;
 
+import java.sql.SQLException;
+
 import org.junit.Test;
+import static junit.framework.Assert.*;
 
 public class PatientTest {
 
@@ -17,5 +20,15 @@ public class PatientTest {
     @Test
     public void testLookingForPatient() {
         
+    }
+    
+    @Test
+    public void testCheckExistPatient() throws SQLException {
+        assertTrue(Patient.checkExistPatient(1));
+    }
+    
+    @Test
+    public void testGetPatient() throws SQLException {
+        assertNotNull(Patient.getPatientById(1));
     }
 }

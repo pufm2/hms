@@ -155,7 +155,7 @@ public class RegisterNewPatient extends JPanel implements ActionListener{
 			// Generate new patientID
 			int newPatientID = -1;
 			try {
-				newPatientID = patient.getNewPatientID();
+				newPatientID = Patient.getNewPatientID();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

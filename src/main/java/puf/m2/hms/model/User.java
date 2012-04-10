@@ -20,8 +20,7 @@ public class User {
     	String result = "";
         try {
             db.createConnection();
-            db.createStatement();
-            ResultSet rs = db.getResultSet("SELECT usertypecode FROM User WHERE username='"
+            ResultSet rs = db.executeQuery("SELECT usertypecode FROM User WHERE username='"
                     + username + "' " + "and password = '" + password + "'");
 
             
