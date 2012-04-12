@@ -5,12 +5,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 import puf.m2.hms.model.User;
 
-public class LoginPanel extends JPanel implements ActionListener{
+public class LoginPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
@@ -21,17 +20,20 @@ public class LoginPanel extends JPanel implements ActionListener{
 	private JPasswordField txtPassword;
 	private JButton btnSignIn;
 
-	public LoginPanel(){
+	public LoginPanel() {
 		this.btnSignIn = new JButton("Submit");
 		this.lblUsername = new JLabel("User name:");
 		this.lblPassword = new JLabel("Password:");
 		this.btnSignIn = new JButton("Sign In");
-		//---------------USERNAME FIELD--------------------------------------------------------------//
+		// ---------------USERNAME
+		// FIELD--------------------------------------------------------------//
 		this.txtUsername = new JTextField(30);
-		//---------------PASSWORD FIELD--------------------------------------------------------------//
+		// ---------------PASSWORD
+		// FIELD--------------------------------------------------------------//
 		this.txtPassword = new JPasswordField(30);
 
-		//---------------ADD TO CONTAINT-------------------------------------------------------------//
+		// ---------------ADD TO
+		// CONTAINT-------------------------------------------------------------//
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2, 2, 2, 2); // insets for all components
@@ -63,12 +65,9 @@ public class LoginPanel extends JPanel implements ActionListener{
 
 		// Add event for click on button Singin
 		btnSignIn.addActionListener(this);
-		
-		//Set panel at center of screen
-		
+
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -76,42 +75,45 @@ public class LoginPanel extends JPanel implements ActionListener{
 			String username = this.txtUsername.getText();
 			String password = this.txtPassword.getText();
 
-			User userImpl = new User();
-			
-			String userType = "";
-			userType = userImpl.login(username, password);
-			
-			if (userType.equals("receptionist")){
-				// login successful, show "Main view" form of receptionist
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Receptionist role", new ReceptionistView());
-					}
-				});
-			}
-			else if (userType.equals("nurse")){
-				// login successful, show "Main view" form of nurse
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Nurse role", new NurseView());
-					}
-				});
-			}
-			else if (userType.equals("doctor")){
-				// login successful, show "Main view" form of doctor
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Doctor role", new DoctorView());
-					}
-				});
-			}
-			else {
+			User user = User.login(username, password);
+
+			if (user != null) {
+				String role = user.getRole();
+				if (role.equals("receptionist")) {
+					// login successful, show "Main view" form of receptionist
+					javax.swing.SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							UIManager.put("swing.boldMetal", Boolean.FALSE);
+							Utils.createAndShowGUI("Receptionist role",
+									new ReceptionistView());
+						}
+					});
+				} else if (role.equals("nurse")) {
+					// login successful, show "Main view" form of nurse
+					javax.swing.SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							UIManager.put("swing.boldMetal", Boolean.FALSE);
+							Utils.createAndShowGUI("Nurse role",
+									new NurseView());
+						}
+					});
+				} else if (role.equals("doctor")) {
+					// login successful, show "Main view" form of doctor
+					javax.swing.SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							UIManager.put("swing.boldMetal", Boolean.FALSE);
+							Utils.createAndShowGUI("Doctor role",
+									new DoctorView());
+						}
+					});
+				}
+			} else {
 				// login unsuccessful
-				JOptionPane.showMessageDialog(null, "Login fail, please retype username and password");
+				JOptionPane.showMessageDialog(null,
+						"Login fail, please retype username and password");
 			}
+
 		}
 	}
+
 }

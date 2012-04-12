@@ -5,18 +5,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import puf.m2.hms.model.Patient;
 import puf.m2.hms.view.datechooser.JDateChooser;
 
 public class DoctorSchedule extends JPanel implements ActionListener{
@@ -25,7 +21,7 @@ public class DoctorSchedule extends JPanel implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	private JLabel lblPatientName, lblPatientBirthDate, lblPatientAddress, lblPatientSex, lblPatientPhone, lblBiographicHealth;
-	private JTextField txtPatientName, txtPatientBirthDate, txtPatientAddress, txtPatientPhone;
+	private JTextField txtPatientName, txtPatientAddress, txtPatientPhone;
 	private JTextArea txtBiographicHealth;
 	private JButton btnRegister;
 	private ButtonGroup sexChoose;
@@ -51,7 +47,7 @@ public class DoctorSchedule extends JPanel implements ActionListener{
 
 		//------------------Text field------------------------------------------------//
 		this.txtPatientName = new JTextField(60);
-		this.txtPatientBirthDate= new JTextField(12);
+		new JTextField(12);
 		this.txtPatientAddress = new JTextField(50);
 		this.txtPatientPhone = new JTextField(12);
 		

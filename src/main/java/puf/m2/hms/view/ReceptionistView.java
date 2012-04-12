@@ -11,10 +11,9 @@ public class ReceptionistView extends JPanel{
 	public ReceptionistView(){
 		this.containt_tabPanel = new JTabbedPane();
 		//---------------Tab panel-----------------------------//
-		this.containt_tabPanel.add(new RegisterNewPatient(),"Register new patient");
+		this.containt_tabPanel.add(new RegisterPatient(),"Register new patient");
 		this.containt_tabPanel.add(new LookupPatientInfo(),"Lookup information patient");
 		this.containt_tabPanel.add(new AssignNurse(),"Assign Nurse");
 		this.add(containt_tabPanel);
 	}
-
 }

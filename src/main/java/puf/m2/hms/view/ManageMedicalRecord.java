@@ -5,8 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Date;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -15,28 +15,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.MedicalRecord;
+import puf.m2.hms.model.Patient;
+import puf.m2.hms.utils.DateUtils;
+import puf.m2.hms.view.datechooser.JDateChooser;
 
 public class ManageMedicalRecord extends JPanel implements ActionListener {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
-	MedicalRecord medicalRecord = new MedicalRecord();
 	protected GridBagConstraints gbc = new GridBagConstraints();
 
 	// Define GUI component
 	JLabel lblRecordID, lblPatientID, lblDateAffect, lblRecordDetail;
 	JComboBox cboRecordID, cboPatientID;
-	JTextField txtDateAffect, txtRecordDetail;
-	JButton btnInsert, btnUpdate, btnDelete;
+	JDateChooser txtDateAffect;
+	JTextField txtRecordDetail;
+	JButton btnInsert;
 
-	public ManageMedicalRecord(){
+	public ManageMedicalRecord() {
+
 		initGUIComponent();
 	}
 
-	private void initGUIComponent(){
+	public void initGUIComponent() {
 		lblRecordID = new JLabel("Record ID");
 		lblPatientID = new JLabel("Patient ID");
 		lblDateAffect = new JLabel("Date affect");
@@ -45,35 +48,33 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 		cboRecordID = new JComboBox();
 		cboPatientID = new JComboBox();
 
-		txtDateAffect = new JTextField();
+		txtDateAffect = new JDateChooser();
 		txtRecordDetail = new JTextField(50);
 
 		btnInsert = new JButton("Insert");
-		btnUpdate = new JButton("Update");
-		btnDelete = new JButton("Delete");
 
 		drawGUI();
 		addActionListener();
 
 		try {
-			fillInCombobox();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			fillPatient();
+		} catch (HmsException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy, int gridwidth, int gridheight){
+	public void addComponent(JComponent comp, int gridx, int gridy,
+			int gridwidth, int gridheight) {
 		gbc.gridx = gridx;
 		gbc.gridy = gridy;
-		gbc.gridwidth = gridwidth; 
+		gbc.gridwidth = gridwidth;
 		gbc.gridheight = gridheight;
 		add(comp, this.gbc);
 	}
 
 	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy){
+	public void addComponent(JComponent comp, int gridx, int gridy) {
 		gbc.gridx = gridx;
 		gbc.gridy = gridy;
 		gbc.gridwidth = 1;
@@ -81,7 +82,7 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 		add(comp, this.gbc);
 	}
 
-	private void drawGUI(){
+	private void drawGUI() {
 
 		setLayout(new GridBagLayout());
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -98,69 +99,63 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 		addComponent(txtRecordDetail, 1, 3);
 
 		addComponent(btnInsert, 0, 5);
-		addComponent(btnUpdate, 1, 5);
-		addComponent(btnDelete, 2, 5);
-
 	}
-	
-	public void addActionListener(){
+
+	public void addActionListener() {
 		btnInsert.addActionListener(this);
-		btnUpdate.addActionListener(this);
-		btnDelete.addActionListener(this);
 	}
 
-	private void fillInCombobox() throws SQLException{
-		ResultSet rs = medicalRecord.loadListOfPatient();
-		while (rs.next()){
-			cboPatientID.addItem(rs.getString("PatientID"));
+	public void fillPatient() throws HmsException {
+
+		for (Patient patient : Patient.getPatients()) {
+			cboPatientID.addItem(patient.getId());
 		}
-	}
 
-	public void insertMedicalRecord() throws SQLException{
-		
-		medicalRecord = new MedicalRecord(Integer.parseInt(cboPatientID.getSelectedItem().toString()),
-		        txtDateAffect.getText(), txtRecordDetail.getText());
-		medicalRecord.insertMedicalRecord();
-		
-		JOptionPane.showMessageDialog(null, "Inserted medical record");
-
-	}
-
-	public void updateMedicalRecord() throws SQLException {
-
-		medicalRecord = new MedicalRecord(Integer.parseInt(cboPatientID.getSelectedItem().toString()), txtDateAffect.getText(), this.txtRecordDetail.toString());
-		medicalRecord.updateMedicalRecord();
-
-	}
-
-	public int deleteMedicalRecord(){
-		/*
-		 * Return 1 if delete successful
-		 * Otherwise, return 0
-		 */
-		int result = 0;
-		return result;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Insert".equals(e.getActionCommand())){
-			try {
-				insertMedicalRecord();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		if ("Insert".equals(e.getActionCommand())) {
+			
+			int patientId = Integer.parseInt(cboPatientID.getSelectedItem().toString());
+			Date dateAffect = txtDateAffect.getDate();
+			String recordDetail = txtRecordDetail.getText();
+
+			switch (validateInputForm(patientId, DateUtils.dateToString(dateAffect), recordDetail)) {
+			case -1:
+				JOptionPane.showMessageDialog(null, "You must input valid patientID");
+				break;
+			case -2:
+				JOptionPane.showMessageDialog(null, "You must input valid date");
+				break;
+			case -3:
+				JOptionPane.showMessageDialog(null, "You must input valid record detail");
+				break;
+			case 1:
+				try {
+					MedicalRecord medicalrecord = new MedicalRecord(patientId, dateAffect, recordDetail);
+					medicalrecord.save();
+				} catch (HmsException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
-		else if ("Update".equals(e.getActionCommand())){
-			try {
-				updateMedicalRecord();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		else if ("Delete".equals(e.getActionCommand())){
-			deleteMedicalRecord();
-		}
-	}}
+	}
+
+	private final int validateInputForm(int patientId, String dateAffect,
+			String recordDetail) {
+
+		// Check if any field is null
+		if (patientId < 0)
+			return -1;
+		// Date is not valid
+		else if (dateAffect.equals("")) // Change later
+			return -2;
+		else if (recordDetail.equals(""))
+			return -3;
+		else
+			return 1;
+
+	}
+
+}

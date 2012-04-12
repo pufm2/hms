@@ -196,13 +196,13 @@ public void actionPerformed( ActionEvent e )
 /**
  * Creates a JFrame with a JSpinField inside and can be used for testing.
  */
-static public void main( String[] s )
+/*static public void main( String[] s )
 {
    JFrame frame = new JFrame( "JSpinField" );
    frame.getContentPane().add( new JSpinField() );
    frame.pack();
    frame.setVisible( true );
-}
+}*/
 
 private JTextField textField;
 private JScrollBar scrollBar;

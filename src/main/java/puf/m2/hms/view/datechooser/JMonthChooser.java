@@ -394,10 +394,10 @@ public class JMonthChooser extends JPanel implements ItemListener,
 	 * @param s
 	 *            The command line arguments
 	 */
-	public static void main(String[] s) {
+/*	public static void main(String[] s) {
 		JFrame frame = new JFrame("MonthChooser");
 		frame.getContentPane().add(new JMonthChooser());
 		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 }

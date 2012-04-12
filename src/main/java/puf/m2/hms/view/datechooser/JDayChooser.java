@@ -1013,12 +1013,12 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 	 * @param s
 	 *            The command line arguments
 	 */
-	public static void main(String[] s) {
+/*	public static void main(String[] s) {
 		JFrame frame = new JFrame("JDayChooser");
 		frame.getContentPane().add(new JDayChooser());
 		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 
 	class DecoratorButton extends JButton {
 		private static final long serialVersionUID = -5306477668406547496L;

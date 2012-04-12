@@ -88,7 +88,7 @@ public class DateBean {
 		return sqlDate;
 	}
 
-	public static void main(String args[]) {
+/*	public static void main(String args[]) {
 		DateBean jcal = new DateBean(new Date());
 		p("Day of Month: " + jcal.getDayOfMonth());
 		p("Year: " + jcal.getYear());
@@ -103,7 +103,7 @@ public class DateBean {
 		p("DST: " + jcal.getDSTOffset());
 		p("ZONE Offset: " + jcal.getZoneOffset());
 		p("TIMEZONE: " + jcal.getUSTimeZone());
-	}
+	}*/
 
 	private static void p(String x) {
 		System.out.println(x);

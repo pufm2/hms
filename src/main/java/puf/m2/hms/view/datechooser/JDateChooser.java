@@ -552,7 +552,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 * @param s
 	 *            The command line arguments
 	 */
-	public static void main(String[] s) {
+/*	public static void main(String[] s) {
 		JFrame frame = new JFrame("JDateChooser");
 		JDateChooser dateChooser = new JDateChooser();
 		// JDateChooser dateChooser = new JDateChooser(null, new Date(), null,
@@ -572,6 +572,6 @@ public class JDateChooser extends JPanel implements ActionListener,
 		frame.getContentPane().add(dateChooser);
 		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 
 }

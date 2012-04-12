@@ -84,12 +84,12 @@ public class JYearChooser extends JSpinField {
     /**
      * Creates a JFrame with a JYearChooser inside and can be used for testing.
      */
-    static public void main(String[] s) {
+/*    static public void main(String[] s) {
         JFrame frame = new JFrame("JYearChooser");
         frame.getContentPane().add(new JYearChooser());
         frame.pack();
         frame.setVisible(true);
-    }
+    }*/
 
     private JDayChooser dayChooser;
     private int year;

@@ -14,7 +14,7 @@ import puf.m2.hms.db.DatabaseImpl;
 public class Patient {
 
     private static final Database DB = DatabaseImpl.defaultDb;
-    private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>(); 
+    private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>();
 
     private int id;
     private String name;
@@ -24,9 +24,8 @@ public class Patient {
     private String phone;
     private String biographicHealth;
 
-    public Patient(int id, String name, String dateOfBirth, String address, int sex,
-                        String phone, String biographicHealth) {
-        this.id = id;
+    public Patient(String name, String dateOfBirth, String address,
+            int sex, String phone, String biographicHealth) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
@@ -34,112 +33,163 @@ public class Patient {
         this.phone = phone;
         this.biographicHealth = biographicHealth;
     }
+
+    public Patient(int id) {
+        this.id = id;
+    }
+
+    public void save() throws HmsException {
+
+        id = getNextFreeId();
+    	final String queryTemplate = "insert into Patient values({0},''{1}'',''{2}'',''{3}'',{4},''{5}'',''{6}'')";
+
+        try {
+			DB.createConnection();
+			
+			DB.executeUpdate(MessageFormat.format(queryTemplate, id, name,
+	                dateOfBirth, address, sex, phone, biographicHealth));
+	        
+			DB.closeConnection();
+		} catch (SQLException e) {
+			throw new HmsException(e);
+		}
+    }
     
-    public Patient(int id){
-    	this.id = id;
+    private int getNextFreeId() throws HmsException {
+    	int freeId = 1;
+		try {
+			DB.createConnection();
+		
+		String query = "select max(id) as maxId from Patient";
+
+		ResultSet rs = DB.executeQuery(query);
+
+		if (rs.next()) {
+			freeId = rs.getInt("maxId") + 1;
+		}
+
+		DB.closeConnection();
+		} catch (SQLException e) {
+			throw new HmsException(e);
+		}
+
+		return freeId;
     }
+    public static boolean checkExistPatient(int id) throws HmsException {
 
-    public int registerNewPatient() throws SQLException {
-
-        int result = 0;
-        // Check if PatientID exist in database or not
-        if (checkExistPatient(id))
-            // patientID already exists in database
-            return -1;
-        else {
-            // insert new patient to database
-            String query = "INSERT INTO Patient (id, name, dateOfBirth, address,"
-                    + "sex, phone, biographicHealth) VALUES ("
-                    + this.id
-                    + ",'"
-                    + this.name
-                    + "','"
-                    + this.dateOfBirth
-                    + "','"
-                    + this.address
-                    + "',"
-                    + this.sex
-                    + ",'"
-                    + this.phone
-                    + "','"
-                    + this.biographicHealth + "')";
-            DB.createConnection();
-            result = DB.executeUpdate(query); // result != 0 is sucess
-            DB.closeConnection();
-        }
-
-        return result; // 0 is okey
-    }
-
-    public static boolean checkExistPatient(int patientID) throws SQLException {
-
-        DB.createConnection();
-
-        final String queryTemplate = "SELECT patientID FROM Patient WHERE PatientID = {0}";
-        
-        ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, patientID));
 
         boolean existed = false;
-        
-        if (rs.next()) {
-            existed = true;
+        try {
+            DB.createConnection();
+            final String queryTemplate = "select id from Patient where id = {0}";
+
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, id));
+
+            if (rs.next()) {
+                existed = true;
+            }
+
+            DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
+
         }
-        
-        DB.closeConnection();
         return existed;
 
-        
     }
 
-    public static Patient getPatientById(int id) throws SQLException {
+    public static List<Patient> getPatients() throws HmsException {
+        List<Patient> patientList = new ArrayList<Patient>();
+
+        final String query = "select * from Patient";
+
+        try {
+            DB.createConnection();
+
+            ResultSet rs = DB.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Patient patient = PATIENT_MAP.get(id);
+                
+                if (patient == null) {
+                    patient = new Patient(rs.getString("name"),
+                                rs.getString("dateOfBirth"),
+                                rs.getString("address"),
+                                rs.getInt("sex"),
+                                rs.getString("phone"),
+                                rs.getString("biographicHealth"));
+                    patient.id = id;
+                    
+                    PATIENT_MAP.put(id, patient);
+                }
+                
+                patientList.add(patient);
+            }
+
+            DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
+        }
+
+        return patientList;
+
+    }
+
+    public static Patient getPatientById(int id) throws HmsException {
 
         Patient patient = PATIENT_MAP.get(id);
         if (patient != null) {
             return patient;
         }
-        DB.createConnection();
+        try {
+            DB.createConnection();
 
-        final String queryTempl = "SELECT * FROM Patient WHERE PatientID = {0}";
-        ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
+            final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
 
-        if (rs.next()) {
-            patient = new Patient(
-                rs.getInt("PatientID"),
-                rs.getString("PatientName"),
-                rs.getString("PatientBirthdate"),
-                rs.getString("PatientAddress"),
-                rs.getInt("PatientSex"),
-                rs.getString("PatientPhone"),
-                rs.getString("PatientBiographicHealth"));
+            if (rs.next()) {
+                patient = new Patient(rs.getString("name"),
+                        rs.getString("dateOfBirth"), rs.getString("address"),
+                        rs.getInt("sex"), rs.getString("phone"),
+                        rs.getString("biographicHealth"));
+                patient.id = id;
+                
+                PATIENT_MAP.put(patient.getId(), patient);
+            }
+
+            DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
         }
-        PATIENT_MAP.put(patient.getPatientID(), patient);
-        DB.closeConnection();
+
         return patient;
     }
-    
 
-    public static List<Patient> getPatientByName(String patientName) throws SQLException {
+    public static List<Patient> getPatientByName(String patientName)
+            throws SQLException {
 
         List<Patient> patientList = new ArrayList<Patient>();
 
-        final String queryTemplate = "SELECT * FROM Patient WHERE PatientName = '{0}'";
+        final String queryTemplate = "SELECT * FROM Patient WHERE PatientName = ''{0}''";
 
         DB.createConnection();
 
         ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, patientName));
-        
+
         while (rs.next()) {
-            int id = rs.getInt("PatientID");
+            int id = rs.getInt("id");
             Patient patient = PATIENT_MAP.get(id);
+            
             if (patient == null) {
-                patient = new Patient(
-                            id,
-                            rs.getString("PatientName"),
-                            rs.getString("PatientBirthdate"),
-                            rs.getString("PatientAddress"),
-                            rs.getInt("PatientSex"),
-                            rs.getString("PatientPhone"),
-                            rs.getString("PatientBiographicHealth"));
+                patient = new Patient(rs.getString("name"),
+                            rs.getString("dateOfBirth"),
+                            rs.getString("address"),
+                            rs.getInt("sex"),
+                            rs.getString("phone"),
+                            rs.getString("biographicHealth"));
+                patient.id = id;
+                
                 PATIENT_MAP.put(id, patient);
             }
             patientList.add(patient);
@@ -149,35 +199,60 @@ public class Patient {
         return patientList;
     }
 
-    public static int getNewPatientID() throws SQLException {
-
-        int result = 1;
-        DB.createConnection();
-        String query = "SELECT max(patientID) AS NewPatientID FROM Patient";
-
-        ResultSet rs = DB.executeQuery(query);
-
-        while (rs.next()) {
-            result = rs.getInt("NewPatientID") + 1;
-        }
-
-        DB.closeConnection();
-
-        return result;
-    }
-
-    public void setPatientID(int newPatientID) {
-        this.id = newPatientID;
-    }
-
-    public int getPatientID() {
+    public int getId() {
         return id;
     }
 
+    public boolean isExisted() throws HmsException {
+        return checkExistPatient(id);
+    }
 
-	public boolean isExist() {
-		// TODO Auto-generated method stub
-		return false;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getBiographicHealth() {
+		return biographicHealth;
+	}
+
+	public void setBiographicHealth(String biographicHealth) {
+		this.biographicHealth = biographicHealth;
 	}
 
 }

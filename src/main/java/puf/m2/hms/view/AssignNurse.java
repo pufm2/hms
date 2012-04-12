@@ -5,54 +5,51 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.*;
 
-import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseImpl;
-import puf.m2.hms.model.PhysicianAssignment;
+import puf.m2.hms.model.HmsException;
+import puf.m2.hms.model.Patient;
 import puf.m2.hms.model.Physician;
+import puf.m2.hms.model.PhysicianAssignment;
 
-public class AssignNurse extends JPanel implements ActionListener{
+public class AssignNurse extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblPatientID, lblAvaiableNurse;
 	private JComboBox cboPatientID, cboAvaiableNurse;
 	private JButton btnMakeAssign;
 
-	private static Database db = DatabaseImpl.defaultDb;
-	private ResultSet rs = null;
-	private String query;
-	
-	public AssignNurse(){
-		
+
+	public AssignNurse() {
+
 		this.lblPatientID = new JLabel("ID Patient:");
 		this.lblAvaiableNurse = new JLabel("Available nurse:");
 		this.btnMakeAssign = new JButton("Make assign");
 
-		//----------------------Combo box----------------------------------------//
+		// ----------------------Combo
+		// box----------------------------------------//
 		this.cboPatientID = new JComboBox();
 		this.cboAvaiableNurse = new JComboBox();
 
-		//----------------------ADD CONTAINT------------------------------------//
+		// ----------------------ADD
+		// CONTAINT------------------------------------//
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2, 2, 2, 2); // insets for all components
 		c.gridx = 0; // column 0
 		c.gridy = 0; // row 0
-		c.ipadx = 5; 
-		c.ipady = 5; 
+		c.ipadx = 5;
+		c.ipady = 5;
 		c.anchor = GridBagConstraints.LINE_START;
 		this.add(this.lblPatientID, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1; 
+		c.gridx = 1;
 		// c.gridy = 0; // comment out this for reusing the obj
 		c.ipadx = 0; // resets the pad to 0
 		c.ipady = 0;
-		this.add(this.cboPatientID, c);//ID is generate by system
+		this.add(this.cboPatientID, c);// ID is generate by system
 
 		c.gridx = 0; // column 0
 		c.gridy = 1; // row 1
@@ -60,7 +57,7 @@ public class AssignNurse extends JPanel implements ActionListener{
 		this.add(this.lblAvaiableNurse, c);
 
 		// Set data for comboboxs
-		
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1; // column 0
 		c.gridy = 1; // row 1
@@ -73,81 +70,47 @@ public class AssignNurse extends JPanel implements ActionListener{
 		
 		try {
 			fillComboBox();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (HmsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Add action listener
 		btnMakeAssign.addActionListener(this);
 	}
 
-	private void fillComboBox() throws ClassNotFoundException, SQLException {
+	private void fillComboBox() throws HmsException {
 		// Fill patientID
-		db.createConnection();
-		
-		query = "SELECT Distinct(PatientID) FROM Patient";
-		String patientID;
-		rs = db.executeQuery(query);
-		while (rs.next()){
-			patientID = rs.getString("PatientID");
-			cboPatientID.addItem(patientID);
+
+		for (Patient patient : Patient.getPatients()) {
+			cboPatientID.addItem(patient.getId());
 		}
 
 		// Fill nurseID
-		query = "SELECT Distinct(PhysicianID) FROM Physician" +
-				" WHERE PhysicianRole = 'Nurse' " +
-				" AND Avaiable = 1";
-		rs = db.executeQuery(query);
-		while (rs.next()){
-			cboAvaiableNurse.addItem(rs.getString("PhysicianID"));
+		for (Physician nurse : Physician.getNurses()) {
+			if (nurse.isAvailable()) {
+				cboAvaiableNurse.addItem(nurse.getId());
+			}
 		}
-	
-		db.closeConnection();
+
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if ("Make assign".equals(e.getActionCommand())) {
-			PhysicianAssignment assignPhysician = new PhysicianAssignment();
-			int insertResult=-1;
-			int updateResult=-1;
-			
-			// Save assign information to database
+			Patient patient;
 			try {
-				insertResult = assignPhysician.insertNewAssign(cboPatientID.getSelectedItem().toString(), cboAvaiableNurse.getSelectedItem().toString());
-			} catch (SQLException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-			
-			// Update status of nurse become unavailable
-			Physician physician = new Physician();
-			try {
-				String physicianIDToUpdate;
-				physicianIDToUpdate = cboAvaiableNurse.getSelectedItem().toString();
-				updateResult = physician.updateStatus(physicianIDToUpdate);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			
-			// Show message
-			if (insertResult!=0){
+				patient = Patient.getPatientById(Integer.parseInt(cboPatientID.getSelectedItem().toString()));
+				Physician nurse = Physician.getPhysicianById(Integer.parseInt(cboAvaiableNurse.getSelectedItem().toString()));
+				
+				PhysicianAssignment physicianAssignment = new PhysicianAssignment(patient, nurse);
+				physicianAssignment.save();
 				JOptionPane.showMessageDialog(null, "Insert new assign successful");
-			}
-			else
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Fail to insert new assign");
-			
-			//Show message
-			if (updateResult!=0){
-				JOptionPane.showMessageDialog(null, "Update nurse's status successful");
+				
 			}
-			else
-				JOptionPane.showMessageDialog(null, "Fail to update nurse's status");
 		}
 	}
 }

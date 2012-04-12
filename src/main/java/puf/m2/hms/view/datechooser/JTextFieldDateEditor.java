@@ -449,12 +449,12 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
 	 * @param s
 	 *            The command line arguments
 	 */
-	public static void main(String[] s) {
+/*	public static void main(String[] s) {
 		JFrame frame = new JFrame("JTextFieldDateEditor");
 		JTextFieldDateEditor jTextFieldDateEditor = new JTextFieldDateEditor();
 		jTextFieldDateEditor.setDate(new Date());
 		frame.getContentPane().add(jTextFieldDateEditor);
 		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 }

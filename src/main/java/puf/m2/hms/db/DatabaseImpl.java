@@ -11,7 +11,7 @@ import java.util.Map;
 public class DatabaseImpl implements Database {
 
     private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
-    private static final String DB_URL = "jdbc:sqlite:HMS.db";
+    private static final String DB_URL = "jdbc:sqlite:HMS.db3";
 
     private static Map<String, Database> databasePool;
 

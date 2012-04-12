@@ -5,10 +5,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 import javax.swing.*;
 
+import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.view.datechooser.JDateChooser;
 
@@ -146,33 +146,22 @@ public class RegisterNewPatient extends JPanel implements ActionListener{
 		if ("Register".equals(e.getActionCommand())){
 
 			int patientSex;
-			patientSex = "Male".equals(e.getActionCommand())?0:1; //If Male then 0
+			patientSex = "Male".equals(e.getActionCommand()) ? 0 : 1;
 			
 			// Create Patient object
-			Patient patient = new Patient(0, txtPatientName.getText(), txtPatientBirthDate.getText(), 
+			Patient patient = new Patient(txtPatientName.getText(), txtPatientBirthDate.getText(), 
 					txtPatientAddress.getText(), patientSex, txtPatientPhone.getText(), txtBiographicHealth.getText());
-			
-			// Generate new patientID
-			int newPatientID = -1;
-			try {
-				newPatientID = Patient.getNewPatientID();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			patient.setPatientID(newPatientID); 
 
 			// Save patient information to database
-			int regiterSuccess=-1;
 			try {
-				regiterSuccess = patient.registerNewPatient();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if (regiterSuccess!=0)
-				JOptionPane.showMessageDialog(null, "Saved patient's information with new patient ID is " + patient.getPatientID());
-			else
+				patient.save();
+			} catch (HmsException e1) {
 				JOptionPane.showMessageDialog(null, "Can not save patient's information");
+				return;
+			}
+			
+			JOptionPane.showMessageDialog(null, "Saved patient's information with new patient ID is " + patient.getId());
+				
 		}
 	}
 }
