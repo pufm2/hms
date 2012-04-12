@@ -1,63 +1,84 @@
 package puf.m2.hms.model;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseImpl;
+import puf.m2.hms.utils.DateUtils;
 
 public class MedicalRecord {
 
-    private int recordID;
-    private int patientID;
+    private static Map<Integer, MedicalRecord> MR_MAP = new HashMap<Integer, MedicalRecord>();
+    private static final Database DB = DatabaseImpl.defaultDb;
+	
+	private int id;
+    private Patient patient;
     private Date dateAffect;
-    private String recordDetail;
-    
-    private Database db = DatabaseImpl.defaultDb;
+    private String detail;
 
-	public MedicalRecord(int patientID, Date dateAffect, String recordDetail) {
-        // recordId is auto number
-    	this.patientID = patientID;
+	public MedicalRecord(Patient patient, Date dateAffect, String detail) {
+    	this.patient = patient;
         this.dateAffect = dateAffect;
-        this.recordDetail = recordDetail;
+        this.detail = detail;
     }
 
-    public MedicalRecord() {
-
-	}
-
 	public void save() throws HmsException {
-    	
     	try {
-			db.createConnection();
+    		id = getNextFreeId();
+			DB.createConnection();
 			
-			String query = "INSERT INTO MedicalRecord (PatientID, DateAffect, RecordDetail)" +
-					" VALUES (" + patientID + ",'" + dateAffect + "','" + recordDetail + "')";
+			String queryTemplate = "insert into MedicalRecord values({0}, {1}, ''{2}'', ''{3}'')";
 			
-			db.executeUpdate(query);
-			db.closeConnection();
+			DB.executeUpdate(MessageFormat.format(queryTemplate, id, patient.getId(),
+					DateUtils.dateToString(dateAffect), detail));
+			DB.closeConnection();
+			
+			MR_MAP.put(id, this);
+		} catch (SQLException e) {
+			throw new HmsException(e);
+		}
+    }
+	
+	public void update() throws HmsException {
+    	try {
+			DB.createConnection();
+			
+			String queryTemplate = "update MedicalRecord set patientId = {0}, dateAfect = ''{1}'', detail = ''{2}'' where id = {3})";
+			
+			DB.executeUpdate(MessageFormat.format(queryTemplate, patient.getId(),
+					DateUtils.dateToString(dateAffect), detail, id));
+			DB.closeConnection();
+		} catch (SQLException e) {
+			throw new HmsException(e);
+		}
+    }
+
+    private int getNextFreeId() throws HmsException {
+    	int freeId = 1;
+		try {
+			DB.createConnection();
+		
+		String query = "select max(id) as maxId from MedicalRecord";
+
+		ResultSet rs = DB.executeQuery(query);
+
+		if (rs.next()) {
+			freeId = rs.getInt("maxId") + 1;
+		}
+
+		DB.closeConnection();
 		} catch (SQLException e) {
 			throw new HmsException(e);
 		}
 
-
+		return freeId;
     }
-
-    public void update() throws SQLException {
-
-    	db.createConnection();
-		
-		String query = "UPDATE MedicalRecord " +
-				" SET 	dateAffect = " + dateAffect + "," +
-				" 		recordDetail = " + recordDetail +
-				" WHERE recordID = " + recordID +
-					" AND patientID = " + patientID;
-		
-		db.executeUpdate(query);
-		db.closeConnection();
-
-    }
-
+    
     public void deleteMedicalRecord() {
 
     }

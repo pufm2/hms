@@ -75,6 +75,7 @@ public class Patient {
 
 		return freeId;
     }
+    
     public static boolean checkExistPatient(int id) throws HmsException {
 
 

@@ -118,6 +118,7 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 		if ("Insert".equals(e.getActionCommand())) {
 			
 			int patientId = Integer.parseInt(cboPatientID.getSelectedItem().toString());
+
 			Date dateAffect = txtDateAffect.getDate();
 			String recordDetail = txtRecordDetail.getText();
 
@@ -133,7 +134,8 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 				break;
 			case 1:
 				try {
-					MedicalRecord medicalrecord = new MedicalRecord(patientId, dateAffect, recordDetail);
+					Patient patient = Patient.getPatientById(patientId);
+					MedicalRecord medicalrecord = new MedicalRecord(patient, dateAffect, recordDetail);
 					medicalrecord.save();
 				} catch (HmsException ex) {
 					ex.printStackTrace();
