@@ -50,6 +50,8 @@ public class Patient {
 	                dateOfBirth, address, sex, phone, biographicHealth));
 	        
 			DB.closeConnection();
+			
+			PATIENT_MAP.put(id, this);
 		} catch (SQLException e) {
 			throw new HmsException(e);
 		}

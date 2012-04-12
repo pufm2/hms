@@ -78,6 +78,8 @@ public class PhysicianAssignment {
             DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(), physician.getId(),
                     DateUtils.dateToString(startDate), DateUtils.dateToString(endDate)));
             DB.closeConnection();
+            
+            PA_MAP.put(id, this);
         } catch (SQLException e) {
             throw new HmsException(e);
         }
