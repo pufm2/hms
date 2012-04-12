@@ -72,7 +72,7 @@ public class PhysicianAssignment {
 
     public void save() throws HmsException {
         id = getNextFreeId();
-        final String queryTemple = "insert into PhysicianAssignment values({0}, ''{1}'', ''{2}'', ''{3}'', ''{4}'')";
+        final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
         try {
             DB.createConnection();
             DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(), physician.getId(),

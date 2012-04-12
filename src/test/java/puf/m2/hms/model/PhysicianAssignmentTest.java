@@ -8,7 +8,7 @@ public class PhysicianAssignmentTest {
     @Test
     public void testSave() throws HmsException {
         Patient patient = Patient.getPatientById(1);
-        Physician physician = Physician.getDoctors().get(0);
+        Physician physician = Physician.getPhysicianById(104);
 
         PhysicianAssignment pa = new PhysicianAssignment(patient, physician);
         pa.save();

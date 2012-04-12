@@ -25,6 +25,7 @@ public class PatientTest {
     @Test
     public void testCheckExistPatient() throws HmsException {
         assertTrue(Patient.checkExistPatient(1));
+        assertFalse(Patient.checkExistPatient(100));
     }
     
     @Test

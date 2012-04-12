@@ -138,7 +138,7 @@ public class Physician {
         try {
             DB.createConnection();
 
-            final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
+            final String queryTempl = "SELECT * FROM Physician WHERE id = {0}";
             ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
 
             if (rs.next()) {
