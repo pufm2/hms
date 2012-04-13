@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseImpl;
-
+import puf.m2.hms.db.DatabaseFactory;
 
 public class Physician {
 
-    private static final Database DB = DatabaseImpl.defaultDb;
+    private static final Database DB = DatabaseFactory.DEFAULT_DB;
     private static final Map<Integer, Physician> PHYSICIAN_MAP = new HashMap<Integer, Physician>();
     
     private int id;

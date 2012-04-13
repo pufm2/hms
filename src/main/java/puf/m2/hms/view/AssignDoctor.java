@@ -13,8 +13,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseImpl;
 import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.model.Physician;

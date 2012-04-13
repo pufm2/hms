@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseImpl;
+import puf.m2.hms.db.DatabaseFactory;
 
 public class User {
 
-	private static final Database DB = DatabaseImpl.defaultDb;
+	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 	private static final Map<Integer, User> USER_MAP = new HashMap<Integer, User>();
 
 	private int id;

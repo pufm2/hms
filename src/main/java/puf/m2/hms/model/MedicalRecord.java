@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseImpl;
+import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.utils.DateUtils;
 
 public class MedicalRecord {
 
     private static Map<Integer, MedicalRecord> MR_MAP = new HashMap<Integer, MedicalRecord>();
-    private static final Database DB = DatabaseImpl.defaultDb;
+    private static final Database DB = DatabaseFactory.DEFAULT_DB;
 	
 	private int id;
     private Patient patient;
