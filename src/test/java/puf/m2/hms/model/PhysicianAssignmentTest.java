@@ -1,22 +1,54 @@
 package puf.m2.hms.model;
 
-import java.util.Date;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 public class PhysicianAssignmentTest {
-    @Test
-    public void testSave() throws HmsException {
-        Patient patient = Patient.getPatientById(1);
-        Physician physician = Physician.getPhysicianById(104);
 
-        PhysicianAssignment pa = new PhysicianAssignment(patient, physician);
-        pa.save();
+	@Test
+	public void testPhysicianAssignmentPatientPhysicianDateDate() {
+		fail("Not yet implemented");
+	}
 
-    }
-    
-    @Test
-    public void test123() {
-    	
-    }
+	@Test
+	public void testPhysicianAssignmentPatientPhysician() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPhysicianAssignments() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSave() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetId() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPatient() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPhysician() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetStartDate() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetEndDate() {
+		fail("Not yet implemented");
+	}
+
 }

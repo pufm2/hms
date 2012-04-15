@@ -5,5 +5,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
 	<classpathentry kind="var" path="M2_REPO/junit/junit/4.8.2/junit-4.8.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/xerial/sqlite-jdbc/3.7.2/sqlite-jdbc-3.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/NHPhat/Desktop/eclipse-java-indigo-SR1-win32/plugins/objenesis-1.2/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/NHPhat/Desktop/eclipse-java-indigo-SR1-win32/plugins/easymock-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/NHPhat/Desktop/eclipse-java-indigo-SR1-win32/plugins/cglib-nodep-2.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
