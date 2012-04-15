@@ -80,6 +80,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 		if ("Sign In".equals(e.getActionCommand())) {
 			String username = this.txtUsername.getText();
+			@SuppressWarnings("deprecation")
 			String password = this.txtPassword.getText();
 
 			User user = User.login(username, password);

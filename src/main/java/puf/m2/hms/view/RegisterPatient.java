@@ -6,7 +6,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
@@ -100,12 +108,16 @@ public class RegisterPatient extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if ("Register".equals(e.getActionCommand())) {
 
-			int patientSex = "Male".equals(e.getActionCommand()) ? 1 : 0; // If Male then 0
+			int patientSex = "Male".equals(e.getActionCommand()) ? 1 : 0; // If
+																			// Male
+																			// then
+																			// 0
 
 			// Create Patient object
 
 			Patient patient = new Patient(txtPatientName.getText(),
-					txtBirthDate.getDate().toString(), txtPatientAddress.getText(), patientSex,
+					txtBirthDate.getDate().toString(),
+					txtPatientAddress.getText(), patientSex,
 					txtPatientPhone.getText(), txtBiographicHealth.getText());
 
 			// Save patient information to database
@@ -113,12 +125,14 @@ public class RegisterPatient extends JPanel implements ActionListener {
 			try {
 				patient.save();
 			} catch (HmsException ex) {
-				JOptionPane.showMessageDialog(null, "Can not save patient's information");
+				JOptionPane.showMessageDialog(null,
+						"Can not save patient's information");
 				return;
 			}
 
 			JOptionPane.showMessageDialog(null,
-					"Saved patient's information with new patient ID is " + patient.getId());
+					"Saved patient's information with new patient ID is "
+							+ patient.getId());
 
 		}
 	}

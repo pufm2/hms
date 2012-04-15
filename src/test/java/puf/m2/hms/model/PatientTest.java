@@ -1,35 +1,124 @@
 package puf.m2.hms.model;
 
-import java.sql.SQLException;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
-import static junit.framework.Assert.*;
 
 public class PatientTest {
 
-    @Test
-    public void testAddPatient() {
-        
-    }
-    
-    @Test
-    public void testUpdatePatient() {
-        
-    }
-    
-    @Test
-    public void testLookingForPatient() {
-        
-    }
-    
-    @Test
-    public void testCheckExistPatient() throws HmsException {
-        assertTrue(Patient.checkExistPatient(1));
-        assertFalse(Patient.checkExistPatient(100));
-    }
-    
-    @Test
-    public void testGetPatient() throws HmsException {
-        assertNotNull(Patient.getPatientById(1));
-    }
+	@Test
+	public void testSetId() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testPatientStringStringStringIntStringString() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testPatientInt() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testPatient() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSave() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testCheckExistPatient() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPatients() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPatientById() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPatientByName() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetId() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testIsExisted() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetName() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSetName() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetDateOfBirth() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSetDateOfBirth() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetAddress() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSetAddress() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetSex() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSetSex() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPhone() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSetPhone() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetBiographicHealth() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSetBiographicHealth() {
+		fail("Not yet implemented");
+	}
+
 }
