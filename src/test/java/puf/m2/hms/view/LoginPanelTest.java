@@ -21,7 +21,7 @@ public class LoginPanelTest {
 		User mock = EasyMock.createNiceMock(User.class);
 		LoginPanel loginpanel = new LoginPanel();
 		EasyMock.replay(mock);
-		assertEquals(loginpanel.checkValidateUser("", ""),-1);
+		assertFalse(loginpanel.checkValidateUser("", ""));
 		EasyMock.verify(mock);
 	}
 	
@@ -30,7 +30,7 @@ public class LoginPanelTest {
 		User mock = EasyMock.createNiceMock(User.class);
 		LoginPanel loginpanel = new LoginPanel();
 		EasyMock.replay(mock);
-		assertEquals(loginpanel.checkValidateUser("aaa", ""),-2);
+		assertFalse(loginpanel.checkValidateUser("aaa", ""));
 		EasyMock.verify(mock);
 	}
 	

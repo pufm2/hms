@@ -13,210 +13,202 @@ import puf.m2.hms.db.DatabaseFactory;
 
 public class Patient {
 
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
-	private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>();
+    private static final Database DB = DatabaseFactory.DEFAULT_DB;
+    private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>();
 
-	private int id;
+    private int id;
+    private String name;
+    private String dateOfBirth;
+    private String address;
+    private int sex;
+    private String phone;
+    private String biographicHealth;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Patient(String name, String dateOfBirth, String address,
+            int sex, String phone, String biographicHealth) {
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.sex = sex;
+        this.phone = phone;
+        this.biographicHealth = biographicHealth;
+    }
 
-	private String name;
-	private String dateOfBirth;
-	private String address;
-	private int sex;
-	private String phone;
-	private String biographicHealth;
+    public Patient(int id) {
+        this.id = id;
+    }
 
-	public Patient(String name, String dateOfBirth, String address, int sex,
-			String phone, String biographicHealth) {
-		this.name = name;
-		this.dateOfBirth = dateOfBirth;
-		this.address = address;
-		this.sex = sex;
-		this.phone = phone;
-		this.biographicHealth = biographicHealth;
-	}
+    public void save() throws HmsException {
 
-	public Patient(int id) {
-		this.id = id;
-	}
+        id = getNextFreeId();
+    	final String queryTemplate = "insert into Patient values({0},''{1}'',''{2}'',''{3}'',{4},''{5}'',''{6}'')";
 
-	public Patient() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public void save() throws HmsException {
-
-		id = getNextFreeId();
-		final String queryTemplate = "insert into Patient values({0},''{1}'',''{2}'',''{3}'',{4},''{5}'',''{6}'')";
-
-		try {
+        try {
 			DB.createConnection();
-
+			
 			DB.executeUpdate(MessageFormat.format(queryTemplate, id, name,
-					dateOfBirth, address, sex, phone, biographicHealth));
-
+	                dateOfBirth, address, sex, phone, biographicHealth));
+	        
 			DB.closeConnection();
-
+			
 			PATIENT_MAP.put(id, this);
 		} catch (SQLException e) {
 			throw new HmsException(e);
 		}
-	}
-
-	private int getNextFreeId() throws HmsException {
-		int freeId = 1;
+    }
+    
+    private int getNextFreeId() throws HmsException {
+    	int freeId = 1;
 		try {
 			DB.createConnection();
+		
+		String query = "select max(id) as maxId from Patient";
 
-			String query = "select max(id) as maxId from Patient";
+		ResultSet rs = DB.executeQuery(query);
 
-			ResultSet rs = DB.executeQuery(query);
+		if (rs.next()) {
+			freeId = rs.getInt("maxId") + 1;
+		}
 
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-
-			DB.closeConnection();
+		DB.closeConnection();
 		} catch (SQLException e) {
 			throw new HmsException(e);
 		}
 
 		return freeId;
-	}
+    }
+    
+    public static boolean checkExistPatient(int id) throws HmsException {
 
-	public static boolean checkExistPatient(int id) throws HmsException {
 
-		boolean existed = false;
-		try {
-			DB.createConnection();
-			final String queryTemplate = "select id from Patient where id = {0}";
+        boolean existed = false;
+        try {
+            DB.createConnection();
+            final String queryTemplate = "select id from Patient where id = {0}";
 
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-					id));
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, id));
 
-			if (rs.next()) {
-				existed = true;
-			}
+            if (rs.next()) {
+                existed = true;
+            }
 
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
+            DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
 
-		}
-		return existed;
+        }
+        return existed;
 
-	}
+    }
 
-	public static List<Patient> getPatients() throws HmsException {
-		List<Patient> patientList = new ArrayList<Patient>();
+    public static List<Patient> getPatients() throws HmsException {
+        List<Patient> patientList = new ArrayList<Patient>();
 
-		final String query = "select * from Patient";
+        final String query = "select * from Patient";
 
-		try {
-			DB.createConnection();
+        try {
+            DB.createConnection();
 
-			ResultSet rs = DB.executeQuery(query);
+            ResultSet rs = DB.executeQuery(query);
 
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				Patient patient = PATIENT_MAP.get(id);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Patient patient = PATIENT_MAP.get(id);
+                
+                if (patient == null) {
+                    patient = new Patient(rs.getString("name"),
+                                rs.getString("dateOfBirth"),
+                                rs.getString("address"),
+                                rs.getInt("sex"),
+                                rs.getString("phone"),
+                                rs.getString("biographicHealth"));
+                    patient.id = id;
+                    
+                    PATIENT_MAP.put(id, patient);
+                }
+                
+                patientList.add(patient);
+            }
 
-				if (patient == null) {
-					patient = new Patient(rs.getString("name"),
-							rs.getString("dateOfBirth"),
-							rs.getString("address"), rs.getInt("sex"),
-							rs.getString("phone"),
-							rs.getString("biographicHealth"));
-					patient.id = id;
+            DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
+        }
 
-					PATIENT_MAP.put(id, patient);
-				}
+        return patientList;
 
-				patientList.add(patient);
-			}
+    }
 
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
+    public static Patient getPatientById(int id) throws HmsException {
 
-		return patientList;
+        Patient patient = PATIENT_MAP.get(id);
+        if (patient != null) {
+            return patient;
+        }
+        try {
+            DB.createConnection();
 
-	}
+            final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
 
-	public static Patient getPatientById(int id) throws HmsException {
+            if (rs.next()) {
+                patient = new Patient(rs.getString("name"),
+                        rs.getString("dateOfBirth"), rs.getString("address"),
+                        rs.getInt("sex"), rs.getString("phone"),
+                        rs.getString("biographicHealth"));
+                patient.id = id;
+                
+                PATIENT_MAP.put(patient.getId(), patient);
+            }
 
-		Patient patient = PATIENT_MAP.get(id);
-		if (patient != null) {
-			return patient;
-		}
-		try {
-			DB.createConnection();
+            DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
+        }
 
-			final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
-			ResultSet rs = DB
-					.executeQuery(MessageFormat.format(queryTempl, id));
+        return patient;
+    }
 
-			if (rs.next()) {
-				patient = new Patient(rs.getString("name"),
-						rs.getString("dateOfBirth"), rs.getString("address"),
-						rs.getInt("sex"), rs.getString("phone"),
-						rs.getString("biographicHealth"));
-				patient.id = id;
+    public static List<Patient> getPatientByName(String patientName)
+            throws SQLException {
 
-				PATIENT_MAP.put(patient.getId(), patient);
-			}
+        List<Patient> patientList = new ArrayList<Patient>();
 
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
+        final String queryTemplate = "SELECT * FROM Patient WHERE PatientName = ''{0}''";
 
-		return patient;
-	}
+        DB.createConnection();
 
-	public static List<Patient> getPatientByName(String patientName)
-			throws SQLException {
+        ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, patientName));
 
-		List<Patient> patientList = new ArrayList<Patient>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            Patient patient = PATIENT_MAP.get(id);
+            
+            if (patient == null) {
+                patient = new Patient(rs.getString("name"),
+                            rs.getString("dateOfBirth"),
+                            rs.getString("address"),
+                            rs.getInt("sex"),
+                            rs.getString("phone"),
+                            rs.getString("biographicHealth"));
+                patient.id = id;
+                
+                PATIENT_MAP.put(id, patient);
+            }
+            patientList.add(patient);
+        }
 
-		final String queryTemplate = "SELECT * FROM Patient WHERE PatientName = ''{0}''";
+        DB.closeConnection();
+        return patientList;
+    }
 
-		DB.createConnection();
+    public int getId() {
+        return id;
+    }
 
-		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-				patientName));
-
-		while (rs.next()) {
-			int id = rs.getInt("id");
-			Patient patient = PATIENT_MAP.get(id);
-
-			if (patient == null) {
-				patient = new Patient(rs.getString("name"),
-						rs.getString("dateOfBirth"), rs.getString("address"),
-						rs.getInt("sex"), rs.getString("phone"),
-						rs.getString("biographicHealth"));
-				patient.id = id;
-
-				PATIENT_MAP.put(id, patient);
-			}
-			patientList.add(patient);
-		}
-
-		DB.closeConnection();
-		return patientList;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public boolean isExisted() throws HmsException {
-		return checkExistPatient(id);
-	}
+    public boolean isExisted() throws HmsException {
+        return checkExistPatient(id);
+    }
 
 	public String getName() {
 		return name;

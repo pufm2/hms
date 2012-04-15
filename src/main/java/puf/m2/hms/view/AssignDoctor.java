@@ -114,33 +114,21 @@ public class AssignDoctor extends JPanel implements ActionListener {
 		add(comp, this.gbc);
 	}
 
-	public int assign(Physician physician, Patient patient, Date startDate,
-			Date endDate) throws HmsException, HeadlessException, SQLException {
-		/*
-		 * Return -1 if either patientID does not exist -2 if physicianID does
-		 * not exist -3 if physicianID exist, but is not a doctor -4 if
-		 * physicianID exist, physician is a doctor, but not available 1 if
-		 * patientID exist, and PhysicianID is doctor => insert into database
-		 */
+	public void assign(Physician physician, Patient patient, Date startDate,
+			Date endDate) throws HmsException {
 		if (!checkExistsPatient(patient.getId())) {
 			JOptionPane.showMessageDialog(null, "This patientID is not exists");
-			return -1;
-		} else if (!physician.isExist(physician.getId())) {
-			JOptionPane.showMessageDialog(null,
-					"This physicianID is not exists");
-			return -2;
-		} else if (!physician.isDoctor(physician.getId())) {
+
+		} else if (!"doctor".equals(physician.getRole())) {
 			JOptionPane.showMessageDialog(null,
 					"This physician is not a docotr");
-			return -3;
-		} else if (physician.isAvaiable(startDate, physician.getId()) == false) {
+
+		} else if (!physician.isAvailable()) {
 			JOptionPane.showMessageDialog(null, "This doctor is not available");
-			return -4;
+
 		} else {
-			// Insert into Assign table
 			PhysicianAssignment pa = new PhysicianAssignment(patient, physician);
 			pa.save();
-			return 1;
 		}
 	}
 
@@ -162,18 +150,12 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				physician = Physician.getPhysicianById(physicianID);
 				Patient patient;
 				patient = Patient.getPatientById(patientID);
-				assign(physician, patient, txtStartDate.getDate(),
-						txtEndDate.getDate());
-			} catch (HeadlessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (HmsException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+				assign(physician, patient, txtStartDate.getDate(), txtEndDate.getDate());
+			} catch (HmsException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Assign failed");
+				return;
+			} 
 			JOptionPane.showMessageDialog(null, "Assign successful");
 
 		}

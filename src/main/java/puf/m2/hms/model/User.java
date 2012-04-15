@@ -29,10 +29,6 @@ public class User {
 		this.role = role;
 	}
 
-	public User() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public static User login(String username, String password) {
 
 		User user = null;
@@ -46,8 +42,8 @@ public class User {
 				int id = rs.getInt("id");
 				user = USER_MAP.get(id);
 				if (user == null) {
-					user = new User(username, password, rs.getString("email"),
-							rs.getString("role"));
+					user = new User(username, password,
+							rs.getString("email"), rs.getString("role"));
 					user.id = id;
 					USER_MAP.put(id, user);
 				}
@@ -60,57 +56,55 @@ public class User {
 
 		return user;
 	}
-
+	
 	public void save() throws HmsException {
 		id = getNextFreeId();
-
+		
 		final String queryTemple = "insert into User values({0}, ''{1}'', ''{2}'', ''{3}'', ''{4}'')";
-		try {
-			DB.createConnection();
-			DB.executeUpdate(MessageFormat.format(queryTemple, id, name,
-					password, email, role));
-			DB.closeConnection();
-
-			USER_MAP.put(id, this);
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
+    	try {
+    		DB.createConnection();
+    		DB.executeUpdate(MessageFormat.format(queryTemple, id, name, password, email, role));
+    		DB.closeConnection();
+    		
+    		USER_MAP.put(id, this);
+    	} catch (SQLException e) {
+    		throw new HmsException(e);
+    	}
 	}
-
+	
 	public void update() throws HmsException {
 
-		final String queryTemple = "update User set name = ''{0}'', password = ''{1}'', "
-				+ "email = ''{2}'', role = ''{3}'' where id = {4})";
-		try {
-			DB.createConnection();
-			DB.executeUpdate(MessageFormat.format(queryTemple, name, password,
-					email, role, id));
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
+		final String queryTemple = "update User set name = ''{0}'', password = ''{1}'', " +
+				"email = ''{2}'', role = ''{3}'' where id = {4})";
+    	try {
+    		DB.createConnection();
+    		DB.executeUpdate(MessageFormat.format(queryTemple, name, password, email, role, id));
+    		DB.closeConnection();
+    	} catch (SQLException e) {
+    		throw new HmsException(e);
+    	}
 	}
+	
+    private int getNextFreeId() throws HmsException {
+        int freeId = 1;
+        try {
+            DB.createConnection();
+        
+        String query = "select max(id) as maxId from User";
 
-	private int getNextFreeId() throws HmsException {
-		int freeId = 1;
-		try {
-			DB.createConnection();
+        ResultSet rs = DB.executeQuery(query);
 
-			String query = "select max(id) as maxId from User";
+        if (rs.next()) {
+            freeId = rs.getInt("maxId") + 1;
+        }
 
-			ResultSet rs = DB.executeQuery(query);
+        DB.closeConnection();
+        } catch (SQLException e) {
+            throw new HmsException(e);
+        }
 
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
-
-		return freeId;
-	}
+        return freeId;
+    }
 
 	public String getUsername() {
 		return name;
@@ -146,15 +140,6 @@ public class User {
 
 	public int getId() {
 		return id;
-	}
-
-	public int checkValidateUser(String user, String pwd) {
-		if (user.equals(""))
-			return -1;
-		else if (pwd.equals(""))
-			return -2;
-		else
-			return 1;
 	}
 
 }

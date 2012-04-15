@@ -124,8 +124,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	public int checkValidateUser(String username, String password) {
-		User user = new User();
-		return user.checkValidateUser(username, password);
+	public boolean checkValidateUser(String username, String password) {
+		User user = User.login(username, password);
+		return user != null;
 	}
 }
