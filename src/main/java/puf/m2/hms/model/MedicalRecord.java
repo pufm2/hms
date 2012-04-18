@@ -3,8 +3,10 @@ package puf.m2.hms.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.db.Database;
@@ -59,6 +61,39 @@ public class MedicalRecord {
 		}
 	}
 
+	public static List<MedicalRecord> loadMedicalRecord(Patient patient) throws HmsException {
+		
+		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE patientId = {0}";
+		List<MedicalRecord> mrList = new ArrayList<MedicalRecord>();
+		
+		try {
+			DB.createConnection();
+
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, patient.getId()));
+
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				MedicalRecord mr = MR_MAP.get(id);
+
+				if (mr == null) {
+					Date dateAffect = DateUtils.parseDate(rs.getString("dateAffect"));
+            		
+					mr = new MedicalRecord(patient, dateAffect, rs.getString("detail"));
+					mr.id = id;
+
+					MR_MAP.put(id, mr);
+				}
+
+				mrList.add(mr);
+			}
+
+			DB.closeConnection();
+		} catch (Exception e) {
+			throw new HmsException(e);
+		}
+		return mrList;
+	}
+	
 	private int getNextFreeId() throws HmsException {
 		int freeId = 1;
 		try {
