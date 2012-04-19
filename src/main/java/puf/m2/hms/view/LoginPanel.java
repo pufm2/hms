@@ -27,6 +27,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private JPasswordField txtPassword;
 	private JButton btnSignIn;
 
+	public static String currentUser = "";
+
 	public LoginPanel() {
 		this.btnSignIn = new JButton("Submit");
 		this.lblUsername = new JLabel("User name:");

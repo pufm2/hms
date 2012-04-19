@@ -14,7 +14,7 @@ public class DoctorView extends JPanel {
 
 		this.containt_tabPanel = new JTabbedPane();
 		this.containt_tabPanel.add(new InsertDiagnosis(), "Insert diagnosis");
-		this.containt_tabPanel.add(new UpdateDiagnosis(), "Insert diagnosis");
+		this.containt_tabPanel.add(new UpdateDiagnosis(), "Update diagnosis");
 		this.containt_tabPanel.add(new ManageSchedule(), "Manage schedule");
 		this.add(containt_tabPanel);
 	}

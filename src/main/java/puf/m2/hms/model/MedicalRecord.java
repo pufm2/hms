@@ -61,24 +61,28 @@ public class MedicalRecord {
 		}
 	}
 
-	public static List<MedicalRecord> loadMedicalRecord(Patient patient) throws HmsException {
-		
+	public static List<MedicalRecord> loadMedicalRecord(Patient patient)
+			throws HmsException {
+
 		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE patientId = {0}";
 		List<MedicalRecord> mrList = new ArrayList<MedicalRecord>();
-		
+
 		try {
 			DB.createConnection();
 
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, patient.getId()));
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+					patient.getId()));
 
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				MedicalRecord mr = MR_MAP.get(id);
 
 				if (mr == null) {
-					Date dateAffect = DateUtils.parseDate(rs.getString("dateAffect"));
-            		
-					mr = new MedicalRecord(patient, dateAffect, rs.getString("detail"));
+					Date dateAffect = DateUtils.parseDate(rs
+							.getString("dateAffect"));
+
+					mr = new MedicalRecord(patient, dateAffect,
+							rs.getString("detail"));
 					mr.id = id;
 
 					MR_MAP.put(id, mr);
@@ -93,7 +97,41 @@ public class MedicalRecord {
 		}
 		return mrList;
 	}
-	
+
+	public static MedicalRecord loadMedicalRecordById(int id)
+			throws HmsException {
+
+		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE id = {0}";
+
+		MedicalRecord mr = MR_MAP.get(id);
+		if (mr == null) {
+			try {
+				DB.createConnection();
+
+				ResultSet rs = DB.executeQuery(MessageFormat.format(
+						queryTemplate, id));
+
+				if (rs.next()) {
+					Date dateAffect = DateUtils.parseDate(rs
+							.getString("dateAffect"));
+					int patientId = rs.getInt("patientId");
+
+					mr = new MedicalRecord(Patient.getPatientById(patientId),
+							dateAffect, rs.getString("detail"));
+					mr.id = id;
+
+					MR_MAP.put(id, mr);
+
+				}
+
+				DB.closeConnection();
+			} catch (Exception e) {
+				throw new HmsException(e);
+			}
+		}
+		return mr;
+	}
+
 	private int getNextFreeId() throws HmsException {
 		int freeId = 1;
 		try {

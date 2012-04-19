@@ -39,80 +39,6 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 		initGUIComponent();
 	}
 
-	public void initGUIComponent() {
-		lblRecordID = new JLabel("Record ID");
-		lblPatientID = new JLabel("Patient ID");
-		lblDateAffect = new JLabel("Date affect");
-		lblRecordDetail = new JLabel("Record detail");
-
-		cboRecordID = new JComboBox();
-		cboPatientID = new JComboBox();
-
-		txtDateAffect = new JDateChooser();
-		txtRecordDetail = new JTextField(50);
-
-		btnInsert = new JButton("Insert");
-
-		drawGUI();
-		addActionListener();
-
-		try {
-			fillPatient();
-		} catch (HmsException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy,
-			int gridwidth, int gridheight) {
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		gbc.gridwidth = gridwidth;
-		gbc.gridheight = gridheight;
-		add(comp, this.gbc);
-	}
-
-	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy) {
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-		add(comp, this.gbc);
-	}
-
-	private void drawGUI() {
-
-		setLayout(new GridBagLayout());
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.insets = new Insets(2, 2, 2, 2);
-
-		addComponent(lblRecordID, 0, 0);
-		addComponent(cboRecordID, 1, 0);
-		addComponent(lblPatientID, 0, 1);
-		addComponent(cboPatientID, 1, 1);
-		addComponent(lblDateAffect, 0, 2);
-		addComponent(txtDateAffect, 1, 2);
-		addComponent(lblRecordDetail, 0, 3);
-		addComponent(txtRecordDetail, 1, 3);
-
-		addComponent(btnInsert, 0, 5);
-	}
-
-	public void addActionListener() {
-		btnInsert.addActionListener(this);
-	}
-
-	public void fillPatient() throws HmsException {
-
-		for (Patient patient : Patient.getPatients()) {
-			cboPatientID.addItem(patient.getId());
-		}
-
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("Insert".equals(e.getActionCommand())) {
@@ -141,6 +67,80 @@ public class ManageMedicalRecord extends JPanel implements ActionListener {
 					ex.printStackTrace();
 				}
 			}
+		}
+	}
+
+	public void addActionListener() {
+		btnInsert.addActionListener(this);
+	}
+
+	// Add component to specify row and column
+	public void addComponent(JComponent comp, int gridx, int gridy) {
+		gbc.gridx = gridx;
+		gbc.gridy = gridy;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		add(comp, this.gbc);
+	}
+
+	// Add component to specify row and column
+	public void addComponent(JComponent comp, int gridx, int gridy,
+			int gridwidth, int gridheight) {
+		gbc.gridx = gridx;
+		gbc.gridy = gridy;
+		gbc.gridwidth = gridwidth;
+		gbc.gridheight = gridheight;
+		add(comp, this.gbc);
+	}
+
+	private void drawGUI() {
+
+		setLayout(new GridBagLayout());
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(2, 2, 2, 2);
+
+		addComponent(lblRecordID, 0, 0);
+		addComponent(cboRecordID, 1, 0);
+		addComponent(lblPatientID, 0, 1);
+		addComponent(cboPatientID, 1, 1);
+		addComponent(lblDateAffect, 0, 2);
+		addComponent(txtDateAffect, 1, 2);
+		addComponent(lblRecordDetail, 0, 3);
+		addComponent(txtRecordDetail, 1, 3);
+
+		addComponent(btnInsert, 0, 5);
+	}
+
+	public void fillPatient() throws HmsException {
+
+		for (Patient patient : Patient.getPatients()) {
+			cboPatientID.addItem(patient.getId());
+		}
+
+	}
+
+	public void initGUIComponent() {
+		lblRecordID = new JLabel("Record ID");
+		lblPatientID = new JLabel("Patient ID");
+		lblDateAffect = new JLabel("Date affect");
+		lblRecordDetail = new JLabel("Record detail");
+
+		cboRecordID = new JComboBox();
+		cboPatientID = new JComboBox();
+
+		txtDateAffect = new JDateChooser();
+		txtRecordDetail = new JTextField(50);
+
+		btnInsert = new JButton("Insert");
+
+		drawGUI();
+		addActionListener();
+
+		try {
+			fillPatient();
+		} catch (HmsException e) {
+			e.printStackTrace();
 		}
 	}
 

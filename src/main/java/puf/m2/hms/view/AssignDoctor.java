@@ -2,11 +2,9 @@ package puf.m2.hms.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -150,12 +148,13 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				physician = Physician.getPhysicianById(physicianID);
 				Patient patient;
 				patient = Patient.getPatientById(patientID);
-				assign(physician, patient, txtStartDate.getDate(), txtEndDate.getDate());
+				assign(physician, patient, txtStartDate.getDate(),
+						txtEndDate.getDate());
 			} catch (HmsException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Assign failed");
 				return;
-			} 
+			}
 			JOptionPane.showMessageDialog(null, "Assign successful");
 
 		}
