@@ -16,6 +16,7 @@ public class AssignDoctorTest {
 
 	@Test
 	public void testIsExistPatient() throws SQLException, HmsException {
+		// For test
 		Physician mockPhysician = EasyMock.createMock(Physician.class);
 		mockPhysician.setId(101);
 		EasyMock.expect(mockPhysician.isExist(mockPhysician.getId()))

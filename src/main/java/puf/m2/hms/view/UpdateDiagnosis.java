@@ -1,20 +1,12 @@
 package puf.m2.hms.view;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.MedicalRecord;
@@ -23,88 +15,21 @@ import puf.m2.hms.utils.DateUtils;
 
 public class UpdateDiagnosis extends JPanel implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnUpdate;
+	private javax.swing.JComboBox cboMedicalRecordID;
+	private javax.swing.JComboBox cboPatientID;
+	private javax.swing.JLabel lblPatientID;
+	private javax.swing.JLabel lblDateAffect;
+	private javax.swing.JLabel lblDetail;
+	private javax.swing.JScrollPane jScrollPane1;
+	private javax.swing.JTextArea txtDetails;
+
+	// End of variables declaration
 
 	public UpdateDiagnosis() {
-		super();
-		initGUIComponent();
-	}
-
-	protected GridBagConstraints gbc = new GridBagConstraints();
-
-	private JLabel lblPatientID, lblMedicalRecord, lblDetails;
-	private JComboBox cboPatientID, cboMedicalRecordID;
-
-	private JLabel lblDate;
-	private JTextField txtDetails;
-	private JButton btnSave;
-	private JButton btnClear;
-
-	private void addActionListener() {
-		btnSave.setActionCommand("Save");
-		btnSave.addActionListener(this);
-
-		btnClear.setActionCommand("Clear");
-		btnClear.addActionListener(this);
-
-		cboPatientID.setActionCommand("PatientID");
-		cboPatientID.addActionListener(this);
-
-		cboMedicalRecordID.setActionCommand("MedicalRecordID");
-		cboMedicalRecordID.addActionListener(this);
-	}
-
-	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy) {
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-		add(comp, this.gbc);
-	}
-
-	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy,
-			int gridwidth, int gridheight) {
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		gbc.gridwidth = gridwidth;
-		gbc.gridheight = gridheight;
-		add(comp, this.gbc);
-	}
-
-	private void drawGUI() {
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(2, 2, 2, 2); // insets for all components
-
-		addComponent(lblPatientID, 0, 0);
-		addComponent(cboPatientID, 1, 0);
-		addComponent(lblMedicalRecord, 0, 1);
-		addComponent(cboMedicalRecordID, 1, 1);
-		addComponent(lblDate, 0, 2);
-		addComponent(lblDetails, 0, 3);
-		addComponent(txtDetails, 1, 3);
-
-		addComponent(btnSave, 0, 4);
-		addComponent(btnClear, 1, 4);
-	}
-
-	private void initGUIComponent() {
-		lblPatientID = new JLabel("Patient");
-		cboPatientID = new JComboBox();
-		lblMedicalRecord = new JLabel("Medical record");
-		cboMedicalRecordID = new JComboBox();
-		lblDetails = new JLabel("Details");
-		lblDate = new JLabel("    ");
-		txtDetails = new JTextField(50);
-		btnSave = new JButton("Update");
-		btnClear = new JButton("Cancel");
-
-		drawGUI();
+		initComponents();
 
 		try {
 			fillComboBox();
@@ -115,14 +40,6 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 		addActionListener();
 	}
 
-	private void fillComboBox() throws HmsException {
-		// Fill patientID
-		for (Patient patient : Patient.getPatients()) {
-			cboPatientID.addItem(patient.getId());
-		}
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("Update".equals(e.getActionCommand())) {
 			Patient patient = new Patient(Integer.parseInt(cboPatientID
@@ -132,7 +49,7 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 			MedicalRecord medicalRecord = null;
 			try {
 				medicalRecord = new MedicalRecord(patient,
-						DateUtils.parseDate(lblDate.getText()), detail);
+						DateUtils.parseDate(lblDateAffect.getText()), detail);
 				try {
 					medicalRecord.update();
 				} catch (HmsException e1) {
@@ -166,9 +83,137 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 			} catch (HmsException e1) {
 				e1.printStackTrace();
 			}
-			lblDate.setText(DateUtils.dateToString(medicalRecord
-					.getDateAffect()));
 			txtDetails.setText(medicalRecord.getDetail());
 		}
 	}
+
+	private void addActionListener() {
+		btnUpdate.setActionCommand("Save");
+		btnUpdate.addActionListener(this);
+
+		cboPatientID.setActionCommand("PatientID");
+		cboPatientID.addActionListener(this);
+
+		cboMedicalRecordID.setActionCommand("MedicalRecordID");
+		cboMedicalRecordID.addActionListener(this);
+	}
+
+	private void fillComboBox() throws HmsException {
+		// Fill patientID
+		for (Patient patient : Patient.getPatients()) {
+			cboPatientID.addItem(patient.getId());
+		}
+	}
+
+	private void initComponents() {
+
+		lblPatientID = new javax.swing.JLabel();
+		cboPatientID = new javax.swing.JComboBox();
+		lblDateAffect = new javax.swing.JLabel();
+		cboMedicalRecordID = new javax.swing.JComboBox();
+		lblDetail = new javax.swing.JLabel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		txtDetails = new javax.swing.JTextArea();
+		btnUpdate = new javax.swing.JButton();
+
+		lblPatientID.setText("Patient ID");
+
+		lblDateAffect.setText("Medical record ID");
+
+		lblDetail.setText("Details");
+
+		txtDetails.setColumns(20);
+		txtDetails.setRows(5);
+		jScrollPane1.setViewportView(txtDetails);
+
+		btnUpdate.setText("Update");
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		this.setLayout(layout);
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.TRAILING)
+												.addComponent(btnUpdate)
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGroup(
+																		layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(
+																						lblPatientID)
+																				.addComponent(
+																						lblDateAffect)
+																				.addComponent(
+																						lblDetail))
+																.addGap(18, 18,
+																		18)
+																.addGroup(
+																		layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addGroup(
+																						layout.createParallelGroup(
+																								javax.swing.GroupLayout.Alignment.LEADING,
+																								false)
+																								.addComponent(
+																										cboPatientID,
+																										0,
+																										94,
+																										Short.MAX_VALUE)
+																								.addComponent(
+																										cboMedicalRecordID,
+																										0,
+																										javax.swing.GroupLayout.DEFAULT_SIZE,
+																										Short.MAX_VALUE))
+																				.addComponent(
+																						jScrollPane1,
+																						javax.swing.GroupLayout.PREFERRED_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.PREFERRED_SIZE))))
+								.addContainerGap(21, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(lblPatientID)
+												.addComponent(
+														cboPatientID,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(lblDateAffect)
+												.addComponent(
+														cboMedicalRecordID,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(lblDetail)
+												.addComponent(
+														jScrollPane1,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+								.addComponent(btnUpdate)
+								.addContainerGap(19, Short.MAX_VALUE)));
+	}// </editor-fold>
 }

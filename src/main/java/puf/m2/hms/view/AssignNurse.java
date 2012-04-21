@@ -1,12 +1,10 @@
 package puf.m2.hms.view;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
@@ -16,58 +14,19 @@ import puf.m2.hms.model.PhysicianAssignment;
 public class AssignNurse extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel lblPatientID, lblAvaiableNurse;
-	private JComboBox cboPatientID, cboAvaiableNurse;
-	private JButton btnMakeAssign;
 
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnAssign;
+	private javax.swing.JComboBox cboPatientID;
+	private javax.swing.JComboBox cboNurseID;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+
+	// End of variables declaration
 
 	public AssignNurse() {
+		initComponents();
 
-		this.lblPatientID = new JLabel("ID Patient:");
-		this.lblAvaiableNurse = new JLabel("Available nurse:");
-		this.btnMakeAssign = new JButton("Make assign");
-
-		// ----------------------Combo
-		// box----------------------------------------//
-		this.cboPatientID = new JComboBox();
-		this.cboAvaiableNurse = new JComboBox();
-
-		// ----------------------ADD
-		// CONTAINT------------------------------------//
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(2, 2, 2, 2); // insets for all components
-		c.gridx = 0; // column 0
-		c.gridy = 0; // row 0
-		c.ipadx = 5;
-		c.ipady = 5;
-		c.anchor = GridBagConstraints.LINE_START;
-		this.add(this.lblPatientID, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		// c.gridy = 0; // comment out this for reusing the obj
-		c.ipadx = 0; // resets the pad to 0
-		c.ipady = 0;
-		this.add(this.cboPatientID, c);// ID is generate by system
-
-		c.gridx = 0; // column 0
-		c.gridy = 1; // row 1
-		c.anchor = GridBagConstraints.LINE_START;
-		this.add(this.lblAvaiableNurse, c);
-
-		// Set data for comboboxs
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1; // column 0
-		c.gridy = 1; // row 1
-		this.add(this.cboAvaiableNurse, c);
-
-		c.gridx = 1; // column 1
-		c.gridy = 2; // row 2
-		c.anchor = GridBagConstraints.LINE_END;
-		this.add(this.btnMakeAssign, c);
-		
 		try {
 			fillComboBox();
 		} catch (HmsException e) {
@@ -75,8 +34,36 @@ public class AssignNurse extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 
-		// Add action listener
-		btnMakeAssign.addActionListener(this);
+		addActionListener();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if ("Make assign".equals(e.getActionCommand())) {
+			Patient patient;
+			try {
+				patient = Patient.getPatientById(Integer.parseInt(cboPatientID
+						.getSelectedItem().toString()));
+				Physician nurse = Physician.getPhysicianById(Integer
+						.parseInt(cboNurseID.getSelectedItem().toString()));
+
+				PhysicianAssignment physicianAssignment = new PhysicianAssignment(
+						patient, nurse);
+				physicianAssignment.save();
+				JOptionPane.showMessageDialog(null,
+						"Insert new assign successful");
+			} catch (Exception ex) {
+				JOptionPane
+						.showMessageDialog(null, "Fail to insert new assign");
+
+			}
+		}
+	}
+
+	private void addActionListener() {
+		btnAssign.setActionCommand("Assign");
+		btnAssign.addActionListener(this);
 	}
 
 	private void fillComboBox() throws HmsException {
@@ -89,28 +76,92 @@ public class AssignNurse extends JPanel implements ActionListener {
 		// Fill nurseID
 		for (Physician nurse : Physician.getNurses()) {
 			if (nurse.isAvailable()) {
-				cboAvaiableNurse.addItem(nurse.getId());
+				cboNurseID.addItem(nurse.getId());
 			}
 		}
 
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	private void initComponents() {
 
-		if ("Make assign".equals(e.getActionCommand())) {
-			Patient patient;
-			try {
-				patient = Patient.getPatientById(Integer.parseInt(cboPatientID.getSelectedItem().toString()));
-				Physician nurse = Physician.getPhysicianById(Integer.parseInt(cboAvaiableNurse.getSelectedItem().toString()));
-				
-				PhysicianAssignment physicianAssignment = new PhysicianAssignment(patient, nurse);
-				physicianAssignment.save();
-				JOptionPane.showMessageDialog(null, "Insert new assign successful");
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "Fail to insert new assign");
-				
-			}
-		}
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		btnAssign = new javax.swing.JButton();
+		cboPatientID = new javax.swing.JComboBox();
+		cboNurseID = new javax.swing.JComboBox();
+
+		jLabel1.setText("Patient ID");
+
+		jLabel2.setText("Available nurse");
+
+		btnAssign.setText("Assign");
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		this.setLayout(layout);
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addGap(82, 82, 82)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.TRAILING)
+												.addComponent(btnAssign)
+												.addGroup(
+														layout.createParallelGroup(
+																javax.swing.GroupLayout.Alignment.LEADING,
+																false)
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addComponent(
+																						jLabel1)
+																				.addPreferredGap(
+																						javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE)
+																				.addComponent(
+																						cboPatientID,
+																						javax.swing.GroupLayout.PREFERRED_SIZE,
+																						137,
+																						javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addComponent(
+																						jLabel2)
+																				.addGap(32,
+																						32,
+																						32)
+																				.addComponent(
+																						cboNurseID,
+																						javax.swing.GroupLayout.PREFERRED_SIZE,
+																						137,
+																						javax.swing.GroupLayout.PREFERRED_SIZE))))
+								.addContainerGap(90, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addGap(22, 22, 22)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabel1)
+												.addComponent(
+														cboPatientID,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addGap(22, 22, 22)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabel2)
+												.addComponent(
+														cboNurseID,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addGap(27, 27, 27).addComponent(btnAssign)
+								.addContainerGap(127, Short.MAX_VALUE)));
 	}
 }

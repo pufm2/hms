@@ -1,20 +1,12 @@
 package puf.m2.hms.view;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.Date;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.MedicalRecord;
@@ -24,23 +16,29 @@ import puf.m2.hms.view.datechooser.JDateChooser;
 
 public class InsertDiagnosis extends JPanel implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	protected GridBagConstraints gbc = new GridBagConstraints();
-
-	private JLabel lblPatientID, lblDateAffect, lblDetails;
-	private JComboBox cboPatientID;
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnSave;
+	private javax.swing.JComboBox cboPatientID;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JScrollPane jScrollPane1;
 	private JDateChooser txtDateAffect;
-	private JTextField txtDetails;
-	private JButton btnSave;
-	private JButton btnClear;
+	private javax.swing.JTextArea txtDetails;
+
+	// End of variables declaration
 
 	public InsertDiagnosis() {
-		super();
-		initGUIComponent();
+		initComponents();
+		try {
+			fillComboBox();
+		} catch (HmsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		addActionListener();
 	}
 
 	@Override
@@ -75,64 +73,6 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 	private void addActionListener() {
 		this.btnSave.setActionCommand("Save");
 		this.btnSave.addActionListener(this);
-
-		this.btnClear.setActionCommand("Clear");
-		this.btnClear.addActionListener(this);
-	}
-
-	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy) {
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-		add(comp, this.gbc);
-	}
-
-	// Add component to specify row and column
-	public void addComponent(JComponent comp, int gridx, int gridy,
-			int gridwidth, int gridheight) {
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		gbc.gridwidth = gridwidth;
-		gbc.gridheight = gridheight;
-		add(comp, this.gbc);
-	}
-
-	private void drawGUI() {
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(2, 2, 2, 2); // insets for all components
-
-		addComponent(lblPatientID, 0, 0);
-		addComponent(cboPatientID, 1, 0);
-		addComponent(lblDateAffect, 0, 1);
-		addComponent(txtDateAffect, 1, 1);
-		addComponent(lblDetails, 0, 2);
-		addComponent(txtDetails, 1, 2);
-
-		addComponent(btnSave, 0, 3);
-		addComponent(btnClear, 1, 3);
-	}
-
-	private void initGUIComponent() {
-		lblPatientID = new JLabel("Patient");
-		lblDateAffect = new JLabel("Date affect");
-		lblDetails = new JLabel("Details");
-		cboPatientID = new JComboBox();
-		txtDateAffect = new JDateChooser();
-		txtDetails = new JTextField(50);
-		btnSave = new JButton("Save");
-		btnClear = new JButton("Clear ");
-
-		drawGUI();
-		addActionListener();
-
-		try {
-			fillComboBox();
-		} catch (HmsException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void fillComboBox() throws HmsException {
@@ -141,4 +81,116 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 			cboPatientID.addItem(patient.getId());
 		}
 	}
+
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		cboPatientID = new javax.swing.JComboBox();
+		jLabel4 = new javax.swing.JLabel();
+		txtDateAffect = new JDateChooser();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		txtDetails = new javax.swing.JTextArea();
+		btnSave = new javax.swing.JButton();
+
+		jLabel1.setText("Patient");
+
+		jLabel2.setText("Date affect");
+
+		jLabel4.setText("Details");
+
+		txtDetails.setColumns(20);
+		txtDetails.setRows(5);
+		jScrollPane1.setViewportView(txtDetails);
+
+		btnSave.setText("Save");
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		this.setLayout(layout);
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.TRAILING)
+												.addComponent(btnSave)
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGroup(
+																		layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(
+																						jLabel2)
+																				.addComponent(
+																						jLabel1)
+																				.addComponent(
+																						jLabel4))
+																.addGap(18, 18,
+																		18)
+																.addGroup(
+																		layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(
+																						jScrollPane1,
+																						javax.swing.GroupLayout.PREFERRED_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.PREFERRED_SIZE)
+																				.addGroup(
+																						layout.createParallelGroup(
+																								javax.swing.GroupLayout.Alignment.LEADING,
+																								false)
+																								.addComponent(
+																										cboPatientID,
+																										0,
+																										72,
+																										Short.MAX_VALUE)
+																								.addComponent(
+																										txtDateAffect)))))
+								.addContainerGap(
+										javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabel1)
+												.addComponent(
+														cboPatientID,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabel2)
+												.addComponent(
+														txtDateAffect,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(jLabel4)
+												.addComponent(
+														jScrollPane1,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addGap(18, 18, 18)
+								.addComponent(btnSave)
+								.addContainerGap(
+										javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
+	}// </editor-fold>
 }
