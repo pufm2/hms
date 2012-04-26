@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
 
 public class LookupPatient extends JPanel implements ActionListener {
@@ -40,24 +39,25 @@ public class LookupPatient extends JPanel implements ActionListener {
 				patientID = Integer.parseInt(txtPatientID.getText());
 			}
 
+			Patient patient = null;
 			try {
-				Patient patient = Patient.getPatientById(patientID);
-
-				if (patient != null) {
-					String patientInfomation = "Patient infomation \n";
-					patientInfomation += "\n Patient ID: " + patient.getId()
-							+ "\n Patient name: " + patient.getName()
-							+ "\n Birthdate: " + patient.getDateOfBirth()
-							+ "\n Address: " + patient.getAddress()
-							+ "\n Sex: " + patient.getSex() + "\n Phone: "
-							+ patient.getPhone() + "\n Biographic health: "
-							+ patient.getBiographicHealth();
-
-					JOptionPane.showMessageDialog(null, patientInfomation);
-				}
-			} catch (HmsException ex) {
+				patient = Patient.getPatientById(patientID);
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				ex.printStackTrace();
+				e1.printStackTrace();
+			}
+
+			if (patient != null) {
+				String patientInfomation = "Patient infomation \n";
+				patientInfomation += "\n Patient ID: " + patient.getId()
+						+ "\n Patient name: " + patient.getName()
+						+ "\n Birthdate: " + patient.getDateOfBirth()
+						+ "\n Address: " + patient.getAddress() + "\n Sex: "
+						+ patient.getSex() + "\n Phone: " + patient.getPhone()
+						+ "\n Biographic health: "
+						+ patient.getBiographicHealth();
+
+				JOptionPane.showMessageDialog(null, patientInfomation);
 			}
 		}
 	}

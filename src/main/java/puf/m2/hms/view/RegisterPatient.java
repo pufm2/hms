@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.view.datechooser.JDateChooser;
 
@@ -55,15 +54,13 @@ public class RegisterPatient extends JPanel implements ActionListener {
 			// Save patient information to database
 			try {
 				patient.save();
-			} catch (HmsException ex) {
+				JOptionPane.showMessageDialog(null,
+						"Saved patient's information with new patient ID is "
+								+ patient.getId());
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null,
 						"Can not save patient's information");
-				return;
 			}
-
-			JOptionPane.showMessageDialog(null,
-					"Saved patient's information with new patient ID is "
-							+ patient.getId());
 		}
 	}
 
@@ -72,7 +69,6 @@ public class RegisterPatient extends JPanel implements ActionListener {
 	}
 
 	private void fillComboBox() {
-		// TODO Auto-generated method stub
 
 	}
 

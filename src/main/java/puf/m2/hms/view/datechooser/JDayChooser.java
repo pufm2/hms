@@ -33,15 +33,12 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
-
 import java.text.DateFormatSymbols;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -503,7 +500,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 	public void setMonth(int month) {
 		calendar.set(Calendar.MONTH, month);
 		int maxDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		
+
 		int adjustedDay = day;
 		if (day > maxDays) {
 			adjustedDay = maxDays;
@@ -1013,12 +1010,11 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 	 * @param s
 	 *            The command line arguments
 	 */
-/*	public static void main(String[] s) {
-		JFrame frame = new JFrame("JDayChooser");
-		frame.getContentPane().add(new JDayChooser());
-		frame.pack();
-		frame.setVisible(true);
-	}*/
+	/*
+	 * public static void main(String[] s) { JFrame frame = new
+	 * JFrame("JDayChooser"); frame.getContentPane().add(new JDayChooser());
+	 * frame.pack(); frame.setVisible(true); }
+	 */
 
 	class DecoratorButton extends JButton {
 		private static final long serialVersionUID = -5306477668406547496L;

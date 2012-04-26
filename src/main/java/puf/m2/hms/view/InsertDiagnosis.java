@@ -2,13 +2,11 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.MedicalRecord;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.utils.DateUtils;
@@ -32,12 +30,7 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 
 	public InsertDiagnosis() {
 		initComponents();
-		try {
-			fillComboBox();
-		} catch (HmsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		fillComboBox();
 		addActionListener();
 	}
 
@@ -51,20 +44,21 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 
 			MedicalRecord medicalRecord = new MedicalRecord(patient,
 					dateAffect, detail);
+
 			try {
 				medicalRecord.save();
-			} catch (HmsException e1) {
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+
 			JOptionPane.showMessageDialog(null, "Insert diagnosis successful");
 		} else if ("Clear".equals(e.getActionCommand())) {
 			cboPatientID.setSelectedIndex(0);
-			try {
-				txtDateAffect.setDate(DateUtils.parseDate(DateUtils
-						.getCurrentDate()));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
+
+			txtDateAffect.setDate(DateUtils.parseDate(DateUtils
+					.getCurrentDate()));
+
 			txtDetails.setText("");
 			JOptionPane.showMessageDialog(null, "Clear all!");
 		}
@@ -75,10 +69,15 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 		this.btnSave.addActionListener(this);
 	}
 
-	private void fillComboBox() throws HmsException {
+	private void fillComboBox() {
 		// Fill patientID
-		for (Patient patient : Patient.getPatients()) {
-			cboPatientID.addItem(patient.getId());
+		try {
+			for (Patient patient : Patient.getPatients()) {
+				cboPatientID.addItem(patient.getId());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

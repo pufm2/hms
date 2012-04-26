@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
@@ -536,13 +535,14 @@ public class JDateChooser extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Should only be invoked if the JDateChooser is not used anymore. Due to popup
-	 * handling it had to register a change listener to the default menu
+	 * Should only be invoked if the JDateChooser is not used anymore. Due to
+	 * popup handling it had to register a change listener to the default menu
 	 * selection manager which will be unregistered here. Use this method to
 	 * cleanup possible memory leaks.
 	 */
 	public void cleanup() {
-		MenuSelectionManager.defaultManager().removeChangeListener(changeListener);
+		MenuSelectionManager.defaultManager().removeChangeListener(
+				changeListener);
 		changeListener = null;
 	}
 
@@ -552,26 +552,23 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 * @param s
 	 *            The command line arguments
 	 */
-/*	public static void main(String[] s) {
-		JFrame frame = new JFrame("JDateChooser");
-		JDateChooser dateChooser = new JDateChooser();
-		// JDateChooser dateChooser = new JDateChooser(null, new Date(), null,
-		// null);
-		// dateChooser.setLocale(new Locale("de"));
-		// dateChooser.setDateFormatString("dd. MMMM yyyy");
-
-		// dateChooser.setPreferredSize(new Dimension(130, 20));
-		// dateChooser.setFont(new Font("Verdana", Font.PLAIN, 10));
-		// dateChooser.setDateFormatString("yyyy-MM-dd HH:mm");
-
-		// URL iconURL = dateChooser.getClass().getResource(
-		// "/com/toedter/calendar/images/JMonthChooserColor32.gif");
-		// ImageIcon icon = new ImageIcon(iconURL);
-		// dateChooser.setIcon(icon);
-
-		frame.getContentPane().add(dateChooser);
-		frame.pack();
-		frame.setVisible(true);
-	}*/
+	/*
+	 * public static void main(String[] s) { JFrame frame = new
+	 * JFrame("JDateChooser"); JDateChooser dateChooser = new JDateChooser(); //
+	 * JDateChooser dateChooser = new JDateChooser(null, new Date(), null, //
+	 * null); // dateChooser.setLocale(new Locale("de")); //
+	 * dateChooser.setDateFormatString("dd. MMMM yyyy");
+	 * 
+	 * // dateChooser.setPreferredSize(new Dimension(130, 20)); //
+	 * dateChooser.setFont(new Font("Verdana", Font.PLAIN, 10)); //
+	 * dateChooser.setDateFormatString("yyyy-MM-dd HH:mm");
+	 * 
+	 * // URL iconURL = dateChooser.getClass().getResource( //
+	 * "/com/toedter/calendar/images/JMonthChooserColor32.gif"); // ImageIcon
+	 * icon = new ImageIcon(iconURL); // dateChooser.setIcon(icon);
+	 * 
+	 * frame.getContentPane().add(dateChooser); frame.pack();
+	 * frame.setVisible(true); }
+	 */
 
 }

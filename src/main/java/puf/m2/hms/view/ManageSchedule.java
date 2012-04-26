@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
+import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.model.Physician;
 import puf.m2.hms.model.Schedule;
 import puf.m2.hms.view.datechooser.JDateChooser;
@@ -40,19 +40,21 @@ public class ManageSchedule extends JPanel implements ActionListener {
 			int doctorID = Integer.parseInt(cboDoctorID.getSelectedItem()
 					.toString());
 			Physician physician = null;
+
 			try {
 				physician = Physician.getPhysicianById(doctorID);
-			} catch (HmsException e1) {
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			Schedule schedule = new Schedule(physician, txtStartDate.getDate(),
 					txtEndDate.getDate(), chkAvailable.isSelected());
 			try {
 				schedule.save();
-			} catch (HmsException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Save schedule successful");
+			} catch (ScheduleException e1) {
+				System.out.println("Save unsuccessful: " + e1.getMessage());
 			}
-			JOptionPane.showMessageDialog(null, "Save schedule successful");
 		}
 	}
 
@@ -62,11 +64,12 @@ public class ManageSchedule extends JPanel implements ActionListener {
 	}
 
 	private void fillComboBox() {
+
 		try {
 			for (Physician doctor : Physician.getDoctors()) {
 				cboDoctorID.addItem(doctor.getId());
 			}
-		} catch (HmsException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

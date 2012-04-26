@@ -1,19 +1,14 @@
 package puf.m2.hms.view.datechooser;
 
-import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import java.awt.Dimension;
-
-import java.awt.Rectangle;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Rectangle;
 import java.util.Date;
 
-import javax.swing.JTextArea;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class JCalTestEclipse extends JFrame {
@@ -54,14 +49,14 @@ public class JCalTestEclipse extends JFrame {
 			dateButton.setText("Get Date Info");
 			dateButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// System.out.println("actionPerformed()"); 
+					// System.out.println("actionPerformed()");
 					displayDateInfo();
 				}
 			});
 		}
 		return dateButton;
 	}
-	
+
 	public void displayDateInfo() {
 		Date d = jCal.getDate();
 		dateTextField.setText(d.toString());
@@ -150,16 +145,13 @@ public class JCalTestEclipse extends JFrame {
 		return exitButton;
 	}
 
-/*	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				JCalTestEclipse thisClass = new JCalTestEclipse();
-				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				thisClass.setVisible(true);
-			}
-		});
-	}*/
+	/*
+	 * public static void main(String[] args) { // TODO Auto-generated method
+	 * stub SwingUtilities.invokeLater(new Runnable() { public void run() {
+	 * JCalTestEclipse thisClass = new JCalTestEclipse();
+	 * thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 * thisClass.setVisible(true); } }); }
+	 */
 
 	public JCalTestEclipse() {
 		super();

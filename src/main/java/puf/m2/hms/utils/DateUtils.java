@@ -15,8 +15,14 @@ public class DateUtils {
 		return DF.format(date);
 	}
 
-	public static Date parseDate(String source) throws ParseException {
-		return DF.parse(source);
+	public static Date parseDate(String source) {
+		Date result = null;
+		try {
+			result = DF.parse(source);
+		} catch (ParseException p) {
+
+		}
+		return result;
 	}
 
 	public static String getCurrentDate() {

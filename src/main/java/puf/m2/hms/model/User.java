@@ -8,6 +8,7 @@ import java.util.Map;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
+import puf.m2.hms.exception.UserException;
 
 public class User {
 
@@ -17,9 +18,10 @@ public class User {
 	private int id;
 	private String name;
 	private String password;
-
 	private String email;
 	private String role;
+
+	private static boolean isLogin = false;
 
 	public User(String name, String password, String email, String role) {
 
@@ -29,82 +31,76 @@ public class User {
 		this.role = role;
 	}
 
-	public static User login(String username, String password) {
+	public static User login(String username, String password)
+			throws UserException {
 
+		String queryTemplate = "";
 		User user = null;
-		try {
-			DB.createConnection();
-			final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-					username, password));
+		DB.createConnection();
+		queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
+		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+				username, password));
 
-			if (rs.next()) {
+		try {
+			if (rs != null) {
+				isLogin = true;
 				int id = rs.getInt("id");
 				user = USER_MAP.get(id);
 				if (user == null) {
-					user = new User(username, password,
-							rs.getString("email"), rs.getString("role"));
+					user = new User(username, password, rs.getString("email"),
+							rs.getString("role"));
 					user.id = id;
 					USER_MAP.put(id, user);
 				}
+			} else {
+				throw new UserException(username, password);
 			}
-
-			DB.closeConnection();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			isLogin = false;
 		}
 
+		DB.closeConnection();
 		return user;
 	}
-	
-	public void save() throws HmsException {
+
+	public void save() throws Exception {
 		id = getNextFreeId();
-		
+
 		final String queryTemple = "insert into User values({0}, ''{1}'', ''{2}'', ''{3}'', ''{4}'')";
-    	try {
-    		DB.createConnection();
-    		DB.executeUpdate(MessageFormat.format(queryTemple, id, name, password, email, role));
-    		DB.closeConnection();
-    		
-    		USER_MAP.put(id, this);
-    	} catch (SQLException e) {
-    		throw new HmsException(e);
-    	}
+		DB.createConnection();
+		DB.executeUpdate(MessageFormat.format(queryTemple, id, name, password,
+				email, role));
+		DB.closeConnection();
+
+		USER_MAP.put(id, this);
 	}
-	
-	public void update() throws HmsException {
 
-		final String queryTemple = "update User set name = ''{0}'', password = ''{1}'', " +
-				"email = ''{2}'', role = ''{3}'' where id = {4})";
-    	try {
-    		DB.createConnection();
-    		DB.executeUpdate(MessageFormat.format(queryTemple, name, password, email, role, id));
-    		DB.closeConnection();
-    	} catch (SQLException e) {
-    		throw new HmsException(e);
-    	}
+	public void update() throws Exception {
+
+		final String queryTemple = "update User set name = ''{0}'', password = ''{1}'', "
+				+ "email = ''{2}'', role = ''{3}'' where id = {4})";
+		DB.createConnection();
+		DB.executeUpdate(MessageFormat.format(queryTemple, name, password,
+				email, role, id));
+		DB.closeConnection();
 	}
-	
-    private int getNextFreeId() throws HmsException {
-        int freeId = 1;
-        try {
-            DB.createConnection();
-        
-        String query = "select max(id) as maxId from User";
 
-        ResultSet rs = DB.executeQuery(query);
+	private int getNextFreeId() throws Exception {
+		int freeId = 1;
+		String query = "";
 
-        if (rs.next()) {
-            freeId = rs.getInt("maxId") + 1;
-        }
+		DB.createConnection();
+		query = "select max(id) as maxId from User";
+		ResultSet rs = DB.executeQuery(query);
 
-        DB.closeConnection();
-        } catch (SQLException e) {
-            throw new HmsException(e);
-        }
+		if (rs.next()) {
+			freeId = rs.getInt("maxId") + 1;
+		}
 
-        return freeId;
-    }
+		DB.closeConnection();
+
+		return freeId;
+	}
 
 	public String getUsername() {
 		return name;

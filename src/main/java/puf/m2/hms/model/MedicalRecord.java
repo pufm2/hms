@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,127 +28,111 @@ public class MedicalRecord {
 		this.detail = detail;
 	}
 
-	public void save() throws HmsException {
-		try {
-			id = getNextFreeId();
-			DB.createConnection();
+	public void save() throws Exception {
+		String queryTemplate = "";
+		id = getNextFreeId();
 
-			String queryTemplate = "insert into MedicalRecord values({0}, {1}, ''{2}'', ''{3}'')";
+		DB.createConnection();
 
-			DB.executeUpdate(MessageFormat.format(queryTemplate, id,
-					patient.getId(), DateUtils.dateToString(dateAffect), detail));
-			DB.closeConnection();
+		queryTemplate = "insert into MedicalRecord values({0}, {1}, ''{2}'', ''{3}'')";
 
-			MR_MAP.put(id, this);
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
+		DB.executeUpdate(MessageFormat.format(queryTemplate, id,
+				patient.getId(), DateUtils.dateToString(dateAffect), detail));
+		DB.closeConnection();
+
+		MR_MAP.put(id, this);
 	}
 
-	public void update() throws HmsException {
-		try {
-			DB.createConnection();
+	public void update() throws Exception {
+		String queryTemplate = "";
+		DB.createConnection();
 
-			String queryTemplate = "update MedicalRecord set patientId = {0}, dateAfect = ''{1}'', detail = ''{2}'' where id = {3})";
+		queryTemplate = "update MedicalRecord set patientId = {0}, dateAfect = ''{1}'', detail = ''{2}'' where id = {3})";
 
-			DB.executeUpdate(MessageFormat.format(queryTemplate,
-					patient.getId(), DateUtils.dateToString(dateAffect),
-					detail, id));
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
+		DB.executeUpdate(MessageFormat.format(queryTemplate, patient.getId(),
+				DateUtils.dateToString(dateAffect), detail, id));
+		DB.closeConnection();
+
 	}
 
 	public static List<MedicalRecord> loadMedicalRecord(Patient patient)
-			throws HmsException {
+			throws Exception {
 
 		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE patientId = {0}";
 		List<MedicalRecord> mrList = new ArrayList<MedicalRecord>();
 
-		try {
-			DB.createConnection();
+		DB.createConnection();
 
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-					patient.getId()));
+		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+				patient.getId()));
 
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				MedicalRecord mr = MR_MAP.get(id);
+		while (rs.next()) {
+			int id = rs.getInt("id");
+			MedicalRecord mr = MR_MAP.get(id);
 
-				if (mr == null) {
-					Date dateAffect = DateUtils.parseDate(rs
-							.getString("dateAffect"));
+			if (mr == null) {
+				Date dateAffect = DateUtils.parseDate(rs
+						.getString("dateAffect"));
 
-					mr = new MedicalRecord(patient, dateAffect,
-							rs.getString("detail"));
-					mr.id = id;
+				mr = new MedicalRecord(patient, dateAffect,
+						rs.getString("detail"));
+				mr.id = id;
 
-					MR_MAP.put(id, mr);
-				}
-
-				mrList.add(mr);
+				MR_MAP.put(id, mr);
 			}
 
-			DB.closeConnection();
-		} catch (Exception e) {
-			throw new HmsException(e);
+			mrList.add(mr);
 		}
+
+		DB.closeConnection();
 		return mrList;
 	}
 
-	public static MedicalRecord loadMedicalRecordById(int id)
-			throws HmsException {
+	public static MedicalRecord loadMedicalRecordById(int id) throws Exception {
 
 		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE id = {0}";
 
 		MedicalRecord mr = MR_MAP.get(id);
 		if (mr == null) {
-			try {
-				DB.createConnection();
 
-				ResultSet rs = DB.executeQuery(MessageFormat.format(
-						queryTemplate, id));
+			DB.createConnection();
 
-				if (rs.next()) {
-					Date dateAffect = DateUtils.parseDate(rs
-							.getString("dateAffect"));
-					int patientId = rs.getInt("patientId");
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+					id));
 
-					mr = new MedicalRecord(Patient.getPatientById(patientId),
-							dateAffect, rs.getString("detail"));
-					mr.id = id;
+			if (rs.next()) {
+				Date dateAffect = DateUtils.parseDate(rs
+						.getString("dateAffect"));
+				int patientId = rs.getInt("patientId");
 
-					MR_MAP.put(id, mr);
+				mr = new MedicalRecord(Patient.getPatientById(patientId),
+						dateAffect, rs.getString("detail"));
+				mr.id = id;
 
-				}
+				MR_MAP.put(id, mr);
 
-				DB.closeConnection();
-			} catch (Exception e) {
-				throw new HmsException(e);
 			}
+
+			DB.closeConnection();
+
 		}
 		return mr;
 	}
 
-	private int getNextFreeId() throws HmsException {
+	private int getNextFreeId() throws Exception {
 		int freeId = 1;
-		try {
-			DB.createConnection();
+		String query = "";
+		DB.createConnection();
 
-			String query = "select max(id) as maxId from MedicalRecord";
+		query = "select max(id) as maxId from MedicalRecord";
 
-			ResultSet rs = DB.executeQuery(query);
+		ResultSet rs = DB.executeQuery(query);
 
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
+		if (rs.next()) {
+			freeId = rs.getInt("maxId") + 1;
 		}
 
+		DB.closeConnection();
 		return freeId;
 	}
 

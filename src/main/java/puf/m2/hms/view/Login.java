@@ -6,11 +6,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import puf.m2.hms.exception.UserException;
 import puf.m2.hms.model.User;
 
 public class Login extends javax.swing.JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	public boolean loginSuccesful = false;
 
 	// Variables declaration - do not modify
 	private javax.swing.JLabel jLabel1;
@@ -24,57 +26,73 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 		initComponents();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		if ("Login".equals(e.getActionCommand())) {
-			String username = this.txtUsername.getText();
-			@SuppressWarnings("deprecation")
-			String password = this.txtPassword.getText();
-
-			User user = User.login(username, password);
-
-			if (user != null) {
-				String role = user.getRole();
-				if (role.equals("receptionist")) {
-					// login successful, show "Main view" form of receptionist
-					javax.swing.SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							UIManager.put("swing.boldMetal", Boolean.FALSE);
-							Utils.createAndShowGUI("Receptionist role",
-									new ReceptionistView());
-						}
-					});
-				} else if (role.equals("nurse")) {
-					// login successful, show "Main view" form of nurse
-					javax.swing.SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							UIManager.put("swing.boldMetal", Boolean.FALSE);
-							Utils.createAndShowGUI("Nurse role",
-									new NurseView());
-						}
-					});
-				} else if (role.equals("doctor")) {
-					// login successful, show "Main view" form of doctor
-					javax.swing.SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							UIManager.put("swing.boldMetal", Boolean.FALSE);
-							Utils.createAndShowGUI("Doctor role",
-									new DoctorView());
-						}
-					});
-				}
-			} else {
-				// login unsuccessful
-				JOptionPane.showMessageDialog(null,
-						"Login fail, please retype username and password");
-			}
-
+			login(txtUsername.getText(), txtPassword.getText());
 		}
 	}
 
+	private void login(String username, String password) {
+
+		String role;
+
+		User user = null;
+		try {
+			user = User.login(username, password);
+		} catch (UserException userException) {
+			System.out.println("Can not login with "
+					+ userException.getUsername() + "@"
+					+ userException.getPassword());
+		}
+
+		if (user != null) {
+			loginSuccesful = true;
+			role = user.getRole();
+			if (role.equals("receptionist")) {
+				// login successful, show "Main view" form of receptionist
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						UIManager.put("swing.boldMetal", Boolean.FALSE);
+						Utils.createAndShowGUI("Receptionist role",
+								new ReceptionistView());
+					}
+				});
+			} else if (role.equals("nurse")) {
+				// login successful, show "Main view" form of nurse
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						UIManager.put("swing.boldMetal", Boolean.FALSE);
+						Utils.createAndShowGUI("Nurse role", new NurseView());
+					}
+				});
+			} else if (role.equals("doctor")) {
+				// login successful, show "Main view" form of doctor
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						UIManager.put("swing.boldMetal", Boolean.FALSE);
+						Utils.createAndShowGUI("Doctor role", new DoctorView());
+					}
+				});
+			}
+		} else {
+			// login unsuccessful
+			JOptionPane.showMessageDialog(null,
+					"Login fail, please retype username and password");
+		}
+
+	}
+
 	public boolean checkValidateUser(String username, String password) {
-		User user = User.login(username, password);
+		User user = null;
+		try {
+			user = User.login(username, password);
+		} catch (UserException e) {
+			JOptionPane.showMessageDialog(null,
+					"Invalid username and/or password");
+		}
 		return user != null;
 	}
 

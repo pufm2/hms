@@ -6,7 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
+import puf.m2.hms.exception.PatientException;
+import puf.m2.hms.exception.PhysicianException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.model.Physician;
 import puf.m2.hms.model.PhysicianAssignment;
@@ -26,14 +27,7 @@ public class AssignDoctor extends JPanel implements ActionListener {
 
 	public AssignDoctor() {
 		initComponents();
-
-		try {
-			fillComboBox();
-		} catch (HmsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		fillComboBox();
 		addActionListener();
 	}
 
@@ -41,12 +35,19 @@ public class AssignDoctor extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if ("Assign".equals(e.getActionCommand())) {
-			Patient patient;
+
 			try {
-				patient = Patient.getPatientById(Integer.parseInt(cboPatientID
-						.getSelectedItem().toString()));
-				Physician doctor = Physician.getPhysicianById(Integer
-						.parseInt(cboDoctorID.getSelectedItem().toString()));
+				int patientID = Integer.parseInt(cboPatientID.getSelectedItem()
+						.toString());
+				Patient patient = Patient.getPatientById(patientID);
+				if (patient == null)
+					throw new PatientException(patientID);
+
+				int doctorID = Integer.parseInt(cboDoctorID.getSelectedItem()
+						.toString());
+				Physician doctor = Physician.getPhysicianById(doctorID);
+				if (doctor == null)
+					throw new PhysicianException(doctorID);
 
 				PhysicianAssignment physicianAssignment = new PhysicianAssignment(
 						patient, doctor);
@@ -65,18 +66,25 @@ public class AssignDoctor extends JPanel implements ActionListener {
 		btnAssign.addActionListener(this);
 	}
 
-	private void fillComboBox() throws HmsException {
+	private void fillComboBox() {
 		// Fill patientID
-
-		for (Patient patient : Patient.getPatients()) {
-			cboPatientID.addItem(patient.getId());
+		try {
+			for (Patient patient : Patient.getPatients()) {
+				cboPatientID.addItem(patient.getId());
+			}
+		} catch (Exception e) {
+			System.out.println("Can not get list of patient");
 		}
 
 		// Fill DoctorID
-		for (Physician doctor : Physician.getDoctors()) {
-			if (doctor.isAvailable()) {
-				cboDoctorID.addItem(doctor.getId());
+		try {
+			for (Physician doctor : Physician.getDoctors()) {
+				if (doctor.isAvailable()) {
+					cboDoctorID.addItem(doctor.getId());
+				}
 			}
+		} catch (Exception e) {
+			System.out.println("Can not get list of available doctor");
 		}
 	}
 

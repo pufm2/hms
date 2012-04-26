@@ -11,121 +11,128 @@ import java.util.Map;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
+import puf.m2.hms.exception.DbException;
 import puf.m2.hms.utils.DateUtils;
 
 public class PhysicianAssignment {
 
 	private static final Map<Integer, PhysicianAssignment> PA_MAP = new HashMap<Integer, PhysicianAssignment>();
-    private static final Database DB = DatabaseFactory.DEFAULT_DB;
-    
-    private int id;
-    private Patient patient;
-    private Physician physician;
-    private Date startDate;
-    private Date endDate;
+	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 
-    public PhysicianAssignment(Patient patient, Physician physician,  Date startDate, Date endDate) {
+	public static List<PhysicianAssignment> getPhysicianAssignments()
+			throws Exception {
 
-        this.patient = patient;
-        this.physician = physician;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-    
-    public PhysicianAssignment(Patient patient, Physician physician) {
-        this(patient, physician, new Date(), new Date());
-    }
-    
-    public static List<PhysicianAssignment> getPhysicianAssignments() throws HmsException {
+		List<PhysicianAssignment> paList = new ArrayList<PhysicianAssignment>();
 
-    	List<PhysicianAssignment> paList = new ArrayList<PhysicianAssignment>();
-    	
-    	final String query= "select * from PhysicianAssignment";
-        try {
-            DB.createConnection();
-            ResultSet rs = DB.executeQuery(query);
-            
-            while (rs.next()) {
-            	int id = rs.getInt("id");
-            	
-            	PhysicianAssignment pa = PA_MAP.get(id);
-            	if (pa == null) {
-            		Date startDate = DateUtils.parseDate(rs.getString("startDate"));
-            		Date endDate = DateUtils.parseDate(rs.getString("endDate"));
-            		Patient patient = Patient.getPatientById(rs.getInt("patientId"));
-            		Physician physician = Physician.getPhysicianById(rs.getInt("physicianId"));
-            		
-            		pa = new PhysicianAssignment(patient, physician, startDate, endDate);
-            		
-            		PA_MAP.put(id, pa);
-            	}
-            	paList.add(pa);
-            }
-            DB.closeConnection();
-        } catch (Exception e) {
-            throw new HmsException(e);
-        }
-        
-        return paList;
-        
-    }
+		final String query = "select * from PhysicianAssignment";
+		try {
+			DB.createConnection();
+			ResultSet rs = DB.executeQuery(query);
 
-    public void save() throws HmsException {
-        id = getNextFreeId();
-        final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
-        try {
-            DB.createConnection();
-            DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(), physician.getId(),
-                    DateUtils.dateToString(startDate), DateUtils.dateToString(endDate)));
-            DB.closeConnection();
-            
-            PA_MAP.put(id, this);
-        } catch (SQLException e) {
-            throw new HmsException(e);
-        }
-        physician.setAvailable(false);
-        physician.save();
-    }
-    
-    private int getNextFreeId() throws HmsException {
-        int freeId = 1;
-        try {
-            DB.createConnection();
-        
-        String query = "select max(id) as maxId from PhysicianAssignment";
+			while (rs.next()) {
+				int id = rs.getInt("id");
 
-        ResultSet rs = DB.executeQuery(query);
+				PhysicianAssignment pa = PA_MAP.get(id);
+				if (pa == null) {
+					Date startDate = DateUtils.parseDate(rs
+							.getString("startDate"));
+					Date endDate = DateUtils.parseDate(rs.getString("endDate"));
+					Patient patient = Patient.getPatientById(rs
+							.getInt("patientId"));
+					Physician physician = Physician.getPhysicianById(rs
+							.getInt("physicianId"));
 
-        if (rs.next()) {
-            freeId = rs.getInt("maxId") + 1;
-        }
+					pa = new PhysicianAssignment(patient, physician, startDate,
+							endDate);
 
-        DB.closeConnection();
-        } catch (SQLException e) {
-            throw new HmsException(e);
-        }
+					PA_MAP.put(id, pa);
+				}
+				paList.add(pa);
+			}
+			DB.closeConnection();
+		} catch (Exception e) {
+			throw new DbException(query);
+		}
 
-        return freeId;
-    }
+		return paList;
 
-    public int getId() {
-        return id;
-    }
+	}
 
-    public Patient getPatient() {
-        return patient;
-    }
+	private int id;
+	private Patient patient;
+	private Physician physician;
+	private Date startDate;
 
-    public Physician getPhysician() {
-        return physician;
-    }
+	private Date endDate;
 
-    public Date getStartDate() {
-        return startDate;
-    }
+	public PhysicianAssignment(Patient patient, Physician physician) {
+		this(patient, physician, new Date(), new Date());
+	}
 
-    public Date getEndDate() {
-        return endDate;
-    }
+	public PhysicianAssignment(Patient patient, Physician physician,
+			Date startDate, Date endDate) {
+
+		this.patient = patient;
+		this.physician = physician;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	private int getNextFreeId() throws Exception {
+		int freeId = 1;
+		String query = "";
+		try {
+			DB.createConnection();
+
+			query = "select max(id) as maxId from PhysicianAssignment";
+
+			ResultSet rs = DB.executeQuery(query);
+
+			if (rs.next()) {
+				freeId = rs.getInt("maxId") + 1;
+			}
+
+			DB.closeConnection();
+		} catch (SQLException e) {
+			throw new DbException(query);
+		}
+
+		return freeId;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public Physician getPhysician() {
+		return physician;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void save() throws Exception {
+		id = getNextFreeId();
+		final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
+		DB.createConnection();
+		DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(),
+				physician.getId(), DateUtils.dateToString(startDate),
+				DateUtils.dateToString(endDate)));
+		DB.closeConnection();
+
+		PA_MAP.put(id, this);
+
+		physician.setAvailable(false);
+		physician.save();
+	}
 
 }

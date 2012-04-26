@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.model.Physician;
 import puf.m2.hms.model.PhysicianAssignment;
@@ -27,12 +26,7 @@ public class AssignNurse extends JPanel implements ActionListener {
 	public AssignNurse() {
 		initComponents();
 
-		try {
-			fillComboBox();
-		} catch (HmsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		fillComboBox();
 
 		addActionListener();
 	}
@@ -40,7 +34,7 @@ public class AssignNurse extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if ("Make assign".equals(e.getActionCommand())) {
+		if ("Assign".equals(e.getActionCommand())) {
 			Patient patient;
 			try {
 				patient = Patient.getPatientById(Integer.parseInt(cboPatientID
@@ -66,18 +60,28 @@ public class AssignNurse extends JPanel implements ActionListener {
 		btnAssign.addActionListener(this);
 	}
 
-	private void fillComboBox() throws HmsException {
+	private void fillComboBox() {
 		// Fill patientID
 
-		for (Patient patient : Patient.getPatients()) {
-			cboPatientID.addItem(patient.getId());
+		try {
+			for (Patient patient : Patient.getPatients()) {
+				cboPatientID.addItem(patient.getId());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		// Fill nurseID
-		for (Physician nurse : Physician.getNurses()) {
-			if (nurse.isAvailable()) {
-				cboNurseID.addItem(nurse.getId());
+		try {
+			for (Physician nurse : Physician.getNurses()) {
+				if (nurse.isAvailable()) {
+					cboNurseID.addItem(nurse.getId());
+				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}

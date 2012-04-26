@@ -8,37 +8,55 @@ import java.sql.Statement;
 
 public class SqliteDatabase implements Database {
 
+	private String dbUrl;
 
-    private String dbUrl;
+	public Connection cnn;
 
-    public Connection cnn;
+	public SqliteDatabase(String dbUrl) {
 
-    public SqliteDatabase(String dbUrl) {
+		this.dbUrl = dbUrl;
+	}
 
-        this.dbUrl = dbUrl;
-    }
+	public void createConnection() {
 
-    public void createConnection() throws SQLException {
+		try {
+			cnn = DriverManager.getConnection(dbUrl);
+		} catch (Exception e) {
 
-        cnn = DriverManager.getConnection(dbUrl);
-    }
+		}
+	}
 
-    public ResultSet executeQuery(String query) throws SQLException {
+	@SuppressWarnings("finally")
+	public ResultSet executeQuery(String query) {
 
-        Statement statement = cnn.createStatement();
+		ResultSet rs = null;
+		try {
+			Statement statement = cnn.createStatement();
+			rs = statement.executeQuery(query);
+		} catch (Exception e) {
+		} finally {
+			return rs;
+		}
+	}
 
-        return statement.executeQuery(query);
-    }
+	@SuppressWarnings("finally")
+	public int executeUpdate(String query) {
+		int result = 0;
+		try {
+			Statement statement = cnn.createStatement();
+			result = statement.executeUpdate(query);
+		} catch (Exception e) {
+		} finally {
+			return result;
+		}
+	}
 
-    public int executeUpdate(String query) throws SQLException {
-        Statement statement = cnn.createStatement();
-
-        return statement.executeUpdate(query);
-    }
-    
-    public void closeConnection() throws SQLException {
-        cnn.close();
-    }
-
+	public void closeConnection() {
+		try {
+			cnn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

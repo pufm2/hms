@@ -11,12 +11,14 @@ import java.util.Map;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
+import puf.m2.hms.exception.DbException;
+import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;
 
 public class Schedule {
 	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 	private static final Map<Integer, Schedule> SCHEDULE_MAP = new HashMap<Integer, Schedule>();
-	
+
 	private int id;
 	private Physician physician;
 	private Date startDate;
@@ -32,51 +34,47 @@ public class Schedule {
 		this.available = available;
 	}
 
-	public void save() throws HmsException {
+	public void save() throws ScheduleException {
 		id = getNextFreeId();
 		final String queryTemple = "insert into Schedule values({0}, {1}, ''{2}'', ''{3}'', {4})";
+		DB.createConnection();
+
+		int available = this.available ? 1 : 0;
 		try {
-			DB.createConnection();
-
-			int available = this.available ? 1 : 0;
-			DB.executeUpdate(MessageFormat.format(queryTemple, id, physician.getId(),
-					DateUtils.dateToString(startDate), DateUtils.dateToString(endDate),
-					available));
-			DB.closeConnection();
-
-			SCHEDULE_MAP.put(id, this);
-		} catch (SQLException e) {
-			throw new HmsException(e);
+			DB.executeUpdate(MessageFormat.format(queryTemple, id,
+					physician.getId(), DateUtils.dateToString(startDate),
+					DateUtils.dateToString(endDate), available));
+		} catch (Exception e) {
+			throw new ScheduleException(physician, startDate, endDate,
+					this.available ? true : false);
 		}
+		DB.closeConnection();
 
+		SCHEDULE_MAP.put(id, this);
 	}
 
-	public void update(int scheduleID) throws HmsException {
+	public void update(int scheduleID) throws Exception {
 		final String queryTemple = "update Schedule set physicianId = {0}, startDate = ''{1}'', endDate = ''{2}'', available = {3} where id = {4}";
-		try {
-			DB.createConnection();
+		DB.createConnection();
 
-			int available = this.available ? 1 : 0;
-			DB.executeUpdate(MessageFormat.format(queryTemple, physician.getId(),
-					DateUtils.dateToString(startDate), DateUtils.dateToString(endDate),
-					available, id));
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
-
+		int available = this.available ? 1 : 0;
+		DB.executeUpdate(MessageFormat.format(queryTemple, physician.getId(),
+				DateUtils.dateToString(startDate),
+				DateUtils.dateToString(endDate), available, id));
+		DB.closeConnection();
 	}
-	
 
-	public static List<Schedule> loadSchedule(Physician doctor) throws HmsException {
-		
+	public static List<Schedule> loadSchedule(Physician doctor)
+			throws Exception {
+
 		List<Schedule> scheduleList = new ArrayList<Schedule>();
 		final String queryTemplate = "SELECT * FROM Schedule WHERE physicianId = {0}";
-		
+
 		try {
 			DB.createConnection();
 
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, doctor.getId()));
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+					doctor.getId()));
 
 			while (rs.next()) {
 				int id = rs.getInt("ScheduleId");
@@ -87,10 +85,12 @@ public class Schedule {
 					if (rs.getInt("available") == 0) {
 						available = false;
 					}
-					Date startDate = DateUtils.parseDate(rs.getString("startDate"));
-            		Date endDate = DateUtils.parseDate(rs.getString("endDate"));
-            		
-					schedule = new Schedule(doctor, startDate, endDate, available);
+					Date startDate = DateUtils.parseDate(rs
+							.getString("startDate"));
+					Date endDate = DateUtils.parseDate(rs.getString("endDate"));
+
+					schedule = new Schedule(doctor, startDate, endDate,
+							available);
 					schedule.id = id;
 
 					SCHEDULE_MAP.put(id, schedule);
@@ -101,30 +101,30 @@ public class Schedule {
 
 			DB.closeConnection();
 		} catch (Exception e) {
-			throw new HmsException(e);
+			throw new DbException(queryTemplate);
 		}
 		return scheduleList;
 	}
-	
-	private int getNextFreeId() throws HmsException {
-    	int freeId = 1;
-		try {
-			DB.createConnection();
-		
-		String query = "select max(id) as maxId from Schedule";
+
+	private int getNextFreeId() {
+		int freeId = 1;
+		String query = "";
+		DB.createConnection();
+
+		query = "select max(id) as maxId from Schedule";
 
 		ResultSet rs = DB.executeQuery(query);
 
-		if (rs.next()) {
-			freeId = rs.getInt("maxId") + 1;
+		try {
+			if (rs.next()) {
+				freeId = rs.getInt("maxId") + 1;
+			}
+		} catch (SQLException e) {
+
 		}
 
 		DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
-		}
-
 		return freeId;
-    }
+	}
 
 }

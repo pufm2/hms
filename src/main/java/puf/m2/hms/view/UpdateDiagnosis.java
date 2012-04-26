@@ -2,13 +2,11 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.model.HmsException;
 import puf.m2.hms.model.MedicalRecord;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.utils.DateUtils;
@@ -30,13 +28,7 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 
 	public UpdateDiagnosis() {
 		initComponents();
-
-		try {
-			fillComboBox();
-		} catch (HmsException e) {
-			e.printStackTrace();
-		}
-
+		fillComboBox();
 		addActionListener();
 	}
 
@@ -47,42 +39,44 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 			String detail = txtDetails.getText();
 
 			MedicalRecord medicalRecord = null;
+			medicalRecord = new MedicalRecord(patient,
+					DateUtils.parseDate(lblDateAffect.getText()), detail);
 			try {
-				medicalRecord = new MedicalRecord(patient,
-						DateUtils.parseDate(lblDateAffect.getText()), detail);
-				try {
-					medicalRecord.update();
-				} catch (HmsException e1) {
-					e1.printStackTrace();
-				}
-			} catch (ParseException e2) {
-
-				e2.printStackTrace();
+				medicalRecord.update();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(null, "Update diagnosis successful");
 		} else if ("PatientID".equals(e.getActionCommand())) {
 			Patient patient = new Patient(Integer.parseInt(cboPatientID
 					.getSelectedItem().toString()));
+
+			List<MedicalRecord> ls = null;
 			try {
-				List<MedicalRecord> ls = MedicalRecord
-						.loadMedicalRecord(patient);
-				int index = 0;
-				while (ls.size() >= 1) {
-					cboMedicalRecordID.addItem(ls.get(index).getId());
-					index++;
-				}
-			} catch (HmsException e1) {
+				ls = MedicalRecord.loadMedicalRecord(patient);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			int index = 0;
+			while (ls.size() >= 1) {
+				cboMedicalRecordID.addItem(ls.get(index).getId());
+				index++;
+			}
+
 		} else if ("MedicalRecordID".equals(e.getActionCommand())) {
 			int id = Integer.parseInt(cboMedicalRecordID.getSelectedItem()
 					.toString());
 			MedicalRecord medicalRecord = null;
+
 			try {
 				medicalRecord = MedicalRecord.loadMedicalRecordById(id);
-			} catch (HmsException e1) {
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+
 			txtDetails.setText(medicalRecord.getDetail());
 		}
 	}
@@ -98,10 +92,15 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 		cboMedicalRecordID.addActionListener(this);
 	}
 
-	private void fillComboBox() throws HmsException {
+	private void fillComboBox() {
 		// Fill patientID
-		for (Patient patient : Patient.getPatients()) {
-			cboPatientID.addItem(patient.getId());
+		try {
+			for (Patient patient : Patient.getPatients()) {
+				cboPatientID.addItem(patient.getId());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
