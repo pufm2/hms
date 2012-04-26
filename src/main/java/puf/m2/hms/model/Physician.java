@@ -13,9 +13,8 @@ import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.exception.DbException;
 import puf.m2.hms.exception.PhysicianException;
 
-public class Physician {
+public class Physician extends HmsEntity {
 
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 	private static final Map<Integer, Physician> PHYSICIAN_MAP = new HashMap<Integer, Physician>();
 
 	public static List<Physician> getDoctors() throws PhysicianException {
@@ -147,29 +146,6 @@ public class Physician {
 
 	public String getName() {
 		return name;
-	}
-
-	private int getNextFreeId() throws Exception {
-		int freeId = 1;
-		String query = "";
-		try {
-
-			DB.createConnection();
-
-			query = "select max(id) as maxId from Physician";
-
-			ResultSet rs = DB.executeQuery(query);
-
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new DbException(query);
-		}
-
-		return freeId;
 	}
 
 	public String getRole() {

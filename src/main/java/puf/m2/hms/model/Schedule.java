@@ -15,8 +15,8 @@ import puf.m2.hms.exception.DbException;
 import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;
 
-public class Schedule {
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
+public class Schedule extends HmsEntity {
+
 	private static final Map<Integer, Schedule> SCHEDULE_MAP = new HashMap<Integer, Schedule>();
 
 	private int id;
@@ -35,7 +35,11 @@ public class Schedule {
 	}
 
 	public void save() throws ScheduleException {
-		id = getNextFreeId();
+		try {
+			id = getNextFreeId();
+		} catch (Exception e1) {
+
+		}
 		final String queryTemple = "insert into Schedule values({0}, {1}, ''{2}'', ''{3}'', {4})";
 		DB.createConnection();
 
@@ -104,27 +108,6 @@ public class Schedule {
 			throw new DbException(queryTemplate);
 		}
 		return scheduleList;
-	}
-
-	private int getNextFreeId() {
-		int freeId = 1;
-		String query = "";
-		DB.createConnection();
-
-		query = "select max(id) as maxId from Schedule";
-
-		ResultSet rs = DB.executeQuery(query);
-
-		try {
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-		} catch (SQLException e) {
-
-		}
-
-		DB.closeConnection();
-		return freeId;
 	}
 
 }
