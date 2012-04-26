@@ -1,6 +1,6 @@
 package puf.m2.hms.model;
 
-public class UserType {
+public class UserType extends HmsEntity {
 
     private String userTypeCode;
     private String userTypeName;

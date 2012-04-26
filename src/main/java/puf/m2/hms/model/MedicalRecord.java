@@ -12,10 +12,9 @@ import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.utils.DateUtils;
 
-public class MedicalRecord {
+public class MedicalRecord extends HmsEntity {
 
 	private static Map<Integer, MedicalRecord> MR_MAP = new HashMap<Integer, MedicalRecord>();
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 
 	private int id;
 	private Patient patient;
@@ -26,6 +25,10 @@ public class MedicalRecord {
 		this.patient = patient;
 		this.dateAffect = dateAffect;
 		this.detail = detail;
+	}
+	
+	public MedicalRecord() {
+
 	}
 
 	public void save() throws Exception {
@@ -119,23 +122,6 @@ public class MedicalRecord {
 		return mr;
 	}
 
-	private int getNextFreeId() throws Exception {
-		int freeId = 1;
-		String query = "";
-		DB.createConnection();
-
-		query = "select max(id) as maxId from MedicalRecord";
-
-		ResultSet rs = DB.executeQuery(query);
-
-		if (rs.next()) {
-			freeId = rs.getInt("maxId") + 1;
-		}
-
-		DB.closeConnection();
-		return freeId;
-	}
-
 	public void deleteMedicalRecord() {
 
 	}
@@ -160,4 +146,9 @@ public class MedicalRecord {
 		return id;
 	}
 
+	public static void main(String[] args) throws Exception {
+		MedicalRecord r = new MedicalRecord();
+		System.out.println(r.getNextFreeId());
+		
+	}
 }

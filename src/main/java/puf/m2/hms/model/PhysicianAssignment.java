@@ -14,10 +14,9 @@ import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.exception.DbException;
 import puf.m2.hms.utils.DateUtils;
 
-public class PhysicianAssignment {
+public class PhysicianAssignment extends HmsEntity {
 
 	private static final Map<Integer, PhysicianAssignment> PA_MAP = new HashMap<Integer, PhysicianAssignment>();
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 
 	public static List<PhysicianAssignment> getPhysicianAssignments()
 			throws Exception {
@@ -84,28 +83,6 @@ public class PhysicianAssignment {
 
 	public int getId() {
 		return id;
-	}
-
-	private int getNextFreeId() throws Exception {
-		int freeId = 1;
-		String query = "";
-		try {
-			DB.createConnection();
-
-			query = "select max(id) as maxId from PhysicianAssignment";
-
-			ResultSet rs = DB.executeQuery(query);
-
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new DbException(query);
-		}
-
-		return freeId;
 	}
 
 	public Patient getPatient() {

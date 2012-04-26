@@ -10,9 +10,8 @@ import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.exception.UserException;
 
-public class User {
+public class User extends HmsEntity {
 
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 	private static final Map<Integer, User> USER_MAP = new HashMap<Integer, User>();
 
 	private int id;
@@ -83,23 +82,6 @@ public class User {
 		DB.executeUpdate(MessageFormat.format(queryTemple, name, password,
 				email, role, id));
 		DB.closeConnection();
-	}
-
-	private int getNextFreeId() throws Exception {
-		int freeId = 1;
-		String query = "";
-
-		DB.createConnection();
-		query = "select max(id) as maxId from User";
-		ResultSet rs = DB.executeQuery(query);
-
-		if (rs.next()) {
-			freeId = rs.getInt("maxId") + 1;
-		}
-
-		DB.closeConnection();
-
-		return freeId;
 	}
 
 	public String getUsername() {

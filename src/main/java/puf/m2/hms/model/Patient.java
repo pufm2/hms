@@ -12,9 +12,8 @@ import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.exception.DbException;
 
-public class Patient {
+public class Patient extends HmsEntity {
 
-	private static final Database DB = DatabaseFactory.DEFAULT_DB;
 	private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>();
 
 	private int id;
@@ -53,28 +52,6 @@ public class Patient {
 
 		PATIENT_MAP.put(id, this);
 
-	}
-
-	private int getNextFreeId() throws Exception {
-		String query = "";
-		int freeId = 1;
-		try {
-			DB.createConnection();
-
-			query = "select max(id) as maxId from Patient";
-
-			ResultSet rs = DB.executeQuery(query);
-
-			if (rs.next()) {
-				freeId = rs.getInt("maxId") + 1;
-			}
-
-			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new DbException(query);
-		}
-
-		return freeId;
 	}
 
 	public static boolean checkExistPatient(int id) throws Exception {
