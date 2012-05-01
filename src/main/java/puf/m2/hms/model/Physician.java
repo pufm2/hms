@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import puf.m2.hms.exception.PhysicianException;
 
 public class Physician extends HmsEntity {
 
-	private static final Map<Integer, Physician> PHYSICIAN_MAP = new HashMap<Integer, Physician>();
+	private static final Map<Integer, Physician> PHYSICIAN_MAP = new CacheAwareMap<Integer, Physician>();
 
     @DbProp
 	private String name;
@@ -101,7 +100,6 @@ public class Physician extends HmsEntity {
 	}
 
 	public static Physician getPhysicianById(int id) throws HmsException {
-		String queryTempl = "";
 
 		Physician physician = PHYSICIAN_MAP.get(id);
 		if (physician != null) {
@@ -110,7 +108,7 @@ public class Physician extends HmsEntity {
 
 		DB.createConnection();
 
-		queryTempl = "SELECT * FROM Physician WHERE id = {0}";
+		final String queryTempl = "SELECT * FROM Physician WHERE id = {0}";
 		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
 
 		try {

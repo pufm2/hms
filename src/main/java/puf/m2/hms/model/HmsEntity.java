@@ -15,6 +15,8 @@ import puf.m2.hms.utils.DateUtils;
 
 public abstract class HmsEntity {
     protected static final Database DB = DatabaseFactory.DEFAULT_DB;
+    
+    private static boolean cached = true;
 
     @DbProp
     protected int id;
@@ -125,6 +127,14 @@ public abstract class HmsEntity {
         DB.closeConnection();
     }
 
+    public static boolean isCached() {
+        return cached;
+    }
+
+    public static void setCached(boolean cached) {
+        HmsEntity.cached = cached;
+    }
+
     public int getId() {
         return id;
     }
@@ -144,4 +154,5 @@ public abstract class HmsEntity {
         }
         return dbPropFields;
     }
+
 }

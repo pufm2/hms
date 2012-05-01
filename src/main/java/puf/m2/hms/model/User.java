@@ -30,12 +30,11 @@ public class User extends HmsEntity {
 
 	}
 
-	public User login(String username, String password) throws UserException {
+	public static User login(String username, String password) throws UserException {
 
-		String queryTemplate = "";
 		User user = null;
 		DB.createConnection();
-		queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
+		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
 		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
 				username, password));
 

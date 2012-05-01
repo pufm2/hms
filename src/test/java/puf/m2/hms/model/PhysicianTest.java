@@ -1,51 +1,27 @@
 package puf.m2.hms.model;
 
-import org.easymock.EasyMock;
-import org.junit.Before;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 import puf.m2.hms.exception.HmsException;
-import puf.m2.hms.exception.PhysicianException;
 
-public class PhysicianTest {
+public class PhysicianTest extends TestSupport {
 
-	Physician mock;
-
-	@Before
-	public void setUp() {
-		mock = EasyMock.createMock(Physician.class);
+	@Test
+	public void testSave() throws HmsException {
+	    Physician p = new Physician("doctor X", "doctor", true);
+	    p.save();
+	    Physician p1 = Physician.getPhysicianById(p.id);
+	    assertEquals(p.id, p1.id);
 	}
 
 	@Test
-	public void testSave() throws Exception {
-		int id = 1000;
-		mock.save();
-		EasyMock.expectLastCall().andThrow(new PhysicianException(id));
-		EasyMock.replay(mock);
-
-		try {
-			mock.save();
-		} catch (HmsException e) {
-			System.out.println("Can not save physician with Id = " + id);
-		}
-
-		EasyMock.verify(mock);
-	}
-
-	@Test
-	public void testUpdate() throws Exception {
-		int id = 1000;
-		mock.update();
-		EasyMock.expectLastCall().andThrow(new PhysicianException(id));
-		EasyMock.replay(mock);
-
-		try {
-			mock.update();
-		} catch (HmsException e) {
-			System.out.println("Can not update physician with Id = " + id);
-		}
-
-		EasyMock.verify(mock);
+	public void testUpdate() throws HmsException {
+	    Physician p = Physician.getPhysicianById(100);
+	    p.setAvailable(false);
+	    p.update();
+	    Physician p1 = Physician.getPhysicianById(100);
+        assertEquals(p1.isAvailable(), false);
 	}
 
 }
