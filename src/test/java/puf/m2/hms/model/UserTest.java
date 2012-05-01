@@ -11,13 +11,15 @@ public class UserTest {
 
 	@Test
 	public void testLoginFail() throws UserException {
-		Object o = User.login("", "");
-		assertNull(o);
+		User user = new User();
+		User result = user.login("", "");
+		assertNull(result);
 	}
 
 	@Test
 	public void testLoginSuccess() throws UserException {
-		Object o = User.login("nhphat", "123");
-		assertNotNull(o);
+		User user = new User();
+		User result = user.login("nhphat", "123");
+		assertNotNull(result);
 	}
 }

@@ -3,7 +3,6 @@ package puf.m2.hms.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import puf.m2.hms.exception.UserException;
@@ -12,7 +11,6 @@ import puf.m2.hms.model.User;
 public class Login extends javax.swing.JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	public boolean loginSuccesful = false;
 
 	// Variables declaration - do not modify
 	private javax.swing.JLabel jLabel1;
@@ -26,30 +24,36 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 		initComponents();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		if ("Login".equals(e.getActionCommand())) {
-			login(txtUsername.getText(), txtPassword.getText());
+			try {
+				login(txtUsername.getText(), txtPassword.getText());
+			} catch (UserException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
-	private void login(String username, String password) {
+	public void login(String username, String password) throws UserException {
 
 		String role;
 
 		User user = null;
 		try {
-			user = User.login(username, password);
+			User s = new User();
+			user = s.login(username, password);
 		} catch (UserException userException) {
 			System.out.println("Can not login with "
 					+ userException.getUsername() + "@"
 					+ userException.getPassword());
 		}
 
-		if (user != null) {
-			loginSuccesful = true;
+		if (!user.isValidUser()) {
+			throw new UserException(username, password);
+		} else {
 			role = user.getRole();
 			if (role.equals("receptionist")) {
 				// login successful, show "Main view" form of receptionist
@@ -77,23 +81,8 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 					}
 				});
 			}
-		} else {
-			// login unsuccessful
-			JOptionPane.showMessageDialog(null,
-					"Login fail, please retype username and password");
 		}
 
-	}
-
-	public boolean checkValidateUser(String username, String password) {
-		User user = null;
-		try {
-			user = User.login(username, password);
-		} catch (UserException e) {
-			JOptionPane.showMessageDialog(null,
-					"Invalid username and/or password");
-		}
-		return user != null;
 	}
 
 	private void initComponents() {

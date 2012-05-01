@@ -26,8 +26,11 @@ public class User extends HmsEntity {
 		this.role = role;
 	}
 
-	public static User login(String username, String password)
-			throws UserException {
+	public User() {
+
+	}
+
+	public User login(String username, String password) throws UserException {
 
 		String queryTemplate = "";
 		User user = null;
@@ -76,6 +79,12 @@ public class User extends HmsEntity {
 		DB.executeUpdate(MessageFormat.format(queryTemple, name, password,
 				email, role, id));
 		DB.closeConnection();
+	}
+
+	public boolean isValidUser() {
+		if (this.name != "" & this.password != "")
+			return true;
+		return false;
 	}
 
 	public String getUsername() {
