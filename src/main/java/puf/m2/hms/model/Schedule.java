@@ -61,7 +61,7 @@ public class Schedule extends HmsEntity {
 	}
 
 	public static List<Schedule> loadSchedule(Physician doctor)
-			throws Exception {
+			throws HmsException {
 
 		List<Schedule> scheduleList = new ArrayList<Schedule>();
 		final String queryTemplate = "SELECT * FROM Schedule WHERE physicianId = {0}";
@@ -73,7 +73,7 @@ public class Schedule extends HmsEntity {
 					doctor.getId()));
 
 			while (rs.next()) {
-				int id = rs.getInt("ScheduleId");
+				int id = rs.getInt("id");
 				Schedule schedule = SCHEDULE_MAP.get(id);
 
 				if (schedule == null) {
