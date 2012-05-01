@@ -4,6 +4,7 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.PhysicianException;
 
 public class PhysicianTest {
@@ -24,7 +25,7 @@ public class PhysicianTest {
 
 		try {
 			mock.save();
-		} catch (PhysicianException e) {
+		} catch (HmsException e) {
 			System.out.println("Can not save physician with Id = " + id);
 		}
 
@@ -40,7 +41,7 @@ public class PhysicianTest {
 
 		try {
 			mock.update();
-		} catch (PhysicianException e) {
+		} catch (HmsException e) {
 			System.out.println("Can not update physician with Id = " + id);
 		}
 

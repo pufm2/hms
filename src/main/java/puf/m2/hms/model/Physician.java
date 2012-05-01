@@ -8,11 +8,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.PhysicianException;
 
 public class Physician extends HmsEntity {
 
 	private static final Map<Integer, Physician> PHYSICIAN_MAP = new HashMap<Integer, Physician>();
+
+    @DbProp
+	private String name;
+    @DbProp
+    private String role;
+    @DbProp
+    private boolean available;
+
+    public Physician(String name, String role, boolean available) {
+
+        this.name = name;
+        this.role = role;
+        this.available = available;
+    }
 
 	public static List<Physician> getDoctors() throws PhysicianException {
 		List<Physician> doctorList = new ArrayList<Physician>();
@@ -85,7 +100,7 @@ public class Physician extends HmsEntity {
 		return doctorList;
 	}
 
-	public static Physician getPhysicianById(int id) throws PhysicianException {
+	public static Physician getPhysicianById(int id) throws HmsException {
 		String queryTempl = "";
 
 		Physician physician = PHYSICIAN_MAP.get(id);
@@ -109,36 +124,14 @@ public class Physician extends HmsEntity {
 						rs.getString("role"), available);
 				physician.id = rs.getInt("id");
 				PHYSICIAN_MAP.put(physician.getId(), physician);
-			} else {
-				throw new PhysicianException(id);
 			}
-		} catch (SQLException sqlException) {
-			System.out.println("Error related to SQL Exception: "
-					+ sqlException.getMessage());
-		} catch (NullPointerException nullPointerException) {
-			System.out.println("Error: ID" + id + " does not exists");
+		} catch (SQLException e) {
+		    throw new HmsException(e);
 		}
 
 		DB.closeConnection();
 
 		return physician;
-	}
-
-	private int id;
-
-	private String name, role;
-
-	private boolean available;
-
-	public Physician(String name, String role, boolean available) {
-
-		this.name = name;
-		this.role = role;
-		this.available = available;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getName() {
@@ -153,17 +146,8 @@ public class Physician extends HmsEntity {
 		return available;
 	}
 
-	public void save() throws Exception {
-		id = getNextFreeId();
-		final String queryTemple = "insert into Physician values({0}, ''{1}'', ''{2}'', ''{3}'')";
-
-		DB.createConnection();
-
-		int available = this.available ? 1 : 0;
-		DB.executeUpdate(MessageFormat.format(queryTemple, id, name, role,
-				available));
-		DB.closeConnection();
-
+	public void save() throws HmsException {
+		super.save();
 		PHYSICIAN_MAP.put(id, this);
 
 	}
@@ -180,16 +164,15 @@ public class Physician extends HmsEntity {
 		this.role = role;
 	}
 
-	public void update() throws Exception {
-		final String queryTemple = "update Physician set name = ''{0}'', role = ''{1}'', available = ''{2}'' where id = {4}";
-
-		DB.createConnection();
-
-		int available = this.available ? 1 : 0;
-		DB.executeUpdate(MessageFormat.format(queryTemple, name, role,
-				available, id));
-		DB.closeConnection();
+	public void update() throws HmsException {
+		super.update();
 
 	}
+	
+    public static void main (String[] args) throws Exception {
+        Physician p = getPhysicianById(100);
+        p.update();
+        
+    }
 
 }

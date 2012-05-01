@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.utils.DateUtils;
 
 public class MedicalRecord extends HmsEntity {
 
 	private static Map<Integer, MedicalRecord> MR_MAP = new HashMap<Integer, MedicalRecord>();
 
-	private int id;
 	private Patient patient;
 	private Date dateAffect;
 	private String detail;
@@ -29,7 +29,7 @@ public class MedicalRecord extends HmsEntity {
 
 	}
 
-	public void save() throws Exception {
+	public void save() throws HmsException {
 		String queryTemplate = "";
 		id = getNextFreeId();
 
@@ -44,7 +44,7 @@ public class MedicalRecord extends HmsEntity {
 		MR_MAP.put(id, this);
 	}
 
-	public void update() throws Exception {
+	public void update() throws HmsException {
 		String queryTemplate = "";
 		DB.createConnection();
 
@@ -138,10 +138,6 @@ public class MedicalRecord extends HmsEntity {
 
 	public void setDetail(String detail) {
 		this.detail = detail;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public static void main(String[] args) throws Exception {

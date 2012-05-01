@@ -1,6 +1,7 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,15 +9,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.exception.DbException;
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.utils.DateUtils;
 
 public class PhysicianAssignment extends HmsEntity {
 
 	private static final Map<Integer, PhysicianAssignment> PA_MAP = new HashMap<Integer, PhysicianAssignment>();
 
+    private Patient patient;
+    private Physician physician;
+    private Date startDate;
+
+    private Date endDate;
+
+    public PhysicianAssignment(Patient patient, Physician physician) {
+        this(patient, physician, new Date(), new Date());
+    }
+
+    public PhysicianAssignment(Patient patient, Physician physician,
+            Date startDate, Date endDate) {
+
+        this.patient = patient;
+        this.physician = physician;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+    
 	public static List<PhysicianAssignment> getPhysicianAssignments()
-			throws Exception {
+			throws HmsException {
 
 		List<PhysicianAssignment> paList = new ArrayList<PhysicianAssignment>();
 
@@ -33,10 +53,8 @@ public class PhysicianAssignment extends HmsEntity {
 					Date startDate = DateUtils.parseDate(rs
 							.getString("startDate"));
 					Date endDate = DateUtils.parseDate(rs.getString("endDate"));
-					Patient patient = Patient.getPatientById(rs
-							.getInt("patientId"));
-					Physician physician = Physician.getPhysicianById(rs
-							.getInt("physicianId"));
+					Patient patient = Patient.getPatientById(rs.getInt("patientId"));
+					Physician physician = Physician.getPhysicianById(rs.getInt("physicianId"));
 
 					pa = new PhysicianAssignment(patient, physician, startDate,
 							endDate);
@@ -46,40 +64,16 @@ public class PhysicianAssignment extends HmsEntity {
 				paList.add(pa);
 			}
 			DB.closeConnection();
-		} catch (Exception e) {
-			throw new DbException(query);
+		} catch (SQLException e) {
+			throw new HmsException(e);
 		}
 
 		return paList;
 
 	}
 
-	private int id;
-	private Patient patient;
-	private Physician physician;
-	private Date startDate;
-
-	private Date endDate;
-
-	public PhysicianAssignment(Patient patient, Physician physician) {
-		this(patient, physician, new Date(), new Date());
-	}
-
-	public PhysicianAssignment(Patient patient, Physician physician,
-			Date startDate, Date endDate) {
-
-		this.patient = patient;
-		this.physician = physician;
-		this.startDate = startDate;
-		this.endDate = endDate;
-	}
-
 	public Date getEndDate() {
 		return endDate;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public Patient getPatient() {
@@ -94,7 +88,7 @@ public class PhysicianAssignment extends HmsEntity {
 		return startDate;
 	}
 
-	public void save() throws Exception {
+	public void save() throws HmsException {
 		id = getNextFreeId();
 		final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
 		DB.createConnection();

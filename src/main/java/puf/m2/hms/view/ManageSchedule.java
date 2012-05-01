@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import puf.m2.hms.exception.ScheduleException;
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.model.Physician;
 import puf.m2.hms.model.Schedule;
 import puf.m2.hms.view.datechooser.JDateChooser;
@@ -52,7 +52,7 @@ public class ManageSchedule extends JPanel implements ActionListener {
 			try {
 				schedule.save();
 				JOptionPane.showMessageDialog(null, "Save schedule successful");
-			} catch (ScheduleException e1) {
+			} catch (HmsException e1) {
 				System.out.println("Save unsuccessful: " + e1.getMessage());
 			}
 		}

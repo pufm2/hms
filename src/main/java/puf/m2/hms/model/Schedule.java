@@ -1,6 +1,7 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,15 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.exception.DbException;
-import puf.m2.hms.exception.ScheduleException;
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.utils.DateUtils;
 
 public class Schedule extends HmsEntity {
 
 	private static final Map<Integer, Schedule> SCHEDULE_MAP = new HashMap<Integer, Schedule>();
 
-	private int id;
 	private Physician physician;
 	private Date startDate;
 	private Date endDate;
@@ -31,7 +30,7 @@ public class Schedule extends HmsEntity {
 		this.available = available;
 	}
 
-	public void save() throws ScheduleException {
+	public void save() throws HmsException {
 		try {
 			id = getNextFreeId();
 		} catch (Exception e1) {
@@ -41,14 +40,10 @@ public class Schedule extends HmsEntity {
 		DB.createConnection();
 
 		int available = this.available ? 1 : 0;
-		try {
-			DB.executeUpdate(MessageFormat.format(queryTemple, id,
+		DB.executeUpdate(MessageFormat.format(queryTemple, id,
 					physician.getId(), DateUtils.dateToString(startDate),
 					DateUtils.dateToString(endDate), available));
-		} catch (Exception e) {
-			throw new ScheduleException(physician, startDate, endDate,
-					this.available ? true : false);
-		}
+
 		DB.closeConnection();
 
 		SCHEDULE_MAP.put(id, this);
@@ -101,8 +96,8 @@ public class Schedule extends HmsEntity {
 			}
 
 			DB.closeConnection();
-		} catch (Exception e) {
-			throw new DbException(queryTemplate);
+		} catch (SQLException e) {
+			throw new HmsException(e);
 		}
 		return scheduleList;
 	}

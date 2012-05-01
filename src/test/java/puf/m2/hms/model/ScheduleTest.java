@@ -17,6 +17,7 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.ScheduleException;
 
 public class ScheduleTest {
@@ -29,7 +30,7 @@ public class ScheduleTest {
 	}
 
 	@Test
-	public void testSave() throws ScheduleException {
+	public void testSave() throws HmsException {
 		mock.save();
 		expectLastCall();
 		replay(mock);

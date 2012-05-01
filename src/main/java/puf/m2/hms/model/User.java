@@ -6,13 +6,13 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.UserException;
 
 public class User extends HmsEntity {
 
 	private static final Map<Integer, User> USER_MAP = new HashMap<Integer, User>();
 
-	private int id;
 	private String name;
 	private String password;
 	private String email;
@@ -59,7 +59,7 @@ public class User extends HmsEntity {
 		return user;
 	}
 
-	public void save() throws Exception {
+	public void save() throws HmsException {
 		id = getNextFreeId();
 
 		final String queryTemple = "insert into User values({0}, ''{1}'', ''{2}'', ''{3}'', ''{4}'')";
@@ -71,7 +71,7 @@ public class User extends HmsEntity {
 		USER_MAP.put(id, this);
 	}
 
-	public void update() throws Exception {
+	public void update() throws HmsException {
 
 		final String queryTemple = "update User set name = ''{0}'', password = ''{1}'', "
 				+ "email = ''{2}'', role = ''{3}'' where id = {4})";
@@ -117,10 +117,6 @@ public class User extends HmsEntity {
 
 	public void setRole(String role) {
 		this.role = role;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 }
