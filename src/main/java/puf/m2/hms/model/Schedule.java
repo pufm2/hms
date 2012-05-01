@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.exception.DbException;
 import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;

@@ -6,8 +6,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.exception.UserException;
 
 public class User extends HmsEntity {
@@ -19,8 +17,6 @@ public class User extends HmsEntity {
 	private String password;
 	private String email;
 	private String role;
-
-	private static boolean isLogin = false;
 
 	public User(String name, String password, String email, String role) {
 
@@ -42,7 +38,6 @@ public class User extends HmsEntity {
 
 		try {
 			if (rs != null) {
-				isLogin = true;
 				int id = rs.getInt("id");
 				user = USER_MAP.get(id);
 				if (user == null) {
@@ -55,7 +50,6 @@ public class User extends HmsEntity {
 				throw new UserException(username, password);
 			}
 		} catch (SQLException e) {
-			isLogin = false;
 		}
 
 		DB.closeConnection();

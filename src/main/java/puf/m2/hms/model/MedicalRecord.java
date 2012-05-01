@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.utils.DateUtils;
 
 public class MedicalRecord extends HmsEntity {
@@ -26,7 +24,7 @@ public class MedicalRecord extends HmsEntity {
 		this.dateAffect = dateAffect;
 		this.detail = detail;
 	}
-	
+
 	public MedicalRecord() {
 
 	}
@@ -149,6 +147,6 @@ public class MedicalRecord extends HmsEntity {
 	public static void main(String[] args) throws Exception {
 		MedicalRecord r = new MedicalRecord();
 		System.out.println(r.getNextFreeId());
-		
+
 	}
 }

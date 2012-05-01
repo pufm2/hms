@@ -8,9 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.db.Database;
-import puf.m2.hms.db.DatabaseFactory;
-import puf.m2.hms.exception.DbException;
 import puf.m2.hms.exception.PhysicianException;
 
 public class Physician extends HmsEntity {

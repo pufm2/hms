@@ -21,6 +21,7 @@ public class PhysicianAssignmentTest {
 		mock.save();
 		expectLastCall();
 		replay(mock);
+		EasyMock.verify(mock);
 	}
 
 }
