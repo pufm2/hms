@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-public class TestSupport {
+public abstract class TestSupport {
     private static File dbFile = new File("HMS.db3");
     private static File dbBackupFile = new File("HMS.db3.bak"); 
     
