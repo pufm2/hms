@@ -3,7 +3,6 @@ package puf.m2.hms.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
