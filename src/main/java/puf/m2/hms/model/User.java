@@ -3,7 +3,6 @@ package puf.m2.hms.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
@@ -11,7 +10,7 @@ import puf.m2.hms.exception.UserException;
 
 public class User extends HmsEntity {
 
-	private static final Map<Integer, User> USER_MAP = new HashMap<Integer, User>();
+	private static final Map<Integer, User> USER_MAP = new CacheAwareMap<Integer, User>();
 
 	private String name;
 	private String password;

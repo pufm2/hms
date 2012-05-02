@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import puf.m2.hms.utils.DateUtils;
 
 public class MedicalRecord extends HmsEntity {
 
-	private static Map<Integer, MedicalRecord> MR_MAP = new HashMap<Integer, MedicalRecord>();
+	private static Map<Integer, MedicalRecord> MR_MAP = new CacheAwareMap<Integer, MedicalRecord>();
 
 	private Patient patient;
 	private Date dateAffect;

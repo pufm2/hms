@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import puf.m2.hms.utils.DateUtils;
 
 public class PhysicianAssignment extends HmsEntity {
 
-	private static final Map<Integer, PhysicianAssignment> PA_MAP = new HashMap<Integer, PhysicianAssignment>();
+	private static final Map<Integer, PhysicianAssignment> PA_MAP = new CacheAwareMap<Integer, PhysicianAssignment>();
 
     private Patient patient;
     private Physician physician;

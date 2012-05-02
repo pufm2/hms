@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import puf.m2.hms.exception.HmsException;
 
 public class Patient extends HmsEntity {
 
-    private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>();
+    private static final Map<Integer, Patient> PATIENT_MAP = new CacheAwareMap<Integer, Patient>();
 
     @DbProp
     private String name;

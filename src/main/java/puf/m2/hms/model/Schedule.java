@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import puf.m2.hms.utils.DateUtils;
 
 public class Schedule extends HmsEntity {
 
-	private static final Map<Integer, Schedule> SCHEDULE_MAP = new HashMap<Integer, Schedule>();
+	private static final Map<Integer, Schedule> SCHEDULE_MAP = new CacheAwareMap<Integer, Schedule>();
 
 	private Physician physician;
 	private Date startDate;
