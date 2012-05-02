@@ -14,7 +14,7 @@ import puf.m2.hms.utils.DateUtils;
 
 public class Schedule extends HmsEntity {
 
-	private static final Map<Integer, Schedule> SCHEDULE_MAP = new HashMap<Integer, Schedule>();
+	private static final Map<Integer, Schedule> SCHEDULE_MAP = new CacheAwareMap<Integer, Schedule>();
 
 	private Physician physician;
 	private Date startDate;

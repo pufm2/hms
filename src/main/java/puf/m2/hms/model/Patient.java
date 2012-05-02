@@ -12,7 +12,7 @@ import puf.m2.hms.exception.HmsException;
 
 public class Patient extends HmsEntity {
 
-    private static final Map<Integer, Patient> PATIENT_MAP = new HashMap<Integer, Patient>();
+    private static final Map<Integer, Patient> PATIENT_MAP = new CacheAwareMap<Integer, Patient>();
 
     @DbProp
     private String name;

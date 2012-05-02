@@ -14,7 +14,7 @@ import puf.m2.hms.utils.DateUtils;
 
 public class PhysicianAssignment extends HmsEntity {
 
-	private static final Map<Integer, PhysicianAssignment> PA_MAP = new HashMap<Integer, PhysicianAssignment>();
+	private static final Map<Integer, PhysicianAssignment> PA_MAP = new CacheAwareMap<Integer, PhysicianAssignment>();
 
     private Patient patient;
     private Physician physician;

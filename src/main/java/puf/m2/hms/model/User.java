@@ -11,7 +11,7 @@ import puf.m2.hms.exception.UserException;
 
 public class User extends HmsEntity {
 
-	private static final Map<Integer, User> USER_MAP = new HashMap<Integer, User>();
+	private static final Map<Integer, User> USER_MAP = new CacheAwareMap<Integer, User>();
 
 	private String name;
 	private String password;
