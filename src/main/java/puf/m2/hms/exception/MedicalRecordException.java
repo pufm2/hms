@@ -1,20 +1,11 @@
 package puf.m2.hms.exception;
 
-public class MedicalRecordException extends Exception {
+public class MedicalRecordException extends HmsException {
 
-	/**
-	 * 
-	 */
-	String query;
+    private static final long serialVersionUID = 94640755972863840L;
 
-	public String getQuery() {
-		return query;
+    public MedicalRecordException(Throwable cause) {
+	    super(cause);
 	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
-
-	private static final long serialVersionUID = 1L;
 
 }
