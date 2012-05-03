@@ -1,5 +1,13 @@
 package puf.m2.hms.model;
 
+
+
+import static org.junit.Assert.*;
+
+import java.util.Date;
+
+import org.junit.Test;
+
 import puf.m2.hms.exception.HmsException;
 
 // TODO add at least one test for each method of the PhysicianAssignment class

@@ -1,5 +1,15 @@
 package puf.m2.hms.model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+
 //TODO There is no test in this class!!! (which class do you to test here?)
 
 public abstract class TestSupport {

@@ -1,5 +1,9 @@
 package puf.m2.hms.model;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import puf.m2.hms.exception.HmsException;
 
 public class PhysicianTest extends TestSupport {
