@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import puf.m2.hms.model.Role;
 import puf.m2.hms.model.User;
 
 public class Login extends javax.swing.JPanel implements ActionListener {
@@ -37,12 +38,12 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 		    if (user != null) {
 		        parent.setVisible(false);
 		        String role = user.getRole();
-		        if ("receptionist".equals(role)) {
+		        if (Role.Receptionist.name().equals(role)) {
 		            Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
-	            } else if ("nurse".equals(role)) {
+	            } else if (Role.Nurse.name().equals(role)) {
 	                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
 
-	            } else if ("doctor".equals(role)) {
+	            } else if (Role.Doctor.name().equals(role)) {
 	                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
 
 	            }
