@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
+import puf.m2.hms.exception.PatientException;
 
 public class Patient extends HmsEntity {
 
@@ -40,15 +41,19 @@ public class Patient extends HmsEntity {
         super(id);
     }
 
-  public void save() throws HmsException {
+  public void save() throws PatientException {
 
-        super.save();
+        try {
+            super.save();
+        } catch (HmsException e) {
+            throw new PatientException(e);
+        }
 
         PATIENT_MAP.put(id, this);
 
     }
 
-    public static boolean checkExistPatient(int id) throws HmsException {
+/*    public static boolean checkExistPatient(int id) throws HmsException {
 
         boolean existed = false;
         try {
@@ -68,7 +73,7 @@ public class Patient extends HmsEntity {
         }
         return existed;
 
-    }
+    }*/
 
     public static List<Patient> getPatients() throws Exception {
         List<Patient> patientList = new ArrayList<Patient>();
