@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,32 +32,33 @@ public class Physician extends HmsEntity {
 
 		final String query = "select * from Physician where role = 'Doctor'";
 
-		DB.createConnection();
-
-		ResultSet rs = DB.executeQuery(query);
 		try {
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				Physician physician = PHYSICIAN_MAP.get(id);
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(query);
+            
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Physician physician = PHYSICIAN_MAP.get(id);
 
-				if (physician == null) {
-					boolean available = true;
-					if (rs.getInt("available") == 0) {
-						available = false;
-					}
-					physician = new Physician(rs.getString("name"), "Doctor",
-							available);
-					physician.id = id;
+                if (physician == null) {
+                    boolean available = true;
+                    if (rs.getInt("available") == 0) {
+                        available = false;
+                    }
+                    physician = new Physician(rs.getString("name"), "Doctor",
+                            available);
+                    physician.id = id;
 
-					PHYSICIAN_MAP.put(id, physician);
-				}
+                    PHYSICIAN_MAP.put(id, physician);
+                }
 
-				doctorList.add(physician);
-			}
-		} catch (Exception e) {
-			throw new PhysicianException(e);
-		}
-		DB.closeConnection();
+                doctorList.add(physician);
+            }
+            
+            DB.closeConnection();
+        } catch (Exception e) {
+            throw new PhysicianException(e);
+        }
 
 		return doctorList;
 	}
@@ -68,34 +68,34 @@ public class Physician extends HmsEntity {
 
 		final String query = "select * from Physician where role = 'Nurse'";
 
-		DB.createConnection();
-
-		ResultSet rs = DB.executeQuery(query);
-
 		try {
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				Physician physician = PHYSICIAN_MAP.get(id);
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(query);
+            
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Physician physician = PHYSICIAN_MAP.get(id);
 
-				if (physician == null) {
-					boolean available = true;
-					if (rs.getInt("available") == 0) {
-						available = false;
-					}
-					physician = new Physician(rs.getString("name"), "Nurse",
-							available);
-					physician.id = id;
+                if (physician == null) {
+                    boolean available = true;
+                    if (rs.getInt("available") == 0) {
+                        available = false;
+                    }
+                    physician = new Physician(rs.getString("name"), "Nurse",
+                            available);
+                    physician.id = id;
 
-					PHYSICIAN_MAP.put(id, physician);
-				}
+                    PHYSICIAN_MAP.put(id, physician);
+                }
 
-				doctorList.add(physician);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+                doctorList.add(physician);
+                
+                DB.closeConnection();
+            }
+        } catch (Exception e) {
+            throw new PhysicianException(e);
+        }
 
-		DB.closeConnection();
 		return doctorList;
 	}
 
@@ -106,28 +106,28 @@ public class Physician extends HmsEntity {
 			return physician;
 		}
 
-		DB.createConnection();
-
 		final String queryTempl = "SELECT * FROM Physician WHERE id = {0}";
-		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
-
+		
 		try {
-			if (rs.next()) {
-				boolean available = true;
-				if (rs.getInt("available") == 0) {
-					available = false;
-				}
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
+            
+            if (rs.next()) {
+                boolean available = true;
+                if (rs.getInt("available") == 0) {
+                    available = false;
+                }
 
-				physician = new Physician(rs.getString("name"),
-						rs.getString("role"), available);
-				physician.id = rs.getInt("id");
-				PHYSICIAN_MAP.put(physician.getId(), physician);
-			}
-		} catch (Exception e) {
-		    throw new PhysicianException(e);
-		}
-
-		DB.closeConnection();
+                physician = new Physician(rs.getString("name"),
+                        rs.getString("role"), available);
+                physician.id = rs.getInt("id");
+                PHYSICIAN_MAP.put(physician.getId(), physician);
+            }
+            
+            DB.closeConnection();
+        } catch (Exception e) {
+            throw new PhysicianException(e);
+        }
 
 		return physician;
 	}
@@ -144,8 +144,12 @@ public class Physician extends HmsEntity {
 		return available;
 	}
 
-	public void save() throws HmsException {
-		super.save();
+	public void save() throws PhysicianException {
+		try {
+            super.save();
+        } catch (HmsException e) {
+            throw new PhysicianException(e);
+        }
 		PHYSICIAN_MAP.put(id, this);
 
 	}
@@ -162,8 +166,12 @@ public class Physician extends HmsEntity {
 		this.role = role;
 	}
 
-	public void update() throws HmsException {
-		super.update();
+	public void update() throws PhysicianException {
+		try {
+            super.update();
+        } catch (HmsException e) {
+            throw new PhysicianException(e);
+        }
 
 	}
 	

@@ -2,7 +2,6 @@ package puf.m2.hms.model;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import java.util.Map;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
+import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.utils.DateUtils;
 
@@ -31,22 +31,19 @@ public abstract class HmsEntity {
 
     protected int getNextFreeId() throws HmsException {
         int freeId = 1;
-
-        DB.createConnection();
-
         String query = "select max(id) as maxId from " + getClass().getSimpleName();
-
-        ResultSet rs = DB.executeQuery(query);
-
         try {
+
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(query);
             if (rs.next()) {
                 freeId = rs.getInt("maxId") + 1;
             }
-        } catch (SQLException e) {
+            DB.closeConnection();
+        } catch (Exception e) {
             throw new HmsException(e);
         }
 
-        DB.closeConnection();
         return freeId;
     }
 
@@ -84,12 +81,17 @@ public abstract class HmsEntity {
 
         final String queryTemplate = "insert into {0}({1}) values({2})";
 
-        DB.createConnection();
+        try {
+            DB.createConnection();
 
-        DB.executeUpdate(MessageFormat.format(queryTemplate, getClass().getSimpleName(),
-                fields, values));
+            DB.executeUpdate(MessageFormat.format(queryTemplate, getClass().getSimpleName(),
+                    fields, values));
 
-        DB.closeConnection();
+            DB.closeConnection();
+        } catch (DbException e) {
+            throw new HmsException(e);
+        }
+
     }
 
     public void update() throws HmsException {
@@ -119,12 +121,16 @@ public abstract class HmsEntity {
 
         final String queryTemplate = "update {0} set {1} where id = {2}";
 
-        DB.createConnection();
+        try {
+            DB.createConnection();
+            DB.executeUpdate(MessageFormat.format(queryTemplate, getClass().getSimpleName(),
+                    props, id));
+            DB.closeConnection();
+        } catch (DbException e) {
+            throw new HmsException(e);
+        }
 
-        DB.executeUpdate(MessageFormat.format(queryTemplate, getClass().getSimpleName(),
-                props, id));
-
-        DB.closeConnection();
+        
     }
 
     public static boolean isCached() {

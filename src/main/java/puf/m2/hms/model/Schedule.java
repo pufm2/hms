@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.exception.HmsException;
+import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;
 
@@ -29,21 +29,28 @@ public class Schedule extends HmsEntity {
 		this.available = available;
 	}
 
-	public void save() throws HmsException {
+	public void save() throws ScheduleException {
 		try {
 			id = getNextFreeId();
 		} catch (Exception e1) {
 
 		}
 		final String queryTemple = "insert into Schedule values({0}, {1}, ''{2}'', ''{3}'', {4})";
-		DB.createConnection();
+		try {
+            DB.createConnection();
+            
+            int available = this.available ? 1 : 0;
+            DB.executeUpdate(MessageFormat.format(queryTemple, id,
+                        physician.getId(), DateUtils.dateToString(startDate),
+                        DateUtils.dateToString(endDate), available));
 
-		int available = this.available ? 1 : 0;
-		DB.executeUpdate(MessageFormat.format(queryTemple, id,
-					physician.getId(), DateUtils.dateToString(startDate),
-					DateUtils.dateToString(endDate), available));
+            DB.closeConnection();
+            
+        } catch (DbException e) {
+            throw new ScheduleException(e);
+        }
 
-		DB.closeConnection();
+		
 
 		SCHEDULE_MAP.put(id, this);
 	}

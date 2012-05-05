@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ public class Patient extends HmsEntity {
     }
 
   public void save() throws PatientException {
-
         try {
             super.save();
         } catch (HmsException e) {
@@ -50,41 +48,16 @@ public class Patient extends HmsEntity {
         }
 
         PATIENT_MAP.put(id, this);
-
     }
-
-/*    public static boolean checkExistPatient(int id) throws HmsException {
-
-        boolean existed = false;
-        try {
-            DB.createConnection();
-            final String queryTemplate = "select id from Patient where id = {0}";
-
-            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-                    id));
-
-            if (rs.next()) {
-                existed = true;
-            }
-
-            DB.closeConnection();
-        } catch (SQLException e) {
-            throw new HmsException(e);
-        }
-        return existed;
-
-    }*/
 
     public static List<Patient> getPatients() throws PatientException {
         List<Patient> patientList = new ArrayList<Patient>();
 
         final String query = "select * from Patient";
 
-        DB.createConnection();
-
-        ResultSet rs = DB.executeQuery(query);
-
         try {
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(query);
             while (rs.next()) {
                 int id = rs.getInt("id");
                 Patient patient = PATIENT_MAP.get(id);
@@ -101,12 +74,10 @@ public class Patient extends HmsEntity {
     
                 patientList.add(patient);
             }
+            DB.closeConnection();
         } catch (Exception e) {
             throw new PatientException(e);
         }
-
-        DB.closeConnection();
-
         return patientList;
     }
 
@@ -116,13 +87,12 @@ public class Patient extends HmsEntity {
         if (patient != null) {
             return patient;
         }
-
-        DB.createConnection();
-
         final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
-        ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
-
+        
         try {
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
+            
             if (rs.next()) {
                 patient = new Patient(rs.getString("name"),
                         rs.getString("dateOfBirth"), rs.getString("address"),
@@ -132,11 +102,11 @@ public class Patient extends HmsEntity {
 
                 PATIENT_MAP.put(patient.getId(), patient);
             }
-        } catch (SQLException e) {
+            
+            DB.closeConnection();
+        } catch (Exception e) {
             throw new PatientException(e);
         }
-
-        DB.closeConnection();
 
         return patient;
     }
@@ -148,12 +118,11 @@ public class Patient extends HmsEntity {
 
         final String queryTemplate = "SELECT * FROM Patient WHERE name = ''{0}''";
 
-        DB.createConnection();
-
-        ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-                patientName));
-
         try {
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+                    patientName));
+            
             while (rs.next()) {
                 int id = rs.getInt("id");
                 Patient patient = PATIENT_MAP.get(id);
@@ -169,11 +138,11 @@ public class Patient extends HmsEntity {
                 }
                 patientList.add(patient);
             }
+            
+            DB.closeConnection();
         } catch (Exception e) {
             throw new PatientException(e);
         }
-
-        DB.closeConnection();
 
         return patientList;
     }
@@ -224,12 +193,6 @@ public class Patient extends HmsEntity {
 
     public void setBiographicHealth(String biographicHealth) {
         this.biographicHealth = biographicHealth;
-    }
-    
-    public static void main (String[] args) throws Exception {
-        Patient p = getPatientById(1);
-        p.save();
-        
     }
 
 }

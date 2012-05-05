@@ -4,13 +4,11 @@ import java.sql.ResultSet;
 
 public interface Database {
 
-	public void createConnection();
+	public void createConnection() throws DbException;
 
-	// Get Resultset returned by query
-	public ResultSet executeQuery(String query);
+	public ResultSet executeQuery(String query) throws DbException;
 
-	public int executeUpdate(String query);
+	public int executeUpdate(String query) throws DbException;
 
-	// Close database connection
-	public void closeConnection();
+	public void closeConnection() throws DbException;
 }

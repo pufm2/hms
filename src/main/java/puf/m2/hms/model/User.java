@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -34,28 +33,30 @@ public class User extends HmsEntity {
 	}
 
 	public static User login(String username, String password) {
-		DB.createConnection();
-		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
-		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-				username, password));
+	    final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
+	    
+	    try {
+            DB.createConnection();
+            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+                    username, password));
+            
+            if (rs != null) {
+                int id = rs.getInt("id");
+                User user = USER_MAP.get(id);
+                if (user == null) {
+                    user = new User(username, password, rs.getString("email"),
+                            rs.getString("role"));
+                    user.id = id;
+                    USER_MAP.put(id, user);
+                }
+                return user;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
 
-		try {
-			if (rs != null) {
-				int id = rs.getInt("id");
-				User user = USER_MAP.get(id);
-				if (user == null) {
-					user = new User(username, password, rs.getString("email"),
-							rs.getString("role"));
-					user.id = id;
-					USER_MAP.put(id, user);
-				}
-				return user;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-		    return null;
-		}
 
 	}
 

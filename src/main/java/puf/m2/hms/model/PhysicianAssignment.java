@@ -34,6 +34,33 @@ public class PhysicianAssignment extends HmsEntity {
         this.endDate = endDate;
     }
     
+
+    public void save() throws PhysicianAssignmentException {
+        
+        final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
+        try {
+            id = getNextFreeId();
+            
+            DB.createConnection();
+            DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(),
+                    physician.getId(), DateUtils.dateToString(startDate),
+                    DateUtils.dateToString(endDate)));
+            DB.closeConnection();
+        } catch (Exception e) {
+            throw new PhysicianAssignmentException(e);
+        }
+        
+        PA_MAP.put(id, this);
+
+        physician.setAvailable(false);
+        try {
+            physician.save();
+        } catch (HmsException e) {
+            throw new PhysicianAssignmentException(e);
+        }
+    }
+
+    
 	public static List<PhysicianAssignment> getPhysicianAssignments() throws PhysicianAssignmentException {
 
 		List<PhysicianAssignment> paList = new ArrayList<PhysicianAssignment>();
@@ -84,21 +111,6 @@ public class PhysicianAssignment extends HmsEntity {
 
 	public Date getStartDate() {
 		return startDate;
-	}
-
-	public void save() throws HmsException {
-		id = getNextFreeId();
-		final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
-		DB.createConnection();
-		DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(),
-				physician.getId(), DateUtils.dateToString(startDate),
-				DateUtils.dateToString(endDate)));
-		DB.closeConnection();
-
-		PA_MAP.put(id, this);
-
-		physician.setAvailable(false);
-		physician.save();
 	}
 
 }

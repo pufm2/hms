@@ -17,45 +17,40 @@ public class SqliteDatabase implements Database {
 		this.dbUrl = dbUrl;
 	}
 
-	public void createConnection() {
+	public void createConnection() throws DbException {
 
 		try {
 			cnn = DriverManager.getConnection(dbUrl);
 		} catch (Exception e) {
-
+		    throw new DbException(e);
 		}
 	}
 
-	@SuppressWarnings("finally")
-	public ResultSet executeQuery(String query) {
+	public ResultSet executeQuery(String query) throws DbException {
 
-		ResultSet rs = null;
 		try {
 			Statement statement = cnn.createStatement();
-			rs = statement.executeQuery(query);
+			return statement.executeQuery(query);
 		} catch (Exception e) {
-		} finally {
-			return rs;
+		    throw new DbException(e);
 		}
+
 	}
 
-	@SuppressWarnings("finally")
-	public int executeUpdate(String query) {
-		int result = 0;
+	public int executeUpdate(String query) throws DbException {
 		try {
 			Statement statement = cnn.createStatement();
-			result = statement.executeUpdate(query);
+			return statement.executeUpdate(query);
 		} catch (Exception e) {
-		} finally {
-			return result;
+		    throw new DbException(e);
 		}
 	}
 
-	public void closeConnection() {
+	public void closeConnection() throws DbException {
 		try {
 			cnn.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+		    throw new DbException(e);
 		}
 	}
 
