@@ -3,9 +3,9 @@ package puf.m2.hms.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.UIManager;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-import puf.m2.hms.exception.UserException;
 import puf.m2.hms.model.User;
 
 public class Login extends javax.swing.JPanel implements ActionListener {
@@ -20,69 +20,36 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 
 	// End of variables declaration
 
+	private JFrame parent;
+	
 	public Login() {
-		initComponents();
+	    initComponents();
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void setParent(JFrame parent) {
+        this.parent = parent;
+    }
+
+    public void actionPerformed(ActionEvent e) {
 
 		if ("Login".equals(e.getActionCommand())) {
-			try {
-				login(txtUsername.getText(), txtPassword.getText());
-			} catch (UserException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		    User user = User.login(txtUsername.getText(), new String(txtPassword.getPassword()));
+		    if (user != null) {
+		        parent.setVisible(false);
+		        String role = user.getRole();
+		        if ("receptionist".equals(role)) {
+		            Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
+	            } else if ("nurse".equals(role)) {
+	                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
+
+	            } else if ("doctor".equals(role)) {
+	                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
+
+	            }
+		    } else {
+		        JOptionPane.showMessageDialog(parent, "Invalid Credential", "Alert", JOptionPane.ERROR_MESSAGE);
+		    }
 		}
-	}
-
-	public void login(String username, String password) throws UserException {
-
-		String role;
-
-		User user = null;
-		try {
-			User s = new User();
-			user = s.login(username, password);
-		} catch (UserException userException) {
-			System.out.println("Can not login with "
-					+ userException.getUsername() + "@"
-					+ userException.getPassword());
-		}
-
-		if (!user.isValidUser()) {
-			throw new UserException(username, password);
-		} else {
-			role = user.getRole();
-			if (role.equals("receptionist")) {
-				// login successful, show "Main view" form of receptionist
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Receptionist role",
-								new ReceptionistView());
-					}
-				});
-			} else if (role.equals("nurse")) {
-				// login successful, show "Main view" form of nurse
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Nurse role", new NurseView());
-					}
-				});
-			} else if (role.equals("doctor")) {
-				// login successful, show "Main view" form of doctor
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						Utils.createAndShowGUI("Doctor role", new DoctorView());
-					}
-				});
-			}
-		}
-
 	}
 
 	private void initComponents() {

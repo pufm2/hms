@@ -41,13 +41,13 @@ public class AssignDoctor extends JPanel implements ActionListener {
 						.toString());
 				Patient patient = Patient.getPatientById(patientID);
 				if (patient == null)
-					throw new PatientException(patientID);
+					throw new PatientException(null);
 
 				int doctorID = Integer.parseInt(cboDoctorID.getSelectedItem()
 						.toString());
 				Physician doctor = Physician.getPhysicianById(doctorID);
 				if (doctor == null)
-					throw new PhysicianException(doctorID);
+					throw new PhysicianException(null);
 
 				PhysicianAssignment physicianAssignment = new PhysicianAssignment(
 						patient, doctor);

@@ -12,9 +12,13 @@ public class User extends HmsEntity {
 
 	private static final Map<Integer, User> USER_MAP = new CacheAwareMap<Integer, User>();
 
+	@DbProp
 	private String name;
+	@DbProp
 	private String password;
+	@DbProp
 	private String email;
+	@DbProp
 	private String role;
 
 	public User(String name, String password, String email, String role) {
@@ -29,9 +33,7 @@ public class User extends HmsEntity {
 
 	}
 
-	public static User login(String username, String password) throws UserException {
-
-		User user = null;
+	public static User login(String username, String password) {
 		DB.createConnection();
 		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
 		ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
@@ -40,43 +42,39 @@ public class User extends HmsEntity {
 		try {
 			if (rs != null) {
 				int id = rs.getInt("id");
-				user = USER_MAP.get(id);
+				User user = USER_MAP.get(id);
 				if (user == null) {
 					user = new User(username, password, rs.getString("email"),
 							rs.getString("role"));
 					user.id = id;
 					USER_MAP.put(id, user);
 				}
+				return user;
 			} else {
-				throw new UserException(username, password);
+				return null;
 			}
 		} catch (SQLException e) {
+		    return null;
 		}
 
-		DB.closeConnection();
-		return user;
 	}
 
-	public void save() throws HmsException {
-		id = getNextFreeId();
-
-		final String queryTemple = "insert into User values({0}, ''{1}'', ''{2}'', ''{3}'', ''{4}'')";
-		DB.createConnection();
-		DB.executeUpdate(MessageFormat.format(queryTemple, id, name, password,
-				email, role));
-		DB.closeConnection();
-
+	public void save() throws UserException {
+		try {
+			super.save();
+		} catch (HmsException e) {
+			throw new UserException(e);
+		}
 		USER_MAP.put(id, this);
 	}
 
-	public void update() throws HmsException {
+	public void update() throws UserException {
 
-		final String queryTemple = "update User set name = ''{0}'', password = ''{1}'', "
-				+ "email = ''{2}'', role = ''{3}'' where id = {4})";
-		DB.createConnection();
-		DB.executeUpdate(MessageFormat.format(queryTemple, name, password,
-				email, role, id));
-		DB.closeConnection();
+		try {
+			super.update();
+		} catch (HmsException e) {
+			throw new UserException(e);
+		}
 	}
 
 	public boolean isValidUser() {

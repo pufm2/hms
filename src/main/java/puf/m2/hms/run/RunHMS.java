@@ -1,5 +1,12 @@
 package puf.m2.hms.run;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import puf.m2.hms.view.Login;
 import puf.m2.hms.view.Utils;
 
@@ -12,11 +19,16 @@ public class RunHMS {
 	 * Thu Mar-May 2012
 	 */
 	public static void main(String[] args) {
+	    UIManager.put("swing.boldMetal", Boolean.FALSE);
 
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				// Utils.createAndShowGUI("Login", new LoginPanel());
-				Utils.createAndShowGUI("Login", new Login());
+
+		        JFrame frame = new JFrame("Login");
+	            Login loginPanel = new Login();
+	            loginPanel.setParent(frame);
+	            Utils.createAndShowGUI(frame, loginPanel);
+
 			}
 		});
 	}

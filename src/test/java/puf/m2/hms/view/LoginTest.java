@@ -1,5 +1,7 @@
 package puf.m2.hms.view;
 
+import org.easymock.EasyMock;
+import org.junit.Assert;
 import org.junit.Test;
 
 import puf.m2.hms.exception.UserException;
@@ -23,12 +25,9 @@ public class LoginTest {
 
         User mock = EasyMock.createMock(User.class);
         User result = null;
-        try {
-            result = mock.login("", "");
+        
+        result = mock.login("", "");
 
-        } catch (UserException e) {
-            System.out.println("Login fail");
-        }
         Assert.assertEquals(null, result);
     }
 }
