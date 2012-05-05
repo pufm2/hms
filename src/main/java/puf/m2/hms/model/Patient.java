@@ -146,7 +146,7 @@ public class Patient extends HmsEntity {
 
         List<Patient> patientList = new ArrayList<Patient>();
 
-        final String queryTemplate = "SELECT * FROM Patient WHERE PatientName = ''{0}''";
+        final String queryTemplate = "SELECT * FROM Patient WHERE name = ''{0}''";
 
         DB.createConnection();
 
