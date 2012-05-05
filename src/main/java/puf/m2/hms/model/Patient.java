@@ -142,7 +142,7 @@ public class Patient extends HmsEntity {
     }
 
     public static List<Patient> getPatientByName(String patientName)
-            throws Exception {
+            throws PatientException {
 
         List<Patient> patientList = new ArrayList<Patient>();
 
@@ -153,20 +153,24 @@ public class Patient extends HmsEntity {
         ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
                 patientName));
 
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            Patient patient = PATIENT_MAP.get(id);
-
-            if (patient == null) {
-                patient = new Patient(rs.getString("name"),
-                        rs.getString("dateOfBirth"), rs.getString("address"),
-                        rs.getInt("sex"), rs.getString("phone"),
-                        rs.getString("biographicHealth"));
-                patient.id = id;
-
-                PATIENT_MAP.put(id, patient);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Patient patient = PATIENT_MAP.get(id);
+    
+                if (patient == null) {
+                    patient = new Patient(rs.getString("name"),
+                            rs.getString("dateOfBirth"), rs.getString("address"),
+                            rs.getInt("sex"), rs.getString("phone"),
+                            rs.getString("biographicHealth"));
+                    patient.id = id;
+    
+                    PATIENT_MAP.put(id, patient);
+                }
+                patientList.add(patient);
             }
-            patientList.add(patient);
+        } catch (Exception e) {
+            throw new PatientException(e);
         }
 
         DB.closeConnection();
