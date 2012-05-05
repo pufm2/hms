@@ -2,6 +2,8 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,24 +36,28 @@ public class Login extends javax.swing.JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
 		if ("Login".equals(e.getActionCommand())) {
-		    User user = User.login(txtUsername.getText(), new String(txtPassword.getPassword()));
-		    if (user != null) {
-		        parent.setVisible(false);
-		        String role = user.getRole();
-		        if (Role.Receptionist.name().equals(role)) {
-		            Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
-	            } else if (Role.Nurse.name().equals(role)) {
-	                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
-
-	            } else if (Role.Doctor.name().equals(role)) {
-	                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
-
-	            }
-		    } else {
-		        JOptionPane.showMessageDialog(parent, "Invalid Credential", "Alert", JOptionPane.ERROR_MESSAGE);
-		    }
+		    login();
 		}
 	}
+
+    private void login() {
+        User user = User.login(txtUsername.getText(), new String(txtPassword.getPassword()));
+        if (user != null) {
+            parent.setVisible(false);
+            String role = user.getRole();
+            if (Role.Receptionist.name().equals(role)) {
+                Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
+            } else if (Role.Nurse.name().equals(role)) {
+                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
+
+            } else if (Role.Doctor.name().equals(role)) {
+                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(parent, "Invalid Credential", "Alert", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
 	private void initComponents() {
 
@@ -66,6 +72,13 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 		jLabel2.setText("Password");
 
 		txtPassword.setText("");
+	    txtPassword.addKeyListener(new KeyAdapter() {
+	        public void keyReleased( KeyEvent e ) {
+	            if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+	                login();
+	            }
+	        }
+        });
 
 		btnLogin.setText("Login");
 		btnLogin.addActionListener(this);
