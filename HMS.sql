@@ -89,7 +89,20 @@ role nvarchar(20),
 primary key (id)
 );
 
-insert into User values(1,'nhphat',123,'phatpt01@gmail.com','receptionist');
-insert into User values(2,'lxhoan',123,'lxhoan@gmail.com','doctor');
-insert into User values(3,'tlnquynh',123,'bachthuconuong@gmail.com','nurse');
-insert into User values(4,'nmathu',123,'ngominhanhthu@gmail.com','nurse');
+insert into User values(1,'nhphat',123,'phatpt01@gmail.com','Receptionist');
+insert into User values(2,'lxhoan',123,'lxhoan@gmail.com','Doctor');
+insert into User values(3,'tlnquynh',123,'bachthuconuong@gmail.com','Nurse');
+insert into User values(4,'nmathu',123,'ngominhanhthu@gmail.com','Nurse');
+
+create table Schedule 
+(
+id int not null,
+physicianId int,
+startDate date,
+endDate date,
+available boolean, 
+primary key (id),
+foreign key (physicianId) references Physician(id)
+);
+
+insert into Schedule values(1, 100, '05/04/2012 15:47:15', '05/04/2012 15:47:15', 1);
