@@ -106,7 +106,7 @@ public class Patient extends HmsEntity {
         return patientList;
     }
 
-    public static Patient getPatientById(int id) throws HmsException {
+    public static Patient getPatientById(int id) throws PatientException {
 
         String queryTempl = "";
 
@@ -131,7 +131,7 @@ public class Patient extends HmsEntity {
                 PATIENT_MAP.put(patient.getId(), patient);
             }
         } catch (SQLException e) {
-            throw new HmsException(e);
+            throw new PatientException(e);
         }
 
         DB.closeConnection();

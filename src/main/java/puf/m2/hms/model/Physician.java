@@ -28,7 +28,7 @@ public class Physician extends HmsEntity {
         this.available = available;
     }
 
-	public static List<Physician> getDoctors() throws HmsException {
+	public static List<Physician> getDoctors() throws PhysicianException {
 		List<Physician> doctorList = new ArrayList<Physician>();
 
 		final String query = "select * from Physician where role = 'Doctor'";
@@ -55,8 +55,8 @@ public class Physician extends HmsEntity {
 
 				doctorList.add(physician);
 			}
-		} catch (SQLException e) {
-			throw new HmsException(e);
+		} catch (Exception e) {
+			throw new PhysicianException(e);
 		}
 		DB.closeConnection();
 
@@ -99,7 +99,7 @@ public class Physician extends HmsEntity {
 		return doctorList;
 	}
 
-	public static Physician getPhysicianById(int id) throws HmsException {
+	public static Physician getPhysicianById(int id) throws PhysicianException {
 
 		Physician physician = PHYSICIAN_MAP.get(id);
 		if (physician != null) {
@@ -123,8 +123,8 @@ public class Physician extends HmsEntity {
 				physician.id = rs.getInt("id");
 				PHYSICIAN_MAP.put(physician.getId(), physician);
 			}
-		} catch (SQLException e) {
-		    throw new HmsException(e);
+		} catch (Exception e) {
+		    throw new PhysicianException(e);
 		}
 
 		DB.closeConnection();

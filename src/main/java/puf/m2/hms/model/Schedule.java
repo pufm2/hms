@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
+import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;
 
 public class Schedule extends HmsEntity {
@@ -60,7 +60,7 @@ public class Schedule extends HmsEntity {
 	}
 
 	public static List<Schedule> loadSchedule(Physician doctor)
-			throws HmsException {
+			throws ScheduleException {
 
 		List<Schedule> scheduleList = new ArrayList<Schedule>();
 		final String queryTemplate = "SELECT * FROM Schedule WHERE physicianId = {0}";
@@ -95,8 +95,8 @@ public class Schedule extends HmsEntity {
 			}
 
 			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
+		} catch (Exception e) {
+			throw new ScheduleException(e);
 		}
 		return scheduleList;
 	}

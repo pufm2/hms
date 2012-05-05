@@ -1,7 +1,6 @@
 package puf.m2.hms.model;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
+import puf.m2.hms.exception.PhysicianAssignmentException;
 import puf.m2.hms.utils.DateUtils;
 
 public class PhysicianAssignment extends HmsEntity {
@@ -34,8 +34,7 @@ public class PhysicianAssignment extends HmsEntity {
         this.endDate = endDate;
     }
     
-	public static List<PhysicianAssignment> getPhysicianAssignments()
-			throws HmsException {
+	public static List<PhysicianAssignment> getPhysicianAssignments() throws PhysicianAssignmentException {
 
 		List<PhysicianAssignment> paList = new ArrayList<PhysicianAssignment>();
 
@@ -63,8 +62,8 @@ public class PhysicianAssignment extends HmsEntity {
 				paList.add(pa);
 			}
 			DB.closeConnection();
-		} catch (SQLException e) {
-			throw new HmsException(e);
+		} catch (Exception e) {
+			throw new PhysicianAssignmentException(e);
 		}
 
 		return paList;
