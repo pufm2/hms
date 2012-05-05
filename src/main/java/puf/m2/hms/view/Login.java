@@ -25,13 +25,11 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 
 	private JFrame parent;
 	
-	public Login() {
+	public Login(JFrame parent) {
+	    this.parent = parent;
 	    initComponents();
-	}
 
-	public void setParent(JFrame parent) {
-        this.parent = parent;
-    }
+	}
 
     public void actionPerformed(ActionEvent e) {
 
@@ -73,7 +71,7 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 
 		txtPassword.setText("");
 	    txtPassword.addKeyListener(new KeyAdapter() {
-	        public void keyReleased(KeyEvent e) {
+	        public void keyPressed(KeyEvent e) {
 	            if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 	                login();
 	            }

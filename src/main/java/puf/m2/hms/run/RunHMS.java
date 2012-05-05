@@ -1,8 +1,5 @@
 package puf.m2.hms.run;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -25,8 +22,7 @@ public class RunHMS {
 			public void run() {
 
 		        JFrame frame = new JFrame("Login");
-	            Login loginPanel = new Login();
-	            loginPanel.setParent(frame);
+	            Login loginPanel = new Login(frame);
 	            Utils.createAndShowGUI(frame, loginPanel);
 
 			}
