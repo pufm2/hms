@@ -8,6 +8,8 @@ import java.nio.channels.FileChannel;
 
 import org.junit.BeforeClass;
 
+import puf.m2.hms.db.DbException;
+
 public abstract class TestSupport {
     private static File dbFile = new File("HMS.db3");
     private static File dbBackupFile = new File("HMS.db3.bak");
@@ -23,6 +25,11 @@ public abstract class TestSupport {
     }
 
     public static void restoreDb() {
+        try {
+            HmsEntity.DB.closeConnection();
+        } catch (DbException e) {
+            
+        }
         dbFile.delete();
         dbBackupFile.renameTo(dbFile);
     }
