@@ -73,8 +73,8 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 
 		txtPassword.setText("");
 	    txtPassword.addKeyListener(new KeyAdapter() {
-	        public void keyReleased( KeyEvent e ) {
-	            if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+	        public void keyReleased(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 	                login();
 	            }
 	        }
