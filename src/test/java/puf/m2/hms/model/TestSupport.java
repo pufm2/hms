@@ -6,11 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
-
-//TODO There is no test in this class!!! (which class do you to test here?)
 
 public abstract class TestSupport {
     private static File dbFile = new File("HMS.db3");
@@ -21,14 +17,12 @@ public abstract class TestSupport {
         HmsEntity.setCached(false);
     }
 
-    @Before
-    public void before() throws IOException {
+    public static void backupDb() throws IOException {
         copyFile(dbFile, dbBackupFile);
 
     }
 
-    @After
-    public void after() {
+    public static void restoreDb() {
         dbFile.delete();
         dbBackupFile.renameTo(dbFile);
     }

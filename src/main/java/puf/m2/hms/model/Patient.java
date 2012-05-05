@@ -75,7 +75,7 @@ public class Patient extends HmsEntity {
 
     }*/
 
-    public static List<Patient> getPatients() throws Exception {
+    public static List<Patient> getPatients() throws PatientException {
         List<Patient> patientList = new ArrayList<Patient>();
 
         final String query = "select * from Patient";
@@ -84,21 +84,25 @@ public class Patient extends HmsEntity {
 
         ResultSet rs = DB.executeQuery(query);
 
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            Patient patient = PATIENT_MAP.get(id);
-
-            if (patient == null) {
-                patient = new Patient(rs.getString("name"),
-                        rs.getString("dateOfBirth"), rs.getString("address"),
-                        rs.getInt("sex"), rs.getString("phone"),
-                        rs.getString("biographicHealth"));
-                patient.id = id;
-
-                PATIENT_MAP.put(id, patient);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Patient patient = PATIENT_MAP.get(id);
+    
+                if (patient == null) {
+                    patient = new Patient(rs.getString("name"),
+                            rs.getString("dateOfBirth"), rs.getString("address"),
+                            rs.getInt("sex"), rs.getString("phone"),
+                            rs.getString("biographicHealth"));
+                    patient.id = id;
+    
+                    PATIENT_MAP.put(id, patient);
+                }
+    
+                patientList.add(patient);
             }
-
-            patientList.add(patient);
+        } catch (Exception e) {
+            throw new PatientException(e);
         }
 
         DB.closeConnection();
@@ -108,8 +112,6 @@ public class Patient extends HmsEntity {
 
     public static Patient getPatientById(int id) throws PatientException {
 
-        String queryTempl = "";
-
         Patient patient = PATIENT_MAP.get(id);
         if (patient != null) {
             return patient;
@@ -117,7 +119,7 @@ public class Patient extends HmsEntity {
 
         DB.createConnection();
 
-        queryTempl = "SELECT * FROM Patient WHERE id = {0}";
+        final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
         ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
 
         try {
