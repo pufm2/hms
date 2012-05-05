@@ -22,7 +22,7 @@ public class ScheduleTest {
         TestSupport.backupDb();
         
         try {
-            Physician p = Physician.getPhysicianById(107);
+            Physician p = Physician.getPhysicianById(101);
             Schedule s = new Schedule(p, new Date(), new Date(), true);
             s.save();
             for (Schedule s1 : Schedule.loadSchedule(p)) {
