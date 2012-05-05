@@ -77,12 +77,6 @@ public class User extends HmsEntity {
 		}
 	}
 
-	public boolean isValidUser() {
-		if (this.name != "" & this.password != "")
-			return true;
-		return false;
-	}
-
 	public String getUsername() {
 		return name;
 	}
