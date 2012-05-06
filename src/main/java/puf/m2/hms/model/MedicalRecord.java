@@ -25,10 +25,6 @@ public class MedicalRecord extends HmsEntity {
 		this.detail = detail;
 	}
 
-	public MedicalRecord() {
-
-	}
-
 	public void save() throws MedicalRecordException {
 		final String queryTemplate = "insert into MedicalRecord values({0}, {1}, ''{2}'', ''{3}'')";
 
