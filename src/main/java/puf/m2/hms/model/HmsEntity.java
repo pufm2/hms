@@ -14,7 +14,7 @@ import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.utils.DateUtils;
 
 public abstract class HmsEntity {
-    protected static final Database DB = DatabaseFactory.DEFAULT_DB;
+    protected static Database DB = DatabaseFactory.DEFAULT_DB;
     
     private static boolean cached = true;
 
@@ -73,7 +73,7 @@ public abstract class HmsEntity {
                 values += (Boolean) val ? 1 : 0;
             } else if (val instanceof HmsEntity) {
                 values += ((HmsEntity) val).id;
-                name += "Id";
+                name += "id";
             }
             fields += name; 
 
@@ -114,7 +114,7 @@ public abstract class HmsEntity {
             } else if (val instanceof Boolean) {
                 prop = name + " = " + ((Boolean) val ? 1 : 0);
             } else if (val instanceof HmsEntity) {
-                prop = name + "Id = " + ((HmsEntity) val).id;
+                prop = name + "id = " + ((HmsEntity) val).id;
             }
             props += prop;
         }

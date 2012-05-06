@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class DatabaseFactory {
 
-	private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
+	public static final String SQLITE_DRIVER = "org.sqlite.JDBC";
 	private static final String DB_URL = "jdbc:sqlite:HMS.db3";
 
 	private static final Map<String, Database> DB_POOL;
