@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.text.MessageFormat;
 import java.util.Map;
 
+import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.UserException;
 
@@ -53,8 +54,15 @@ public class User extends HmsEntity {
             } else {
                 return null;
             }
+
         } catch (Exception e) {
             return null;
+        } finally {
+            try {
+                DB.closeConnection();
+            } catch (DbException e) {
+                
+            }
         }
 
 
