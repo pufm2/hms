@@ -90,8 +90,9 @@ public class Physician extends HmsEntity {
 
                 doctorList.add(physician);
                 
-                DB.closeConnection();
+
             }
+            DB.closeConnection();
         } catch (Exception e) {
             throw new PhysicianException(e);
         }
