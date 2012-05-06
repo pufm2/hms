@@ -99,9 +99,24 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 				cboPatientID.addItem(patient.getId());
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// Fill medical record
+		try {
+			Patient patient = new Patient(Integer.parseInt(cboPatientID
+					.getSelectedItem().toString()));
+
+			for (MedicalRecord medicalRecord : MedicalRecord
+					.loadMedicalRecord(patient)) {
+				if (medicalRecord.getPatient().getId() == Integer
+						.parseInt(cboPatientID.getSelectedItem().toString()))
+					cboMedicalRecordID.addItem(medicalRecord.getId());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private void initComponents() {
