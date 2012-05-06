@@ -47,6 +47,9 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 
 			try {
 				medicalRecord.save();
+				cboPatientID.setSelectedIndex(0);
+				txtDateAffect.cleanup();
+				txtDetails.setText("");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

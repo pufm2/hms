@@ -47,6 +47,16 @@ public class ManageSchedule extends JPanel implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+
+			// Check date
+			if (txtEndDate.getDate().compareTo(txtStartDate.getDate()) == -1) { // endDate
+																				// <
+																				// startDate
+				JOptionPane.showMessageDialog(this,
+						"Start date mus be ealier end date");
+				return;
+			}
+
 			Schedule schedule = new Schedule(physician, txtStartDate.getDate(),
 					txtEndDate.getDate(), chkAvailable.isSelected());
 			try {

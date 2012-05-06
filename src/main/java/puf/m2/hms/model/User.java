@@ -29,42 +29,37 @@ public class User extends HmsEntity {
 		this.role = role;
 	}
 
-	public User() {
-
-	}
-
 	public static User login(String username, String password) {
-	    final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
-	    
-	    try {
-            DB.createConnection();
-            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-                    username, password));
-            
-            if (rs != null) {
-                int id = rs.getInt("id");
-                User user = USER_MAP.get(id);
-                if (user == null) {
-                    user = new User(username, password, rs.getString("email"),
-                            rs.getString("role"));
-                    user.id = id;
-                    USER_MAP.put(id, user);
-                }
-                return user;
-            } else {
-                return null;
-            }
+		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
 
-        } catch (Exception e) {
-            return null;
-        } finally {
-            try {
-                DB.closeConnection();
-            } catch (DbException e) {
-                
-            }
-        }
+		try {
+			DB.createConnection();
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
+					username, password));
 
+			if (rs != null) {
+				int id = rs.getInt("id");
+				User user = USER_MAP.get(id);
+				if (user == null) {
+					user = new User(username, password, rs.getString("email"),
+							rs.getString("role"));
+					user.id = id;
+					USER_MAP.put(id, user);
+				}
+				return user;
+			} else {
+				return null;
+			}
+
+		} catch (Exception e) {
+			return null;
+		} finally {
+			try {
+				DB.closeConnection();
+			} catch (DbException e) {
+
+			}
+		}
 
 	}
 
