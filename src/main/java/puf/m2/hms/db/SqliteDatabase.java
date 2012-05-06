@@ -32,6 +32,11 @@ public class SqliteDatabase implements Database {
 			Statement statement = cnn.createStatement();
 			return statement.executeQuery(query);
 		} catch (Exception e) {
+		    try {
+                cnn.close();
+            } catch (SQLException e1) {
+
+            }
 		    throw new DbException(e);
 		}
 
@@ -42,6 +47,11 @@ public class SqliteDatabase implements Database {
 			Statement statement = cnn.createStatement();
 			return statement.executeUpdate(query);
 		} catch (Exception e) {
+		    try {
+                cnn.close();
+            } catch (SQLException e1) {
+
+            }
 		    throw new DbException(e);
 		}
 	}

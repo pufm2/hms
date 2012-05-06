@@ -175,11 +175,5 @@ public class Physician extends HmsEntity {
         }
 
 	}
-	
-    public static void main (String[] args) throws Exception {
-        Physician p = getPhysicianById(100);
-        p.update();
-        
-    }
 
 }
