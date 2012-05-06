@@ -2,6 +2,7 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,8 +43,17 @@ public class RegisterPatient extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("Register".equals(e.getActionCommand())) {
-
 			int patientSex = "Male".equals(e.getActionCommand()) ? 1 : 0;
+
+			// Check valid birthdate
+			Date current = new Date();
+			Date birthDate = txtBirthdate.getDate();
+			if (birthDate.compareTo(current) > 0) {
+				JOptionPane.showMessageDialog(this,
+						"Birthdate must be ealier than current date");
+				clearField();
+				return;
+			}
 
 			// Create Patient object
 			Patient patient = new Patient(txtPatientName.getText(),
@@ -57,6 +67,7 @@ public class RegisterPatient extends JPanel implements ActionListener {
 				JOptionPane.showMessageDialog(null,
 						"Saved patient's information with new patient ID is "
 								+ patient.getId());
+				clearField();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null,
 						"Can not save patient's information");
@@ -64,12 +75,18 @@ public class RegisterPatient extends JPanel implements ActionListener {
 		}
 	}
 
+	private void clearField() {
+		txtPatientName.setText("");
+		txtBiographicHealth.setText("");
+		txtPhoneNumber.setText("");
+		txtAddress.setText("");
+	}
+
 	private void addActionListener() {
 		btnRegister.addActionListener(this);
 	}
 
 	private void fillComboBox() {
-
 	}
 
 	private void initComponents() {
