@@ -124,7 +124,7 @@ public class Physician extends HmsEntity {
                 physician.id = rs.getInt("id");
                 PHYSICIAN_MAP.put(physician.getId(), physician);
             }
-            
+
             DB.closeConnection();
         } catch (Exception e) {
             throw new PhysicianException(e);
