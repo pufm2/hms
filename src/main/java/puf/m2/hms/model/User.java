@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.UserException;
 
@@ -33,7 +32,6 @@ public class User extends HmsEntity {
 		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
 
 		try {
-			DB.createConnection();
 			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
 					username, password));
 
@@ -53,12 +51,6 @@ public class User extends HmsEntity {
 
 		} catch (Exception e) {
 			return null;
-		} finally {
-			try {
-				DB.closeConnection();
-			} catch (DbException e) {
-
-			}
 		}
 
 	}

@@ -14,7 +14,7 @@ import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.utils.DateUtils;
 
 public abstract class HmsEntity {
-    protected static Database DB = DatabaseFactory.DEFAULT_DB;
+    public static Database DB = DatabaseFactory.DEFAULT_DB;
     
     private static boolean cached = true;
 
@@ -33,13 +33,10 @@ public abstract class HmsEntity {
         int freeId = 1;
         String query = "select max(id) as maxId from " + getClass().getSimpleName();
         try {
-
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(query);
             if (rs.next()) {
                 freeId = rs.getInt("maxId") + 1;
             }
-            DB.closeConnection();
         } catch (Exception e) {
             throw new HmsException(e);
         }
@@ -82,12 +79,8 @@ public abstract class HmsEntity {
         final String queryTemplate = "insert into {0}({1}) values({2})";
 
         try {
-            DB.createConnection();
-
             DB.executeUpdate(MessageFormat.format(queryTemplate, getClass().getSimpleName(),
                     fields, values));
-
-            DB.closeConnection();
         } catch (DbException e) {
             throw new HmsException(e);
         }
@@ -122,10 +115,8 @@ public abstract class HmsEntity {
         final String queryTemplate = "update {0} set {1} where id = {2}";
 
         try {
-            DB.createConnection();
             DB.executeUpdate(MessageFormat.format(queryTemplate, getClass().getSimpleName(),
                     props, id));
-            DB.closeConnection();
         } catch (DbException e) {
             throw new HmsException(e);
         }

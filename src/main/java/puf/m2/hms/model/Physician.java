@@ -33,7 +33,6 @@ public class Physician extends HmsEntity {
 		final String query = "select * from Physician where role = 'Doctor'";
 
 		try {
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(query);
             
             while (rs.next()) {
@@ -54,8 +53,6 @@ public class Physician extends HmsEntity {
 
                 doctorList.add(physician);
             }
-            
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PhysicianException(e);
         }
@@ -69,7 +66,6 @@ public class Physician extends HmsEntity {
 		final String query = "select * from Physician where role = 'Nurse'";
 
 		try {
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(query);
             
             while (rs.next()) {
@@ -92,7 +88,6 @@ public class Physician extends HmsEntity {
                 
 
             }
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PhysicianException(e);
         }
@@ -110,7 +105,6 @@ public class Physician extends HmsEntity {
 		final String queryTempl = "SELECT * FROM Physician WHERE id = {0}";
 		
 		try {
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
             
             if (rs.next()) {
@@ -124,8 +118,6 @@ public class Physician extends HmsEntity {
                 physician.id = rs.getInt("id");
                 PHYSICIAN_MAP.put(physician.getId(), physician);
             }
-
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PhysicianException(e);
         }

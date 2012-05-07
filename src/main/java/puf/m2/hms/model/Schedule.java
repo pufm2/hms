@@ -37,15 +37,10 @@ public class Schedule extends HmsEntity {
 		}
 		final String queryTemple = "insert into Schedule values({0}, {1}, ''{2}'', ''{3}'', {4})";
 		try {
-            DB.createConnection();
-            
             int available = this.available ? 1 : 0;
             DB.executeUpdate(MessageFormat.format(queryTemple, id,
                         physician.getId(), DateUtils.dateToString(startDate),
                         DateUtils.dateToString(endDate), available));
-
-            DB.closeConnection();
-            
         } catch (DbException e) {
             throw new ScheduleException(e);
         }
@@ -57,13 +52,11 @@ public class Schedule extends HmsEntity {
 
 	public void update(int scheduleID) throws Exception {
 		final String queryTemple = "update Schedule set physicianId = {0}, startDate = ''{1}'', endDate = ''{2}'', available = {3} where id = {4}";
-		DB.createConnection();
-
+		
 		int available = this.available ? 1 : 0;
 		DB.executeUpdate(MessageFormat.format(queryTemple, physician.getId(),
 				DateUtils.dateToString(startDate),
 				DateUtils.dateToString(endDate), available, id));
-		DB.closeConnection();
 	}
 
 	public static List<Schedule> loadSchedule(Physician doctor)
@@ -73,8 +66,6 @@ public class Schedule extends HmsEntity {
 		final String queryTemplate = "SELECT * FROM Schedule WHERE physicianId = {0}";
 
 		try {
-			DB.createConnection();
-
 			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
 					doctor.getId()));
 
@@ -100,8 +91,6 @@ public class Schedule extends HmsEntity {
 
 				scheduleList.add(schedule);
 			}
-
-			DB.closeConnection();
 		} catch (Exception e) {
 			throw new ScheduleException(e);
 		}

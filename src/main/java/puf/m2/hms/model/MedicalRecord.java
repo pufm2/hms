@@ -30,10 +30,8 @@ public class MedicalRecord extends HmsEntity {
 
 		try {
 			id = getNextFreeId();
-			DB.createConnection();
 			DB.executeUpdate(MessageFormat.format(queryTemplate, id,
 					patient.getId(), DateUtils.dateToString(dateAffect), detail));
-			DB.closeConnection();
 		} catch (Exception e) {
 			throw new MedicalRecordException(e);
 		}
@@ -43,11 +41,9 @@ public class MedicalRecord extends HmsEntity {
 	public void update() throws MedicalRecordException {
 		final String queryTemplate = "update MedicalRecord set patientId = {0}, dateAfect = ''{1}'', detail = ''{2}'' where id = {3})";
 		try {
-			DB.createConnection();
 			DB.executeUpdate(MessageFormat.format(queryTemplate,
 					patient.getId(), DateUtils.dateToString(dateAffect),
 					detail, id));
-			DB.closeConnection();
 		} catch (DbException e) {
 			throw new MedicalRecordException(e);
 		}
@@ -60,7 +56,6 @@ public class MedicalRecord extends HmsEntity {
 		List<MedicalRecord> mrList = new ArrayList<MedicalRecord>();
 
 		try {
-			DB.createConnection();
 			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
 					patient.getId()));
 
@@ -81,8 +76,6 @@ public class MedicalRecord extends HmsEntity {
 
 				mrList.add(mr);
 			}
-
-			DB.closeConnection();
 		} catch (Exception e) {
 			throw new MedicalRecordException(e);
 		}
@@ -98,7 +91,6 @@ public class MedicalRecord extends HmsEntity {
 		if (mr == null) {
 
 			try {
-				DB.createConnection();
 				ResultSet rs = DB.executeQuery(MessageFormat.format(
 						queryTemplate, id));
 
@@ -114,8 +106,6 @@ public class MedicalRecord extends HmsEntity {
 					MR_MAP.put(id, mr);
 
 				}
-
-				DB.closeConnection();
 			} catch (Exception e) {
 				throw new MedicalRecordException(e);
 			}

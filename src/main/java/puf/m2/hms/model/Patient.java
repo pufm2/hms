@@ -56,7 +56,6 @@ public class Patient extends HmsEntity {
         final String query = "select * from Patient";
 
         try {
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(query);
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -74,7 +73,6 @@ public class Patient extends HmsEntity {
     
                 patientList.add(patient);
             }
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PatientException(e);
         }
@@ -90,7 +88,6 @@ public class Patient extends HmsEntity {
         final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
         
         try {
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
             
             if (rs.next()) {
@@ -102,8 +99,6 @@ public class Patient extends HmsEntity {
 
                 PATIENT_MAP.put(patient.getId(), patient);
             }
-            
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PatientException(e);
         }
@@ -119,7 +114,6 @@ public class Patient extends HmsEntity {
         final String queryTemplate = "SELECT * FROM Patient WHERE name = ''{0}''";
 
         try {
-            DB.createConnection();
             ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
                     patientName));
             
@@ -138,8 +132,6 @@ public class Patient extends HmsEntity {
                 }
                 patientList.add(patient);
             }
-            
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PatientException(e);
         }

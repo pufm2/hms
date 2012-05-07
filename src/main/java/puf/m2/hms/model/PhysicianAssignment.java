@@ -40,12 +40,10 @@ public class PhysicianAssignment extends HmsEntity {
         final String queryTemple = "insert into PhysicianAssignment values({0}, {1}, {2}, ''{3}'', ''{4}'')";
         try {
             id = getNextFreeId();
-            
-            DB.createConnection();
+
             DB.executeUpdate(MessageFormat.format(queryTemple, id, patient.getId(),
                     physician.getId(), DateUtils.dateToString(startDate),
                     DateUtils.dateToString(endDate)));
-            DB.closeConnection();
         } catch (Exception e) {
             throw new PhysicianAssignmentException(e);
         }
@@ -54,7 +52,7 @@ public class PhysicianAssignment extends HmsEntity {
 
         physician.setAvailable(false);
         try {
-            physician.save();
+            physician.update();
         } catch (HmsException e) {
             throw new PhysicianAssignmentException(e);
         }
@@ -67,7 +65,6 @@ public class PhysicianAssignment extends HmsEntity {
 
 		final String query = "select * from PhysicianAssignment";
 		try {
-			DB.createConnection();
 			ResultSet rs = DB.executeQuery(query);
 
 			while (rs.next()) {
@@ -89,7 +86,6 @@ public class PhysicianAssignment extends HmsEntity {
 				}
 				paList.add(pa);
 			}
-			DB.closeConnection();
 		} catch (Exception e) {
 			throw new PhysicianAssignmentException(e);
 		}
