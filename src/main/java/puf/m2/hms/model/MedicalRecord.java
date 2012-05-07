@@ -39,7 +39,7 @@ public class MedicalRecord extends HmsEntity {
 	}
 
 	public void update() throws MedicalRecordException {
-		final String queryTemplate = "update MedicalRecord set patientId = {0}, dateAfect = ''{1}'', detail = ''{2}'' where id = {3})";
+		final String queryTemplate = "update MedicalRecord set patientId = {0}, dateAffect = ''{1}'', detail = ''{2}'' where id = {3}";
 		try {
 			DB.executeUpdate(MessageFormat.format(queryTemplate,
 					patient.getId(), DateUtils.dateToString(dateAffect),
