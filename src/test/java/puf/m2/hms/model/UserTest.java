@@ -3,12 +3,10 @@ package puf.m2.hms.model;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.junit.Test;
 
 import puf.m2.hms.db.DbException;
-import puf.m2.hms.exception.PhysicianException;
 import puf.m2.hms.exception.UserException;
 
 public class UserTest extends TestSupport {
