@@ -2,24 +2,119 @@ package puf.m2.hms.model;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.util.Date;
+
 import org.junit.Test;
 
+import puf.m2.hms.db.DbException;
+import puf.m2.hms.exception.PhysicianException;
 import puf.m2.hms.exception.UserException;
 
-//TODO add at least one test for each method of the User class
+public class UserTest extends TestSupport {
 
-public class UserTest {
+	@Test
+	public void testSave() throws IOException, UserException, DbException {
+		backupDb();
+        
+        try {
+            User user = new User("someone", "something", "somemail@mail.com", "Doctor");
+            user.save();
+            User user1 = User.login("someone", "something");
+            
+            assertEquals(user.id, user1.id);
+        } finally {
+            restoreDb();
+        }
+	}
 
-    // TODO you should add tests that raise UserException
-    @Test
-    public void testLoginFail() throws UserException {
-        User result = User.login("", "");
-        assertNull(result);
+	@Test
+	public void testUpdate() throws IOException, UserException, DbException {
+		backupDb();
+        
+        try {
+            User user = User.login("lxhoan", "123");
+            user.setPassword("abc");
+            user.update();
+            
+            User user1 = User.login("lxhoan", "123");
+            assertNull(user1);
+            
+            user1 = User.login("lxhoan", "abc");
+            
+            assertEquals("lxhoan", user1.getUsername());
+        } finally {
+            restoreDb();
+        }
+	}
+	
+	@Test(expected = UserException.class)
+    public void testUpdateWithNoDb() throws DbException, UserException {
+		User user = User.login("lxhoan", "123");
+		user.setPassword("abc");
+        breakDb();
+        try {
+            user.update();
+        } finally {
+        	unbreakDb();
+        }
     }
+	@Test
+	public void testLogin() {
+		User user = User.login("lxhoan", "123");
+		assertEquals("lxhoan", user.getUsername());
+	}
 
-    @Test
-    public void testLoginSuccess() throws UserException {
-        User result = User.login("nhphat", "123");
-        assertNotNull(result);
-    }
+	@Test
+	public void testGetUsername() {
+		User user = User.login("nhphat", "123");
+		assertEquals("nhphat", user.getUsername());
+	}
+
+	@Test
+	public void testSetUsername() {
+		User user = User.login("nmathu", "123");
+		user.setUsername("ngominhanhthu");
+		assertEquals("ngominhanhthu", user.getUsername());
+	}
+
+	@Test
+	public void testGetPassword() {
+		User user = User.login("nhphat", "123");
+		assertEquals("123", user.getPassword());
+	}
+
+	@Test
+	public void testSetPassword() {
+		User user = User.login("nmathu", "123");
+		user.setPassword("abc");
+		assertEquals("abc", user.getPassword());
+	}
+
+	@Test
+	public void testGetUseremail() {
+		User user = User.login("tlnquynh", "123");
+		assertEquals("bachthuconuong@gmail.com", user.getUseremail());
+	}
+
+	@Test
+	public void testSetUseremail() {
+		User user = User.login("tlnquynh", "123");
+		user.setUseremail("bachthuconuong@yahoo.com");
+		assertEquals("bachthuconuong@yahoo.com", user.getUseremail());
+	}
+
+	@Test
+	public void testGetRole() {
+		User user = User.login("nhphat", "123");
+		assertEquals("Receptionist", user.getRole());
+	}
+
+	@Test
+	public void testSetRole() {
+		User user = User.login("nhphat", "123");
+		user.setRole("Doctor");
+		assertEquals("Doctor", user.getRole());
+	}
+
 }
