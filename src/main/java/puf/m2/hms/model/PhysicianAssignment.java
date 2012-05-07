@@ -83,6 +83,7 @@ public class PhysicianAssignment extends HmsEntity {
 
 					pa = new PhysicianAssignment(patient, physician, startDate,
 							endDate);
+					pa.id = id;
 
 					PA_MAP.put(id, pa);
 				}
