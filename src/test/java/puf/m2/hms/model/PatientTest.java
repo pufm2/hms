@@ -14,7 +14,7 @@ public class PatientTest extends TestSupport {
 
     @Test
     public void testSave() throws PatientException, IOException, DbException {
-        TestSupport.backupDb();
+        backupDb();
         
         try {
             Patient patient = new Patient("Patient 1", "2000", "55 abc st", 1, "324234", "high blood pressure");
@@ -22,13 +22,13 @@ public class PatientTest extends TestSupport {
             Patient patient1 = Patient.getPatientById(patient.id);
             assertNotNull(patient1);
         } finally {
-            TestSupport.restoreDb();
+            restoreDb();
         }
     }
     
     @Test(expected=PatientException.class)
     public void testSaveInvalidSex() throws PatientException, IOException, DbException {
-        TestSupport.backupDb();
+        backupDb();
         
         try {
             Patient patient = new Patient("Patient 1", "2000", "55 abc st", 2, "324234", "high blood pressure");
@@ -36,7 +36,7 @@ public class PatientTest extends TestSupport {
             Patient patient1 = Patient.getPatientById(patient.id);
             assertNotNull(patient1);
         } finally {
-            TestSupport.restoreDb();
+            restoreDb();
         }
     }
 

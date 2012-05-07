@@ -29,14 +29,27 @@ public abstract class TestSupport {
         HmsEntity.DB.closeConnection();
     }
     
-    public static void backupDb() throws IOException {
+    protected static void backupDb() throws IOException {
         copyFile(dbFile, dbBackupFile);
 
     }
 
-    public static void restoreDb() throws DbException {
+    protected static void restoreDb() throws DbException {
     	HmsEntity.DB.closeConnection();
     	dbFile.delete();
+        dbBackupFile.renameTo(dbFile);
+        HmsEntity.DB.createConnection();
+    }
+    
+    protected static void breakDb() throws DbException {
+    	HmsEntity.DB.closeConnection();
+        dbFile.renameTo(dbBackupFile);
+        HmsEntity.DB.createConnection();
+    }
+    
+    protected static void unbreakDb() throws DbException {
+    	HmsEntity.DB.closeConnection();
+        dbFile.delete();
         dbBackupFile.renameTo(dbFile);
         HmsEntity.DB.createConnection();
     }

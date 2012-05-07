@@ -12,7 +12,7 @@ import puf.m2.hms.exception.HmsException;
 
 //TODO add at least one test for each method of the Schedule class
 
-public class ScheduleTest {
+public class ScheduleTest extends TestSupport {
 
     // TODO you should use a Schedule mock object for this case (if there is a bug in the Schedule class, this test
     // could
@@ -20,7 +20,7 @@ public class ScheduleTest {
     // it will also allow you to check the interaction between the Physician and Schedule classes
     @Test
     public void testSave() throws HmsException, IOException, DbException {
-        TestSupport.backupDb();
+        backupDb();
         
         try {
             Physician p = Physician.getPhysicianById(101);
@@ -32,7 +32,7 @@ public class ScheduleTest {
                 }
             }
         } finally {
-            TestSupport.restoreDb();
+            restoreDb();
         }
         fail();
 

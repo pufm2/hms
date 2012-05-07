@@ -18,7 +18,7 @@ public class PhysicianAssignmentTest extends TestSupport {
 
     @Test
     public void testSave() throws HmsException, IOException, DbException {
-        TestSupport.backupDb();
+        backupDb();
 
         try {
             Patient patient = Patient.getPatientById(5);
@@ -35,7 +35,7 @@ public class PhysicianAssignmentTest extends TestSupport {
                 }
             }
         } finally {
-            TestSupport.restoreDb();
+            restoreDb();
         }
     }
     
@@ -46,16 +46,12 @@ public class PhysicianAssignmentTest extends TestSupport {
 
         Physician physician = Physician.getPhysicianById(100);
         
-        HmsEntity.DB.closeConnection();
-    	dbFile.renameTo(dbBackupFile);
+        breakDb();
         try {
             PhysicianAssignment pa = new PhysicianAssignment(patient, physician, new Date(), new Date());
             pa.save();
         } finally {
-        	HmsEntity.DB.closeConnection();
-            dbFile.delete();
-            dbBackupFile.renameTo(dbFile);
-            HmsEntity.DB.createConnection();
+        	unbreakDb();
         }
     }
     

@@ -15,21 +15,21 @@ public class PhysicianTest extends TestSupport {
     @Test
     public void testSave() throws PhysicianException, IOException, DbException {
         try {
-            TestSupport.backupDb();
+            backupDb();
             
             Physician p = new Physician("doctor X", "doctor", true);
             p.save();
             Physician p1 = Physician.getPhysicianById(p.id);
             assertEquals(p.id, p1.id);
         } finally {
-            TestSupport.restoreDb();
+            restoreDb();
         }
     }
 
     @Test
     public void testUpdate() throws PhysicianException, IOException, DbException {
         try {
-            TestSupport.backupDb();
+            backupDb();
             
             Physician p = Physician.getPhysicianById(100);
             p.setAvailable(false);
@@ -37,7 +37,7 @@ public class PhysicianTest extends TestSupport {
             Physician p1 = Physician.getPhysicianById(100);
             assertEquals(p1.isAvailable(), false);
         } finally {
-            TestSupport.restoreDb();
+            restoreDb();
         }
     }
     
@@ -45,14 +45,11 @@ public class PhysicianTest extends TestSupport {
     public void testUpdateWithNoDb() throws PhysicianException, DbException {
         Physician p = Physician.getPhysicianById(100);
         
-        HmsEntity.DB.closeConnection();
-        dbFile.renameTo(dbBackupFile);
+        breakDb();
         try {
             p.update();
         } finally {
-            dbFile.delete();
-            dbBackupFile.renameTo(dbFile);
-            HmsEntity.DB.createConnection();
+        	unbreakDb();
         }
     }
     
