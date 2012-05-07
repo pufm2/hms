@@ -7,12 +7,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.PatientException;
 
 public class PatientTest extends TestSupport {
 
     @Test
-    public void testSave() throws PatientException, IOException {
+    public void testSave() throws PatientException, IOException, DbException {
         TestSupport.backupDb();
         
         try {
@@ -26,7 +27,7 @@ public class PatientTest extends TestSupport {
     }
     
     @Test(expected=PatientException.class)
-    public void testSaveInvalidSex() throws PatientException, IOException {
+    public void testSaveInvalidSex() throws PatientException, IOException, DbException {
         TestSupport.backupDb();
         
         try {

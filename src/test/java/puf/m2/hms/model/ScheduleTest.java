@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.HmsException;
 
 //TODO add at least one test for each method of the Schedule class
@@ -18,7 +19,7 @@ public class ScheduleTest {
     // fail)
     // it will also allow you to check the interaction between the Physician and Schedule classes
     @Test
-    public void testSave() throws HmsException, IOException {
+    public void testSave() throws HmsException, IOException, DbException {
         TestSupport.backupDb();
         
         try {

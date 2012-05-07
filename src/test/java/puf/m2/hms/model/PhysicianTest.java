@@ -13,7 +13,7 @@ import puf.m2.hms.exception.PhysicianException;
 public class PhysicianTest extends TestSupport {
 
     @Test
-    public void testSave() throws PhysicianException, IOException {
+    public void testSave() throws PhysicianException, IOException, DbException {
         try {
             TestSupport.backupDb();
             
@@ -27,7 +27,7 @@ public class PhysicianTest extends TestSupport {
     }
 
     @Test
-    public void testUpdate() throws PhysicianException, IOException {
+    public void testUpdate() throws PhysicianException, IOException, DbException {
         try {
             TestSupport.backupDb();
             
@@ -45,12 +45,14 @@ public class PhysicianTest extends TestSupport {
     public void testUpdateWithNoDb() throws PhysicianException, DbException {
         Physician p = Physician.getPhysicianById(100);
         
+        HmsEntity.DB.closeConnection();
         dbFile.renameTo(dbBackupFile);
         try {
             p.update();
         } finally {
             dbFile.delete();
             dbBackupFile.renameTo(dbFile);
+            HmsEntity.DB.createConnection();
         }
     }
     

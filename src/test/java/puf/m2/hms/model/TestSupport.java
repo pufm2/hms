@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import puf.m2.hms.db.DatabaseFactory;
@@ -16,20 +17,28 @@ public abstract class TestSupport {
     protected static File dbBackupFile = new File("HMS-test.db3.bak");
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws DbException {
         HmsEntity.DB = DatabaseFactory.createDatabase(DatabaseFactory.SQLITE_DRIVER,
                 "jdbc:sqlite:HMS-test.db3");
         HmsEntity.setCached(false);
+        HmsEntity.DB.createConnection();
     }
-
+    
+    @AfterClass
+    public static void afterClass() throws DbException {
+        HmsEntity.DB.closeConnection();
+    }
+    
     public static void backupDb() throws IOException {
         copyFile(dbFile, dbBackupFile);
 
     }
 
-    public static void restoreDb() {
-        dbFile.delete();
+    public static void restoreDb() throws DbException {
+    	HmsEntity.DB.closeConnection();
+    	dbFile.delete();
         dbBackupFile.renameTo(dbFile);
+        HmsEntity.DB.createConnection();
     }
 
     public static void copyFile(File sourceFile, File destFile) throws IOException {
