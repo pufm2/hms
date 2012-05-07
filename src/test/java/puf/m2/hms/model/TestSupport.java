@@ -12,6 +12,13 @@ import org.junit.BeforeClass;
 import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.db.DbException;
 
+/**
+ * 
+ * @author Administrator
+ * This abstract class is super class of other unit test classes
+ * It contains built-in necessary set-ups and tear-downs, as well as some util methods 
+ * An test case for model should extends this class/
+ */
 public abstract class TestSupport {
     protected static File dbFile = new File("HMS-test.db3");
     protected static File dbBackupFile = new File("HMS-test.db3.bak");
