@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.db.DbException;
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;
 
@@ -15,9 +16,13 @@ public class Schedule extends HmsEntity {
 
 	private static final Map<Integer, Schedule> SCHEDULE_MAP = new CacheAwareMap<Integer, Schedule>();
 
+	@DbProp
 	private Physician physician;
+	@DbProp
 	private Date startDate;
+	@DbProp
 	private Date endDate;
+	@DbProp
 	private boolean available;
 
 	public Schedule(Physician physician, Date startDate, Date endDate,
@@ -30,33 +35,23 @@ public class Schedule extends HmsEntity {
 	}
 
 	public void save() throws ScheduleException {
-		try {
-			id = getNextFreeId();
-		} catch (Exception e1) {
-
-		}
-		final String queryTemple = "insert into Schedule values({0}, {1}, ''{2}'', ''{3}'', {4})";
-		try {
-            int available = this.available ? 1 : 0;
-            DB.executeUpdate(MessageFormat.format(queryTemple, id,
-                        physician.getId(), DateUtils.dateToString(startDate),
-                        DateUtils.dateToString(endDate), available));
-        } catch (DbException e) {
-            throw new ScheduleException(e);
-        }
-
 		
+		try {
+			super.save();
+		} catch (HmsException e) {
+			throw new ScheduleException(e);
+		}
 
 		SCHEDULE_MAP.put(id, this);
 	}
 
-	public void update(int scheduleID) throws Exception {
-		final String queryTemple = "update Schedule set physicianId = {0}, startDate = ''{1}'', endDate = ''{2}'', available = {3} where id = {4}";
-		
-		int available = this.available ? 1 : 0;
-		DB.executeUpdate(MessageFormat.format(queryTemple, physician.getId(),
-				DateUtils.dateToString(startDate),
-				DateUtils.dateToString(endDate), available, id));
+	public void update() throws ScheduleException {
+
+		try {
+			super.update();
+		} catch (HmsException e) {
+			throw new ScheduleException(e);
+		}
 	}
 
 	public static List<Schedule> loadSchedule(Physician doctor)
@@ -95,6 +90,38 @@ public class Schedule extends HmsEntity {
 			throw new ScheduleException(e);
 		}
 		return scheduleList;
+	}
+	
+	public Physician getPhysician() {
+		return physician;
+	}
+
+	public void setPhysician(Physician physician) {
+		this.physician = physician;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 }
