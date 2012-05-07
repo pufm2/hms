@@ -31,5 +31,16 @@ public class RunHMS {
 
 			}
 		});
+		
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+	        public void run() {
+	        	try {
+					HmsEntity.DB.closeConnection();
+				} catch (DbException e) {
+					e.printStackTrace();
+				}
+	        }
+	    }));
+
 	}
 }
