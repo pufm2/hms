@@ -37,6 +37,11 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("Save".equals(e.getActionCommand())) {
+
+			if (!isValidFields()) {
+				return;
+			}
+
 			Patient patient = new Patient(Integer.parseInt(cboPatientID
 					.getSelectedItem().toString()));
 			Date dateAffect = txtDateAffect.getDate();
@@ -65,6 +70,31 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 			txtDetails.setText("");
 			JOptionPane.showMessageDialog(null, "Clear all!");
 		}
+	}
+
+	private boolean isValidFields() {
+		boolean result = true;
+
+		// check if date affect is earlier current date
+		Date current = new Date();
+		Date dateAffect = txtDateAffect.getDate();
+		if (dateAffect == null) {
+			JOptionPane.showMessageDialog(this,
+					"You must put a valid date affect for medical record");
+			return false;
+		} else if (dateAffect.compareTo(current) > 0) {
+			JOptionPane.showMessageDialog(this,
+					"Date affect must be ealier than current date");
+			return false;
+		}
+
+		// check details does not blank
+		if (txtDetails.getText().equals("")) {
+			JOptionPane.showMessageDialog(this,
+					"You must put details of record");
+			return false;
+		}
+		return result;
 	}
 
 	private void addActionListener() {
