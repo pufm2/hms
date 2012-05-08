@@ -6,7 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import puf.m2.hms.exception.PatientException;
 import puf.m2.hms.model.Patient;
+import puf.m2.hms.utils.DateUtils;
 
 public class LookupPatient extends JPanel implements ActionListener {
 
@@ -29,36 +31,37 @@ public class LookupPatient extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if ("Lookup".equals(e.getActionCommand())) {
-			// Return patient ResulSet
-			int patientID = 0;
-			String patient_ID = "";
-			patient_ID = txtPatientID.getText();
-			if (!patient_ID.equals("")) {
-				patientID = Integer.parseInt(txtPatientID.getText());
-			}
+
+			if (!isValidCondition())
+				return;
+
+			int patientID = Integer.parseInt(txtPatientID.getText());
 
 			Patient patient = null;
 			try {
 				patient = Patient.getPatientById(patientID);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (PatientException e1) {
+				System.out.println(e1.getMessage());
 			}
 
 			if (patient != null) {
-				String patientInfomation = "Patient infomation \n";
-				patientInfomation += "\n Patient ID: " + patient.getId()
+				String gender = patient.getSex() == 1 ? "Male" : "Female";
+				String patientInfomation = "\n Patient ID: " + patient.getId()
 						+ "\n Patient name: " + patient.getName()
-						+ "\n Birthdate: " + patient.getDateOfBirth()
+						+ "\n Birthdate: "
+						+ DateUtils.parseDate(patient.getDateOfBirth())
 						+ "\n Address: " + patient.getAddress() + "\n Sex: "
-						+ patient.getSex() + "\n Phone: " + patient.getPhone()
+						+ gender + "\n Phone: " + patient.getPhone()
 						+ "\n Biographic health: "
 						+ patient.getBiographicHealth();
 
-				JOptionPane.showMessageDialog(null, patientInfomation);
-			}
+				JOptionPane.showMessageDialog(this, patientInfomation,
+						"Patient information", JOptionPane.INFORMATION_MESSAGE);
+			} else
+				JOptionPane.showMessageDialog(this,
+						"Can not find patient as you type", "Alert",
+						JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -146,5 +149,43 @@ public class LookupPatient extends JPanel implements ActionListener {
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(18, 18, 18).addComponent(btnLookup)
 								.addContainerGap(19, Short.MAX_VALUE)));
+	}
+
+	public boolean isValidCondition() {
+		boolean result = true;
+		// check valid if patient ID is select
+		if (rbPatientID.isSelected()) {
+			// check null value
+			if (txtPatientID.getText().equals("")) {
+				JOptionPane.showMessageDialog(this, "You must put patient ID",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			// check patientID is number
+			try {
+				int i = Integer.parseInt(txtPatientID.getText());
+				result = true;
+			} catch (Exception e) {
+				JOptionPane
+						.showMessageDialog(
+								this,
+								"Patient ID does not accept character, only 0-9 is acceptable",
+								"Error", JOptionPane.ERROR_MESSAGE);
+				result = false;
+			}
+		} else if (rbPatientName.isSelected()) {
+			// check null value
+			if (txtPatientName.getText().equals("")) {
+				JOptionPane.showMessageDialog(this,
+						"You must put patient name", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "You must choose one option",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return result;
 	}
 }

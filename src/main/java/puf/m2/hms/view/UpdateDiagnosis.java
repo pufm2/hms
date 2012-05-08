@@ -2,27 +2,31 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import puf.m2.hms.exception.MedicalRecordException;
+import puf.m2.hms.exception.PatientException;
 import puf.m2.hms.model.MedicalRecord;
 import puf.m2.hms.model.Patient;
-import puf.m2.hms.utils.DateUtils;
 
-public class UpdateDiagnosis extends JPanel implements ActionListener {
+public class UpdateDiagnosis extends JPanel implements ActionListener,
+		ItemListener {
 
 	private static final long serialVersionUID = 1L;
 	// Variables declaration - do not modify
-	private javax.swing.JButton btnUpdate;
-	private javax.swing.JComboBox cboMedicalRecordID;
-	private javax.swing.JComboBox cboPatientID;
 	private javax.swing.JLabel lblPatientID;
-	private javax.swing.JLabel lblDateAffect;
+	private javax.swing.JComboBox cboPatientID;
+	private javax.swing.JLabel lblMedicalRecordID;
+	private javax.swing.JComboBox cboMedicalRecordID;
 	private javax.swing.JLabel lblDetail;
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTextArea txtDetails;
+	private javax.swing.JButton btnUpdate;
 
 	// End of variables declaration
 
@@ -30,6 +34,7 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 		initComponents();
 		fillComboBox();
 		addActionListener();
+		addItemListener();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -39,50 +44,21 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 			String detail = txtDetails.getText();
 
 			MedicalRecord medicalRecord = null;
-			medicalRecord = new MedicalRecord(patient,
-					DateUtils.parseDate(lblDateAffect.getText()), detail);
+			medicalRecord = new MedicalRecord(patient, new Date(), detail);
 			try {
 				medicalRecord.update();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Update sucessful",
+						"Update diagnosis", JOptionPane.INFORMATION_MESSAGE);
+			} catch (MedicalRecordException e1) {
+				JOptionPane.showMessageDialog(this, "Can not update diagnosis",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				System.out.println(e1.getMessage());
 			}
-			JOptionPane.showMessageDialog(null, "Update diagnosis successful");
-		} else if ("PatientID".equals(e.getActionCommand())) {
-			Patient patient = new Patient(Integer.parseInt(cboPatientID
-					.getSelectedItem().toString()));
-
-			List<MedicalRecord> ls = null;
-			try {
-				ls = MedicalRecord.loadMedicalRecord(patient);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			int index = 0;
-			while (ls.size() >= 1) {
-				cboMedicalRecordID.addItem(ls.get(index).getId());
-				index++;
-			}
-
-		} else if ("MedicalRecordID".equals(e.getActionCommand())) {
-			int id = Integer.parseInt(cboMedicalRecordID.getSelectedItem()
-					.toString());
-			MedicalRecord medicalRecord = null;
-
-			try {
-				medicalRecord = MedicalRecord.loadMedicalRecordById(id);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			txtDetails.setText(medicalRecord.getDetail());
 		}
 	}
 
 	private void addActionListener() {
-		btnUpdate.setActionCommand("Save");
+		btnUpdate.setActionCommand("Update");
 		btnUpdate.addActionListener(this);
 
 		cboPatientID.setActionCommand("PatientID");
@@ -92,38 +68,26 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 		cboMedicalRecordID.addActionListener(this);
 	}
 
+	private void addItemListener() {
+		cboPatientID.addItemListener(this);
+	}
+
 	private void fillComboBox() {
 		// Fill patientID
 		try {
 			for (Patient patient : Patient.getPatients()) {
 				cboPatientID.addItem(patient.getId());
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (PatientException e) {
+			System.out.println(e.getMessage());
 		}
-
-		// Fill medical record
-		try {
-			Patient patient = new Patient(Integer.parseInt(cboPatientID
-					.getSelectedItem().toString()));
-
-			for (MedicalRecord medicalRecord : MedicalRecord
-					.loadMedicalRecord(patient)) {
-				if (medicalRecord.getPatient().getId() == Integer
-						.parseInt(cboPatientID.getSelectedItem().toString()))
-					cboMedicalRecordID.addItem(medicalRecord.getId());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	private void initComponents() {
 
 		lblPatientID = new javax.swing.JLabel();
 		cboPatientID = new javax.swing.JComboBox();
-		lblDateAffect = new javax.swing.JLabel();
+		lblMedicalRecordID = new javax.swing.JLabel();
 		cboMedicalRecordID = new javax.swing.JComboBox();
 		lblDetail = new javax.swing.JLabel();
 		jScrollPane1 = new javax.swing.JScrollPane();
@@ -132,7 +96,7 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 
 		lblPatientID.setText("Patient ID");
 
-		lblDateAffect.setText("Medical record ID");
+		lblMedicalRecordID.setText("Medical record ID");
 
 		lblDetail.setText("Details");
 
@@ -161,7 +125,7 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 																				.addComponent(
 																						lblPatientID)
 																				.addComponent(
-																						lblDateAffect)
+																						lblMedicalRecordID)
 																				.addComponent(
 																						lblDetail))
 																.addGap(18, 18,
@@ -208,7 +172,8 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 								.addGroup(
 										layout.createParallelGroup(
 												javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(lblDateAffect)
+												.addComponent(
+														lblMedicalRecordID)
 												.addComponent(
 														cboMedicalRecordID,
 														javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -230,4 +195,19 @@ public class UpdateDiagnosis extends JPanel implements ActionListener {
 								.addComponent(btnUpdate)
 								.addContainerGap(19, Short.MAX_VALUE)));
 	}// </editor-fold>
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		cboMedicalRecordID.removeAllItems();
+		Patient patient = new Patient(Integer.parseInt(cboPatientID
+				.getSelectedItem().toString()));
+		try {
+			for (MedicalRecord medicalRecord : MedicalRecord
+					.loadMedicalRecord(patient)) {
+				cboMedicalRecordID.addItem(medicalRecord.getId());
+			}
+		} catch (MedicalRecordException e1) {
+			System.out.println(e1.getMessage());
+		}
+	}
 }

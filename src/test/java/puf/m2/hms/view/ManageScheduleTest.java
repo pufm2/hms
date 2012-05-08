@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class LoginTest {
+public class ManageScheduleTest {
 
 	@Test
-	public void testLogin() {
+	public void testIsValidFields() {
 		fail("Not yet implemented");
 	}
 

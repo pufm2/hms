@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class LoginTest {
+public class AssignDoctorTest {
 
 	@Test
-	public void testLogin() {
+	public void testIsDuplicateAssign() {
 		fail("Not yet implemented");
 	}
 

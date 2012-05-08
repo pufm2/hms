@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import puf.m2.hms.exception.PatientException;
+import puf.m2.hms.exception.PhysicianAssignmentException;
 import puf.m2.hms.exception.PhysicianException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.model.Physician;
@@ -51,12 +52,24 @@ public class AssignDoctor extends JPanel implements ActionListener {
 
 				PhysicianAssignment physicianAssignment = new PhysicianAssignment(
 						patient, doctor);
-				physicianAssignment.save();
-				JOptionPane.showMessageDialog(null,
-						"Insert new assign successful");
+
+				// check if duplicate data
+				if (isDuplicateAssign(patient, doctor)) {
+					JOptionPane.showMessageDialog(this,
+							"Duplicate value, can not assign these value",
+							"Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					physicianAssignment.save();
+					JOptionPane.showMessageDialog(this,
+							"Insert new assign successful", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+
 			} catch (Exception ex) {
-				JOptionPane
-						.showMessageDialog(null, "Fail to insert new assign");
+				JOptionPane.showMessageDialog(this,
+						"Fail to insert new assign", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -73,7 +86,8 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				cboPatientID.addItem(patient.getId());
 			}
 		} catch (Exception e) {
-			System.out.println("Can not get list of patient");
+			JOptionPane.showMessageDialog(this, "Can not get list of patient",
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		// Fill DoctorID
@@ -84,8 +98,27 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Can not get list of available doctor");
+			JOptionPane.showMessageDialog(this,
+					"Can not get list of available doctor", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	public boolean isDuplicateAssign(Patient patient, Physician doctor) {
+		boolean result = false;
+
+		try {
+			for (PhysicianAssignment physicianAssignment : PhysicianAssignment
+					.getPhysicianAssignments()) {
+				if (physicianAssignment.getPatient().equals(patient)
+						&& physicianAssignment.getPhysician().equals(doctor))
+					// duplicate value
+					return true;
+			}
+		} catch (PhysicianAssignmentException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
 	}
 
 	private void initComponents() {
