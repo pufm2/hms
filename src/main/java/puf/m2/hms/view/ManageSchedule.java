@@ -2,11 +2,13 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import puf.m2.hms.exception.HmsException;
+import puf.m2.hms.exception.PhysicianException;
 import puf.m2.hms.model.Physician;
 import puf.m2.hms.model.Schedule;
 import puf.m2.hms.view.datechooser.JDateChooser;
@@ -43,31 +45,55 @@ public class ManageSchedule extends JPanel implements ActionListener {
 
 			try {
 				physician = Physician.getPhysicianById(doctorID);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (PhysicianException e1) {
+				System.out.println(e1.getMessage());
 			}
 
-			// Check date
-			if (txtEndDate.getDate().compareTo(txtStartDate.getDate()) == -1) { // endDate
-																				// <
-																				// startDate
-				JOptionPane.showMessageDialog(this,
-						"Start date mus be ealier end date", "Error",
-						JOptionPane.ERROR_MESSAGE);
+			if (!isValidFields()) {
 				return;
-			}
+			} else {
 
-			Schedule schedule = new Schedule(physician, txtStartDate.getDate(),
-					txtEndDate.getDate(), chkAvailable.isSelected());
-			try {
-				schedule.save();
-				JOptionPane.showMessageDialog(this, "Save schedule successful",
-						"Success", JOptionPane.INFORMATION_MESSAGE);
-			} catch (HmsException e1) {
-				System.out.println("Save unsuccessful: " + e1.getMessage());
+				Schedule schedule = new Schedule(physician,
+						txtStartDate.getDate(), txtEndDate.getDate(),
+						chkAvailable.isSelected());
+				try {
+					schedule.save();
+					JOptionPane.showMessageDialog(this,
+							"Save schedule successful", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				} catch (HmsException e1) {
+					System.out.println("Save unsuccessful: " + e1.getMessage());
+				}
 			}
 		}
+	}
+
+	public boolean isValidFields() {
+		boolean result = true;
+		// Check date
+		Date current = new Date();
+		Date startDate = txtStartDate.getDate();
+		Date endDate = txtEndDate.getDate();
+
+		if (startDate == null) {
+			JOptionPane.showMessageDialog(this,
+					"You must put a valid start date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (endDate == null) {
+			JOptionPane.showMessageDialog(this,
+					"You must put a valid end date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (startDate.compareTo(endDate) > 0) {
+			JOptionPane.showMessageDialog(this,
+					"Start date must be ealier than end date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return result;
 	}
 
 	private void addActionListener() {

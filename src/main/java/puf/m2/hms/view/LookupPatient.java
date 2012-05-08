@@ -151,7 +151,7 @@ public class LookupPatient extends JPanel implements ActionListener {
 								.addContainerGap(19, Short.MAX_VALUE)));
 	}
 
-	private boolean isValidCondition() {
+	public boolean isValidCondition() {
 		boolean result = true;
 		// check valid if patient ID is select
 		if (rbPatientID.isSelected()) {

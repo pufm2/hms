@@ -178,7 +178,7 @@ public class AssignNurse extends JPanel implements ActionListener {
 								.addContainerGap(127, Short.MAX_VALUE)));
 	}
 
-	private boolean isDuplicateAssign(Patient patient, Physician nurse) {
+	public boolean isDuplicateAssign(Patient patient, Physician nurse) {
 		boolean result = false;
 
 		try {

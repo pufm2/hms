@@ -24,21 +24,23 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 	// End of variables declaration
 
 	private JFrame parent;
-	
+
 	public Login(JFrame parent) {
-	    this.parent = parent;
-	    initComponents();
+		this.parent = parent;
+		initComponents();
 
 	}
 
-    public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 
 		if ("Login".equals(e.getActionCommand())) {
-		    login();
+			String username = txtUsername.getText();
+			String password = txtPassword.getText();
+			login(username, password);
 		}
 	}
 
-    private void initComponents() {
+	private void initComponents() {
 
 		jLabel1 = new javax.swing.JLabel();
 		jLabel2 = new javax.swing.JLabel();
@@ -51,13 +53,13 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 		jLabel2.setText("Password");
 
 		txtPassword.setText("");
-	    txtPassword.addKeyListener(new KeyAdapter() {
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-	                login();
-	            }
-	        }
-        });
+		txtPassword.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					login(txtUsername.getText(), txtPassword.getText());
+				}
+			}
+		});
 
 		btnLogin.setText("Login");
 		btnLogin.addActionListener(this);
@@ -136,22 +138,24 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 										Short.MAX_VALUE)));
 	}
 
-	private void login() {
-        User user = User.login(txtUsername.getText(), new String(txtPassword.getPassword()));
-        if (user != null) {
-            parent.setVisible(false);
-            String role = user.getRole();
-            if (Role.Receptionist.name().equals(role)) {
-                Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
-            } else if (Role.Nurse.name().equals(role)) {
-                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
-
-            } else if (Role.Doctor.name().equals(role)) {
-                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
-
-            }
-        } else {
-            JOptionPane.showMessageDialog(parent, "Invalid Credential", "Alert", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+	public void login(String username, String password) {
+		User user = User.login(username, password);
+		if (user != null) {
+			parent.setVisible(false);
+			String role = user.getRole();
+			if (Role.Receptionist.name().equals(role)) {
+				Utils.createAndShowGUI(new JFrame("Receptionist role"),
+						new ReceptionistView());
+			} else if (Role.Nurse.name().equals(role)) {
+				Utils.createAndShowGUI(new JFrame("Nurse role"),
+						new NurseView());
+			} else if (Role.Doctor.name().equals(role)) {
+				Utils.createAndShowGUI(new JFrame("Doctor role"),
+						new DoctorView());
+			}
+		} else {
+			JOptionPane.showMessageDialog(parent, "Invalid Credential",
+					"Alert", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

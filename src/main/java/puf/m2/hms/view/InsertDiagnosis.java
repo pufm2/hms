@@ -211,7 +211,7 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 										Short.MAX_VALUE)));
 	}// </editor-fold>
 
-	private boolean isDuplicateMedicalRecord(Patient patient, Date dateAffect,
+	public boolean isDuplicateMedicalRecord(Patient patient, Date dateAffect,
 			String detail) {
 		boolean result = false;
 
@@ -229,7 +229,7 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 		return result;
 	}
 
-	private boolean isValidFields() {
+	public boolean isValidFields() {
 		boolean result = true;
 
 		// check if date affect is earlier current date

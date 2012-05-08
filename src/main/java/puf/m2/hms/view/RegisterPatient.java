@@ -287,7 +287,7 @@ public class RegisterPatient extends JPanel implements ActionListener {
 																.addContainerGap()))));
 	}// </editor-fold>
 
-	private boolean isValidFields() {
+	public boolean isValidFields() {
 		boolean result = true;
 
 		// check patient name can not blank
