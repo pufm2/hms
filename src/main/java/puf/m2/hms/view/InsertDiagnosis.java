@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import puf.m2.hms.exception.MedicalRecordException;
 import puf.m2.hms.model.MedicalRecord;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.utils.DateUtils;
@@ -47,29 +48,55 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 			Date dateAffect = txtDateAffect.getDate();
 			String detail = txtDetails.getText();
 
-			MedicalRecord medicalRecord = new MedicalRecord(patient,
-					dateAffect, detail);
-
-			try {
-				medicalRecord.save();
-				cboPatientID.setSelectedIndex(0);
-				txtDateAffect.cleanup();
-				txtDetails.setText("");
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (isDuplicateMedicalRecord(patient, dateAffect, detail)) {
+				// does not allow to save duplicate values: patient,
+				// dateAffect, details
+				JOptionPane
+						.showMessageDialog(
+								this,
+								"Duplicate value, can not insert these value of diagnosis",
+								"Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			} else {
+				MedicalRecord medicalRecord = new MedicalRecord(patient,
+						dateAffect, detail);
+				try {
+					medicalRecord.save();
+					JOptionPane.showMessageDialog(null,
+							"Insert diagnosis successful");
+					cboPatientID.setSelectedIndex(0);
+					txtDateAffect.cleanup();
+					txtDetails.setText("");
+				} catch (Exception e1) {
+					System.out.println(e1.getMessage());
+				}
 			}
 
-			JOptionPane.showMessageDialog(null, "Insert diagnosis successful");
 		} else if ("Clear".equals(e.getActionCommand())) {
 			cboPatientID.setSelectedIndex(0);
-
 			txtDateAffect.setDate(DateUtils.parseDate(DateUtils
 					.getCurrentDate()));
-
 			txtDetails.setText("");
 			JOptionPane.showMessageDialog(null, "Clear all!");
 		}
+	}
+
+	private boolean isDuplicateMedicalRecord(Patient patient, Date dateAffect,
+			String detail) {
+		boolean result = false;
+
+		try {
+			for (MedicalRecord medicalRecord : MedicalRecord
+					.loadMedicalRecord(patient)) {
+				if (medicalRecord.getDateAffect().equals(dateAffect)
+						&& medicalRecord.getDetail().equals(detail))
+					// duplicate value
+					return true;
+			}
+		} catch (MedicalRecordException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
 	}
 
 	private boolean isValidFields() {
@@ -109,8 +136,7 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 				cboPatientID.addItem(patient.getId());
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

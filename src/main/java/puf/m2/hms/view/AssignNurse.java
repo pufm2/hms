@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import puf.m2.hms.exception.PhysicianAssignmentException;
 import puf.m2.hms.model.Patient;
 import puf.m2.hms.model.Physician;
 import puf.m2.hms.model.PhysicianAssignment;
@@ -25,9 +26,7 @@ public class AssignNurse extends JPanel implements ActionListener {
 
 	public AssignNurse() {
 		initComponents();
-
 		fillComboBox();
-
 		addActionListener();
 	}
 
@@ -41,18 +40,44 @@ public class AssignNurse extends JPanel implements ActionListener {
 						.getSelectedItem().toString()));
 				Physician nurse = Physician.getPhysicianById(Integer
 						.parseInt(cboNurseID.getSelectedItem().toString()));
-
 				PhysicianAssignment physicianAssignment = new PhysicianAssignment(
 						patient, nurse);
-				physicianAssignment.save();
-				JOptionPane.showMessageDialog(null,
-						"Insert new assign successful");
-			} catch (Exception ex) {
-				JOptionPane
-						.showMessageDialog(null, "Fail to insert new assign");
 
+				// check if duplicate data
+				if (isDuplicateAssign(patient, nurse)) {
+					JOptionPane.showMessageDialog(this,
+							"Duplicate value, can not assign these value",
+							"Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					physicianAssignment.save();
+					JOptionPane.showMessageDialog(this,
+							"Insert new assign successful", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this,
+						"Fail to insert new assign", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+
+	private boolean isDuplicateAssign(Patient patient, Physician nurse) {
+		boolean result = false;
+
+		try {
+			for (PhysicianAssignment physicianAssignment : PhysicianAssignment
+					.getPhysicianAssignments()) {
+				if (physicianAssignment.getPatient().equals(patient)
+						&& physicianAssignment.getPhysician().equals(nurse))
+					// duplicate value
+					return true;
+			}
+		} catch (PhysicianAssignmentException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
 	}
 
 	private void addActionListener() {
@@ -62,16 +87,13 @@ public class AssignNurse extends JPanel implements ActionListener {
 
 	private void fillComboBox() {
 		// Fill patientID
-
 		try {
 			for (Patient patient : Patient.getPatients()) {
 				cboPatientID.addItem(patient.getId());
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
-
 		// Fill nurseID
 		try {
 			for (Physician nurse : Physician.getNurses()) {
@@ -80,8 +102,7 @@ public class AssignNurse extends JPanel implements ActionListener {
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 	}
