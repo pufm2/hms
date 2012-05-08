@@ -52,11 +52,13 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				PhysicianAssignment physicianAssignment = new PhysicianAssignment(
 						patient, doctor);
 				physicianAssignment.save();
-				JOptionPane.showMessageDialog(null,
-						"Insert new assign successful");
+				JOptionPane.showMessageDialog(this,
+						"Insert new assign successful", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
 			} catch (Exception ex) {
-				JOptionPane
-						.showMessageDialog(null, "Fail to insert new assign");
+				JOptionPane.showMessageDialog(this,
+						"Fail to insert new assign", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -73,7 +75,8 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				cboPatientID.addItem(patient.getId());
 			}
 		} catch (Exception e) {
-			System.out.println("Can not get list of patient");
+			JOptionPane.showMessageDialog(this, "Can not get list of patient",
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		// Fill DoctorID
@@ -84,7 +87,9 @@ public class AssignDoctor extends JPanel implements ActionListener {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Can not get list of available doctor");
+			JOptionPane.showMessageDialog(this,
+					"Can not get list of available doctor", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

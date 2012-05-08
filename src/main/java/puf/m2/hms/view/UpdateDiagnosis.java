@@ -37,10 +37,6 @@ public class UpdateDiagnosis extends JPanel implements ActionListener,
 		addItemListener();
 	}
 
-	private void addItemListener() {
-		cboPatientID.addItemListener(this);
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		if ("Update".equals(e.getActionCommand())) {
 			Patient patient = new Patient(Integer.parseInt(cboPatientID
@@ -70,6 +66,10 @@ public class UpdateDiagnosis extends JPanel implements ActionListener,
 
 		cboMedicalRecordID.setActionCommand("MedicalRecordID");
 		cboMedicalRecordID.addActionListener(this);
+	}
+
+	private void addItemListener() {
+		cboPatientID.addItemListener(this);
 	}
 
 	private void fillComboBox() {

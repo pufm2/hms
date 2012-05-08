@@ -55,29 +55,13 @@ public class AssignNurse extends JPanel implements ActionListener {
 							"Insert new assign successful", "Success",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
-			} catch (Exception ex) {
+			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(this,
 						"Fail to insert new assign", "Error",
 						JOptionPane.ERROR_MESSAGE);
+				System.out.println(e1.getMessage());
 			}
 		}
-	}
-
-	private boolean isDuplicateAssign(Patient patient, Physician nurse) {
-		boolean result = false;
-
-		try {
-			for (PhysicianAssignment physicianAssignment : PhysicianAssignment
-					.getPhysicianAssignments()) {
-				if (physicianAssignment.getPatient().equals(patient)
-						&& physicianAssignment.getPhysician().equals(nurse))
-					// duplicate value
-					return true;
-			}
-		} catch (PhysicianAssignmentException e) {
-			System.out.println(e.getMessage());
-		}
-		return result;
 	}
 
 	private void addActionListener() {
@@ -92,6 +76,8 @@ public class AssignNurse extends JPanel implements ActionListener {
 				cboPatientID.addItem(patient.getId());
 			}
 		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Can not get list of patient",
+					"Error", JOptionPane.ERROR_MESSAGE);
 			System.out.println(e.getMessage());
 		}
 		// Fill nurseID
@@ -102,6 +88,8 @@ public class AssignNurse extends JPanel implements ActionListener {
 				}
 			}
 		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Can not get list of nurse",
+					"Error", JOptionPane.ERROR_MESSAGE);
 			System.out.println(e.getMessage());
 		}
 
@@ -188,5 +176,22 @@ public class AssignNurse extends JPanel implements ActionListener {
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(27, 27, 27).addComponent(btnAssign)
 								.addContainerGap(127, Short.MAX_VALUE)));
+	}
+
+	private boolean isDuplicateAssign(Patient patient, Physician nurse) {
+		boolean result = false;
+
+		try {
+			for (PhysicianAssignment physicianAssignment : PhysicianAssignment
+					.getPhysicianAssignments()) {
+				if (physicianAssignment.getPatient().equals(patient)
+						&& physicianAssignment.getPhysician().equals(nurse))
+					// duplicate value
+					return true;
+			}
+		} catch (PhysicianAssignmentException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
 	}
 }

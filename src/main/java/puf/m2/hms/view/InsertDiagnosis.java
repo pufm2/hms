@@ -62,8 +62,9 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 						dateAffect, detail);
 				try {
 					medicalRecord.save();
-					JOptionPane.showMessageDialog(null,
-							"Insert diagnosis successful");
+					JOptionPane.showMessageDialog(this,
+							"Insert diagnosis successful", "Sucess",
+							JOptionPane.INFORMATION_MESSAGE);
 					cboPatientID.setSelectedIndex(0);
 					txtDateAffect.cleanup();
 					txtDetails.setText("");
@@ -77,51 +78,9 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 			txtDateAffect.setDate(DateUtils.parseDate(DateUtils
 					.getCurrentDate()));
 			txtDetails.setText("");
-			JOptionPane.showMessageDialog(null, "Clear all!");
+			JOptionPane.showMessageDialog(null, "Clear all", "Clear",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
-	}
-
-	private boolean isDuplicateMedicalRecord(Patient patient, Date dateAffect,
-			String detail) {
-		boolean result = false;
-
-		try {
-			for (MedicalRecord medicalRecord : MedicalRecord
-					.loadMedicalRecord(patient)) {
-				if (medicalRecord.getDateAffect().equals(dateAffect)
-						&& medicalRecord.getDetail().equals(detail))
-					// duplicate value
-					return true;
-			}
-		} catch (MedicalRecordException e) {
-			System.out.println(e.getMessage());
-		}
-		return result;
-	}
-
-	private boolean isValidFields() {
-		boolean result = true;
-
-		// check if date affect is earlier current date
-		Date current = new Date();
-		Date dateAffect = txtDateAffect.getDate();
-		if (dateAffect == null) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a valid date affect for medical record");
-			return false;
-		} else if (dateAffect.compareTo(current) > 0) {
-			JOptionPane.showMessageDialog(this,
-					"Date affect must be ealier than current date");
-			return false;
-		}
-
-		// check details does not blank
-		if (txtDetails.getText().equals("")) {
-			JOptionPane.showMessageDialog(this,
-					"You must put details of record");
-			return false;
-		}
-		return result;
 	}
 
 	private void addActionListener() {
@@ -251,4 +210,50 @@ public class InsertDiagnosis extends JPanel implements ActionListener {
 										javax.swing.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)));
 	}// </editor-fold>
+
+	private boolean isDuplicateMedicalRecord(Patient patient, Date dateAffect,
+			String detail) {
+		boolean result = false;
+
+		try {
+			for (MedicalRecord medicalRecord : MedicalRecord
+					.loadMedicalRecord(patient)) {
+				if (medicalRecord.getDateAffect().equals(dateAffect)
+						&& medicalRecord.getDetail().equals(detail))
+					// duplicate value
+					return true;
+			}
+		} catch (MedicalRecordException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+
+	private boolean isValidFields() {
+		boolean result = true;
+
+		// check if date affect is earlier current date
+		Date current = new Date();
+		Date dateAffect = txtDateAffect.getDate();
+		if (dateAffect == null) {
+			JOptionPane.showMessageDialog(this,
+					"You must put a valid date affect for medical record",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else if (dateAffect.compareTo(current) > 0) {
+			JOptionPane.showMessageDialog(this,
+					"Date affect must be ealier than current date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		// check details does not blank
+		if (txtDetails.getText().equals("")) {
+			JOptionPane.showMessageDialog(this,
+					"You must put details of record", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return result;
+	}
 }

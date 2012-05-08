@@ -60,41 +60,9 @@ public class LookupPatient extends JPanel implements ActionListener {
 						"Patient information", JOptionPane.INFORMATION_MESSAGE);
 			} else
 				JOptionPane.showMessageDialog(this,
-						"Can not find patient as you type");
+						"Can not find patient as you type", "Alert",
+						JOptionPane.ERROR_MESSAGE);
 		}
-	}
-
-	private boolean isValidCondition() {
-		boolean result = true;
-		// check valid if patient ID is select
-		if (rbPatientID.isSelected()) {
-			// check null value
-			if (txtPatientID.getText().equals("")) {
-				JOptionPane.showMessageDialog(this, "You must put patient ID");
-				return false;
-			}
-			// check patientID is number
-			try {
-				int i = Integer.parseInt(txtPatientID.getText());
-				result = true;
-			} catch (Exception e) {
-				JOptionPane
-						.showMessageDialog(this,
-								"Patient ID does not accept character, only 0-9 is acceptable");
-				result = false;
-			}
-		} else if (rbPatientName.isSelected()) {
-			// check null value
-			if (txtPatientName.getText().equals("")) {
-				JOptionPane
-						.showMessageDialog(this, "You must put patient name");
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "You must choose one option");
-			return false;
-		}
-		return result;
 	}
 
 	private void addActionListener() {
@@ -181,5 +149,43 @@ public class LookupPatient extends JPanel implements ActionListener {
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(18, 18, 18).addComponent(btnLookup)
 								.addContainerGap(19, Short.MAX_VALUE)));
+	}
+
+	private boolean isValidCondition() {
+		boolean result = true;
+		// check valid if patient ID is select
+		if (rbPatientID.isSelected()) {
+			// check null value
+			if (txtPatientID.getText().equals("")) {
+				JOptionPane.showMessageDialog(this, "You must put patient ID",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			// check patientID is number
+			try {
+				int i = Integer.parseInt(txtPatientID.getText());
+				result = true;
+			} catch (Exception e) {
+				JOptionPane
+						.showMessageDialog(
+								this,
+								"Patient ID does not accept character, only 0-9 is acceptable",
+								"Error", JOptionPane.ERROR_MESSAGE);
+				result = false;
+			}
+		} else if (rbPatientName.isSelected()) {
+			// check null value
+			if (txtPatientName.getText().equals("")) {
+				JOptionPane.showMessageDialog(this,
+						"You must put patient name", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "You must choose one option",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return result;
 	}
 }

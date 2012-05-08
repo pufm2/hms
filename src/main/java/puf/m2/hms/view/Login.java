@@ -38,26 +38,7 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 		}
 	}
 
-    private void login() {
-        User user = User.login(txtUsername.getText(), new String(txtPassword.getPassword()));
-        if (user != null) {
-            parent.setVisible(false);
-            String role = user.getRole();
-            if (Role.Receptionist.name().equals(role)) {
-                Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
-            } else if (Role.Nurse.name().equals(role)) {
-                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
-
-            } else if (Role.Doctor.name().equals(role)) {
-                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
-
-            }
-        } else {
-            JOptionPane.showMessageDialog(parent, "Invalid Credential", "Alert", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-	private void initComponents() {
+    private void initComponents() {
 
 		jLabel1 = new javax.swing.JLabel();
 		jLabel2 = new javax.swing.JLabel();
@@ -154,4 +135,23 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 										javax.swing.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)));
 	}
+
+	private void login() {
+        User user = User.login(txtUsername.getText(), new String(txtPassword.getPassword()));
+        if (user != null) {
+            parent.setVisible(false);
+            String role = user.getRole();
+            if (Role.Receptionist.name().equals(role)) {
+                Utils.createAndShowGUI(new JFrame("Receptionist role"), new ReceptionistView());
+            } else if (Role.Nurse.name().equals(role)) {
+                Utils.createAndShowGUI(new JFrame("Nurse role"), new NurseView());
+
+            } else if (Role.Doctor.name().equals(role)) {
+                Utils.createAndShowGUI(new JFrame("Doctor role"), new DoctorView());
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(parent, "Invalid Credential", "Alert", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

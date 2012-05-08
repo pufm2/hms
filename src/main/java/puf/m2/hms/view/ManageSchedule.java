@@ -53,7 +53,8 @@ public class ManageSchedule extends JPanel implements ActionListener {
 																				// <
 																				// startDate
 				JOptionPane.showMessageDialog(this,
-						"Start date mus be ealier end date");
+						"Start date mus be ealier end date", "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -61,7 +62,8 @@ public class ManageSchedule extends JPanel implements ActionListener {
 					txtEndDate.getDate(), chkAvailable.isSelected());
 			try {
 				schedule.save();
-				JOptionPane.showMessageDialog(null, "Save schedule successful");
+				JOptionPane.showMessageDialog(this, "Save schedule successful",
+						"Success", JOptionPane.INFORMATION_MESSAGE);
 			} catch (HmsException e1) {
 				System.out.println("Save unsuccessful: " + e1.getMessage());
 			}
