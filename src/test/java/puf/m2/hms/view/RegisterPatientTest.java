@@ -10,16 +10,18 @@ public class RegisterPatientTest {
 	@Test
 	public void testIsValidFields_patientName() {
 		RegisterPatient frm = new RegisterPatient();
-		frm.getTxtPatientName().setText("nhphat");
-		Assert.assertEquals(false, frm.isValidFields());
+		frm.getTxtPatientName().setText("");
+		Assert.assertEquals("You must put name of patient",
+				frm.checkValidFields());
 	}
 
 	@Test
-	public void testIsValidFields_birthDate_isNull() {
+	public void testIsValidFields_birthDate_isBlank() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(null);
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put a valid birthdate of patient",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -27,7 +29,8 @@ public class RegisterPatientTest {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(new Date(2013, 01, 01));
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("Birthdate must be ealier than current date",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -36,7 +39,8 @@ public class RegisterPatientTest {
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(new Date());
 		frm.getTxtAddress().setText("");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put address of patient",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -46,7 +50,8 @@ public class RegisterPatientTest {
 		frm.getTxtBirthdate().setDate(new Date());
 		frm.getTxtAddress().setText("123 Le Lai");
 		frm.getTxtPhoneNumber().setText("");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put phone number of patient",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -57,7 +62,9 @@ public class RegisterPatientTest {
 		frm.getTxtAddress().setText("123 Le Lai");
 		frm.getTxtPhoneNumber().setText("abcdefgh");
 		frm.getTxtBiographicHealth().setText("First diagnosis");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals(
+				"Phone number does not accept character, only 0-9 is acceptable",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -68,7 +75,8 @@ public class RegisterPatientTest {
 		frm.getTxtAddress().setText("123 Le Lai");
 		frm.getTxtPhoneNumber().setText("123456789");
 		frm.getTxtBiographicHealth().setText("");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put a biographic health of patient",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -81,7 +89,8 @@ public class RegisterPatientTest {
 		frm.getTxtBiographicHealth().setText("First diagnosis");
 		frm.getRbMale().setSelected(false);
 		frm.getRbFemale().setSelected(false);
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must choose patient's gender",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -93,6 +102,6 @@ public class RegisterPatientTest {
 		frm.getTxtPhoneNumber().setText("123456789");
 		frm.getTxtBiographicHealth().setText("First diagnosis");
 		frm.getRbMale().setSelected(true);
-		Assert.assertEquals(true, frm.isValidFields());
+		Assert.assertEquals("True", frm.checkValidFields());
 	}
 }

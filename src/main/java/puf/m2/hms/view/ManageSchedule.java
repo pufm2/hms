@@ -47,7 +47,10 @@ public class ManageSchedule extends JPanel implements ActionListener {
 				System.out.println(e1.getMessage());
 			}
 
-			if (!isValidFields()) {
+			String checkValidField = checkValidField();
+			if (checkValidField != "True") {
+				JOptionPane.showMessageDialog(this, checkValidField, "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			} else {
 
@@ -211,30 +214,35 @@ public class ManageSchedule extends JPanel implements ActionListener {
 								.addContainerGap(25, Short.MAX_VALUE)));
 	}// </editor-fold>
 
-	public boolean isValidFields() {
-		boolean result = true;
+	/*
+	 * public boolean isValidFields() { boolean result = true; // Check date
+	 * Date current = new Date(); Date startDate = txtStartDate.getDate(); Date
+	 * endDate = txtEndDate.getDate();
+	 * 
+	 * if (startDate == null) { JOptionPane.showMessageDialog(this,
+	 * "You must put a valid start date", "Error", JOptionPane.ERROR_MESSAGE);
+	 * return false; } if (endDate == null) {
+	 * JOptionPane.showMessageDialog(this, "You must put a valid end date",
+	 * "Error", JOptionPane.ERROR_MESSAGE); return false; } if
+	 * (startDate.compareTo(endDate) > 0) { JOptionPane.showMessageDialog(this,
+	 * "Start date must be ealier than end date", "Error",
+	 * JOptionPane.ERROR_MESSAGE); return false; } return result; }
+	 */
+	public String checkValidField() {
+		String result = "True";
 		// Check date
 		Date current = new Date();
 		Date startDate = txtStartDate.getDate();
 		Date endDate = txtEndDate.getDate();
 
 		if (startDate == null) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a valid start date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
+			return "You must put a valid start date";
 		}
 		if (endDate == null) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a valid end date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
+			return "You must put a valid end date";
 		}
 		if (startDate.compareTo(endDate) > 0) {
-			JOptionPane.showMessageDialog(this,
-					"Start date must be ealier than end date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
+			return "Start date must be ealier than end date";
 		}
 		return result;
 	}

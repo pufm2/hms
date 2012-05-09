@@ -62,8 +62,12 @@ public class RegisterPatient extends JPanel implements ActionListener {
 			int patientSex = "Male".equals(e.getActionCommand()) ? 1 : 0;
 
 			// Check valid fields
-			if (!isValidFields())
+			String checkValidFields = checkValidFields();
+			if (checkValidFields != "True") {
+				JOptionPane.showMessageDialog(this, checkValidFields, "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
+			}
 
 			// Create Patient object
 			Patient patient = new Patient(txtPatientName.getText(),
@@ -85,6 +89,52 @@ public class RegisterPatient extends JPanel implements ActionListener {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+
+	public String checkValidFields() {
+		String result = "True";
+
+		// check patient name can not blank
+		if (txtPatientName.getText().equals("")) {
+			return "You must put name of patient";
+		}
+
+		// check if birthdate is earlier current date
+		Date current = new Date();
+		Date birthDate = txtBirthdate.getDate();
+		if (birthDate == null) {
+			return "You must put a valid birthdate of patient";
+		} else if (birthDate.compareTo(current) > 0) {
+			return "Birthdate must be ealier than current date";
+		}
+
+		// check patient address can not blank
+		if (txtAddress.getText().equals("")) {
+			return "You must put address of patient";
+		}
+
+		// check patient phone can not blank
+		if (txtPhoneNumber.getText().equals("")) {
+			return "You must put phone number of patient";
+		}
+
+		// check if phone number is number or string
+		try {
+			int i = Integer.parseInt(txtPhoneNumber.getText());
+		} catch (Exception e) {
+			return "Phone number does not accept character, only 0-9 is acceptable";
+		}
+
+		// check biographicHealth is not null
+		if (txtBiographicHealth.getText().equals("")) {
+			return "You must put a biographic health of patient";
+		}
+
+		// check if sex is selected
+		if (!rbFemale.isSelected() && !rbMale.isSelected()) {
+			return "You must choose patient's gender";
+		}
+		return result;
 	}
 
 	private void addActionListener() {
@@ -331,78 +381,51 @@ public class RegisterPatient extends JPanel implements ActionListener {
 																.addContainerGap()))));
 	}// </editor-fold>
 
-	public boolean isValidFields() {
-		boolean result = true;
-
-		// check patient name can not blank
-		if (txtPatientName.getText().equals("")) {
-			;
-			JOptionPane.showMessageDialog(this, "You must put name of patient",
-					"Error", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// check if birthdate is earlier current date
-		Date current = new Date();
-		Date birthDate = txtBirthdate.getDate();
-		if (birthDate == null) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a valid birthdate of patient", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (birthDate.compareTo(current) > 0) {
-			JOptionPane.showMessageDialog(this,
-					"Birthdate must be ealier than current date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// check patient address can not blank
-		if (txtAddress.getText().equals("")) {
-			JOptionPane.showMessageDialog(this,
-					"You must put address of patient", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// check patient phone can not blank
-		if (txtPhoneNumber.getText().equals("")) {
-			JOptionPane.showMessageDialog(this,
-					"You must put phone number of patient", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// check if phone number is number or string
-		try {
-			int i = Integer.parseInt(txtPhoneNumber.getText());
-			result = true;
-		} catch (Exception e) {
-			JOptionPane
-					.showMessageDialog(
-							this,
-							"Phone number does not accept character, only 0-9 is acceptable",
-							"Error", JOptionPane.ERROR_MESSAGE);
-			result = false;
-		}
-
-		// check biographicHealth is not null
-		if (txtBiographicHealth.getText().equals("")) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a biographic health of patient", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// check if sex is selected
-		if (!rbFemale.isSelected() && !rbMale.isSelected()) {
-			JOptionPane.showMessageDialog(this,
-					"You must choose patient's gender", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		return result;
-	}
+	/*
+	 * public boolean isValidFields() { boolean result = true;
+	 * 
+	 * // check patient name can not blank if
+	 * (txtPatientName.getText().equals("")) { ;
+	 * JOptionPane.showMessageDialog(this, "You must put name of patient",
+	 * "Error", JOptionPane.ERROR_MESSAGE); return false; }
+	 * 
+	 * // check if birthdate is earlier current date Date current = new Date();
+	 * Date birthDate = txtBirthdate.getDate(); if (birthDate == null) {
+	 * JOptionPane.showMessageDialog(this,
+	 * "You must put a valid birthdate of patient", "Error",
+	 * JOptionPane.ERROR_MESSAGE); return false; } else if
+	 * (birthDate.compareTo(current) > 0) { JOptionPane.showMessageDialog(this,
+	 * "Birthdate must be ealier than current date", "Error",
+	 * JOptionPane.ERROR_MESSAGE); return false; }
+	 * 
+	 * // check patient address can not blank if
+	 * (txtAddress.getText().equals("")) { JOptionPane.showMessageDialog(this,
+	 * "You must put address of patient", "Error", JOptionPane.ERROR_MESSAGE);
+	 * return false; }
+	 * 
+	 * // check patient phone can not blank if
+	 * (txtPhoneNumber.getText().equals("")) {
+	 * JOptionPane.showMessageDialog(this,
+	 * "You must put phone number of patient", "Error",
+	 * JOptionPane.ERROR_MESSAGE); return false; }
+	 * 
+	 * // check if phone number is number or string try { int i =
+	 * Integer.parseInt(txtPhoneNumber.getText()); result = true; } catch
+	 * (Exception e) { JOptionPane .showMessageDialog( this,
+	 * "Phone number does not accept character, only 0-9 is acceptable",
+	 * "Error", JOptionPane.ERROR_MESSAGE); result = false; }
+	 * 
+	 * // check biographicHealth is not null if
+	 * (txtBiographicHealth.getText().equals("")) {
+	 * JOptionPane.showMessageDialog(this,
+	 * "You must put a biographic health of patient", "Error",
+	 * JOptionPane.ERROR_MESSAGE); return false; }
+	 * 
+	 * // check if sex is selected if (!rbFemale.isSelected() &&
+	 * !rbMale.isSelected()) { JOptionPane.showMessageDialog(this,
+	 * "You must choose patient's gender", "Error", JOptionPane.ERROR_MESSAGE);
+	 * return false; } return result; }
+	 */
 
 	// End of variables declaration
 

@@ -32,7 +32,7 @@ public class LookupPatient extends JPanel implements ActionListener {
 		if ("Lookup".equals(e.getActionCommand())) {
 
 			String checkValidFields = checkValidFields();
-			if (checkValidFields == "") {
+			if (checkValidFields != "True") {
 				JOptionPane.showMessageDialog(this, checkValidFields, "Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
@@ -171,26 +171,8 @@ public class LookupPatient extends JPanel implements ActionListener {
 								.addContainerGap(19, Short.MAX_VALUE)));
 	}
 
-	/*
-	 * public boolean isValidFields() { boolean result = true; // check valid if
-	 * patient ID is select if (rbPatientID.isSelected()) { // check null value
-	 * if (txtPatientID.getText().equals("")) {
-	 * JOptionPane.showMessageDialog(this, "You must put patient ID", "Error",
-	 * JOptionPane.ERROR_MESSAGE); return false; } // check patientID is number
-	 * try { int i = Integer.parseInt(txtPatientID.getText()); result = true; }
-	 * catch (Exception e) { JOptionPane .showMessageDialog( this,
-	 * "Patient ID does not accept character, only 0-9 is acceptable", "Error",
-	 * JOptionPane.ERROR_MESSAGE); result = false; } } else if
-	 * (rbPatientName.isSelected()) { // check null value if
-	 * (txtPatientName.getText().equals("")) {
-	 * JOptionPane.showMessageDialog(this, "You must put patient name", "Error",
-	 * JOptionPane.ERROR_MESSAGE); return false; } } else {
-	 * JOptionPane.showMessageDialog(this, "You must choose one option",
-	 * "Error", JOptionPane.ERROR_MESSAGE); return false; } return result; }
-	 */
-
 	public String checkValidFields() {
-		String result = "";
+		String result = "True";
 		// check valid if patient ID is select
 		if (rbPatientID.isSelected()) {
 			// check null value
@@ -201,7 +183,6 @@ public class LookupPatient extends JPanel implements ActionListener {
 			// check patientID is number
 			try {
 				int i = Integer.parseInt(txtPatientID.getText());
-				result = "True";
 			} catch (Exception e) {
 				result = "Patient ID does not accept character, only 0-9 is acceptable";
 				return result;
@@ -212,7 +193,6 @@ public class LookupPatient extends JPanel implements ActionListener {
 				result = "You must put patient name";
 				return result;
 			} else {
-				result = "True";
 				return result;
 			}
 

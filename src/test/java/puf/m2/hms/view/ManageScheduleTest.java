@@ -12,14 +12,19 @@ public class ManageScheduleTest {
 	public void testIsValidFields_startDateBlank() {
 		ManageSchedule frm = new ManageSchedule();
 		Date startDate = frm.getTxtStartDate().getDate();
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put a valid start date",
+				frm.checkValidField());
 	}
 
 	@Test
 	public void testIsValidFields_endDateBlank() {
 		ManageSchedule frm = new ManageSchedule();
+		Date startDate = new Date(2012, 02, 02);
+		frm.getTxtStartDate().setDate(startDate);
+
 		Date endDate = frm.getTxtEndDate().getDate();
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put a valid end date",
+				frm.checkValidField());
 	}
 
 	@Test
@@ -29,6 +34,7 @@ public class ManageScheduleTest {
 		Date endDate = new Date(2011, 02, 02);
 		frm.getTxtStartDate().setDate(startDate);
 		frm.getTxtEndDate().setDate(endDate);
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("Start date must be ealier than end date",
+				frm.checkValidField());
 	}
 }
