@@ -11,7 +11,7 @@ public class LookupPatientTest {
 		LookupPatient frm = new LookupPatient();
 		frm.getRbPatientID().setSelected(true);
 		frm.getTxtPatientID().setText("");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put patient ID", frm.checkValidFields());
 	}
 
 	@Test
@@ -19,7 +19,9 @@ public class LookupPatientTest {
 		LookupPatient frm = new LookupPatient();
 		frm.getRbPatientID().setSelected(true);
 		frm.getTxtPatientID().setText("abc");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals(
+				"Patient ID does not accept character, only 0-9 is acceptable",
+				frm.checkValidFields());
 	}
 
 	@Test
@@ -27,7 +29,7 @@ public class LookupPatientTest {
 		LookupPatient frm = new LookupPatient();
 		frm.getRbPatientID().setSelected(true);
 		frm.getTxtPatientID().setText("123");
-		Assert.assertEquals(true, frm.isValidFields());
+		Assert.assertEquals("True", frm.checkValidFields());
 	}
 
 	@Test
@@ -35,7 +37,7 @@ public class LookupPatientTest {
 		LookupPatient frm = new LookupPatient();
 		frm.getRbPatientName().setSelected(true);
 		frm.getTxtPatientName().setText("");
-		Assert.assertEquals(false, frm.isValidFields());
+		Assert.assertEquals("You must put patient name", frm.checkValidFields());
 	}
 
 	@Test
@@ -43,6 +45,6 @@ public class LookupPatientTest {
 		LookupPatient frm = new LookupPatient();
 		frm.getRbPatientName().setSelected(true);
 		frm.getTxtPatientName().setText("nhphat");
-		Assert.assertEquals(true, frm.isValidFields());
+		Assert.assertEquals("True", frm.checkValidFields());
 	}
 }
