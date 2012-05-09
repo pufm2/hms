@@ -2,6 +2,7 @@ package puf.m2.hms.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,15 +39,24 @@ public class LookupPatient extends JPanel implements ActionListener {
 				return;
 			}
 
-			int patientID = Integer.parseInt(txtPatientID.getText());
-
 			Patient patient = null;
-			try {
-				patient = Patient.getPatientById(patientID);
-			} catch (PatientException e1) {
-				System.out.println(e1.getMessage());
+			if (rbPatientID.isSelected()) {
+				try {
+					int patientID = Integer.parseInt(txtPatientID.getText());
+					patient = Patient.getPatientById(patientID);
+				} catch (PatientException e1) {
+					System.out.println(e1.getMessage());
+				}
+			} else if (rbPatientName.isSelected()) {
+				try {
+					List<Patient> ls = Patient.getPatientByName(txtPatientName
+							.getText());
+					if (ls.size() > 0)
+						patient = ls.get(0);
+				} catch (PatientException e1) {
+					System.out.println(e1.getMessage());
+				}
 			}
-
 			if (patient != null) {
 				String gender = patient.getSex() == 1 ? "Male" : "Female";
 				String patientInfomation = "\n Patient ID: " + patient.getId()
