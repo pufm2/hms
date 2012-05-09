@@ -24,15 +24,31 @@ public class RegisterPatient extends JPanel implements ActionListener {
 	private javax.swing.JLabel lblPatientName2;
 	private javax.swing.JLabel lblPatientName3;
 	private javax.swing.JLabel lblPatientName4;
-	private javax.swing.JRadioButton rdFemale;
-	private javax.swing.JRadioButton rdMale;
+	private javax.swing.JRadioButton rbFemale;
+	private javax.swing.JRadioButton rbMale;
+
+	public javax.swing.JRadioButton getRbFemale() {
+		return rbFemale;
+	}
+
+	public void setRbFemale(javax.swing.JRadioButton rbFemale) {
+		this.rbFemale = rbFemale;
+	}
+
+	public javax.swing.JRadioButton getRbMale() {
+		return rbMale;
+	}
+
+	public void setRbMale(javax.swing.JRadioButton rbMale) {
+		this.rbMale = rbMale;
+	}
+
 	private javax.swing.JTextField txtAddress;
 	private javax.swing.JTextArea txtBiographicHealth;
 	private JDateChooser txtBirthdate;
 	private javax.swing.JTextField txtPatientName;
-	private javax.swing.JTextField txtPhoneNumber;
 
-	// End of variables declaration
+	private javax.swing.JTextField txtPhoneNumber;
 
 	public RegisterPatient() {
 		initComponents();
@@ -85,6 +101,34 @@ public class RegisterPatient extends JPanel implements ActionListener {
 	private void fillComboBox() {
 	}
 
+	public javax.swing.JRadioButton getRdFemale() {
+		return rbFemale;
+	}
+
+	public javax.swing.JRadioButton getRdMale() {
+		return rbMale;
+	}
+
+	public javax.swing.JTextField getTxtAddress() {
+		return txtAddress;
+	}
+
+	public javax.swing.JTextArea getTxtBiographicHealth() {
+		return txtBiographicHealth;
+	}
+
+	public JDateChooser getTxtBirthdate() {
+		return txtBirthdate;
+	}
+
+	public javax.swing.JTextField getTxtPatientName() {
+		return txtPatientName;
+	}
+
+	public javax.swing.JTextField getTxtPhoneNumber() {
+		return txtPhoneNumber;
+	}
+
 	private void initComponents() {
 
 		btnGroupSex = new javax.swing.ButtonGroup();
@@ -97,8 +141,8 @@ public class RegisterPatient extends JPanel implements ActionListener {
 		txtBirthdate = new JDateChooser();
 		txtPhoneNumber = new javax.swing.JTextField();
 		txtAddress = new javax.swing.JTextField();
-		rdMale = new javax.swing.JRadioButton();
-		rdFemale = new javax.swing.JRadioButton();
+		rbMale = new javax.swing.JRadioButton();
+		rbFemale = new javax.swing.JRadioButton();
 		btnRegister = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		txtBiographicHealth = new javax.swing.JTextArea();
@@ -114,10 +158,10 @@ public class RegisterPatient extends JPanel implements ActionListener {
 
 		lblPatientName4.setText("Biographic health");
 
-		btnGroupSex.add(rdMale);
-		btnGroupSex.add(rdFemale);
-		rdMale.setText("Male");
-		rdFemale.setText("Female");
+		btnGroupSex.add(rbMale);
+		btnGroupSex.add(rbFemale);
+		rbMale.setText("Male");
+		rbFemale.setText("Female");
 
 		btnRegister.setText("Register");
 
@@ -187,11 +231,11 @@ public class RegisterPatient extends JPanel implements ActionListener {
 												.addGroup(
 														layout.createSequentialGroup()
 																.addComponent(
-																		rdMale)
+																		rbMale)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 																.addComponent(
-																		rdFemale)
+																		rbFemale)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.RELATED,
 																		102,
@@ -279,9 +323,9 @@ public class RegisterPatient extends JPanel implements ActionListener {
 																		layout.createParallelGroup(
 																				javax.swing.GroupLayout.Alignment.BASELINE)
 																				.addComponent(
-																						rdMale)
+																						rbMale)
 																				.addComponent(
-																						rdFemale)
+																						rbFemale)
 																				.addComponent(
 																						btnRegister))
 																.addContainerGap()))));
@@ -351,12 +395,42 @@ public class RegisterPatient extends JPanel implements ActionListener {
 		}
 
 		// check if sex is selected
-		if (!rdFemale.isSelected() && !rdMale.isSelected()) {
+		if (!rbFemale.isSelected() && !rbMale.isSelected()) {
 			JOptionPane.showMessageDialog(this,
 					"You must choose patient's gender", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return result;
+	}
+
+	// End of variables declaration
+
+	public void setRdFemale(javax.swing.JRadioButton rdFemale) {
+		this.rbFemale = rdFemale;
+	}
+
+	public void setRdMale(javax.swing.JRadioButton rdMale) {
+		this.rbMale = rdMale;
+	}
+
+	public void setTxtAddress(javax.swing.JTextField txtAddress) {
+		this.txtAddress = txtAddress;
+	}
+
+	public void setTxtBiographicHealth(javax.swing.JTextArea txtBiographicHealth) {
+		this.txtBiographicHealth = txtBiographicHealth;
+	}
+
+	public void setTxtBirthdate(JDateChooser txtBirthdate) {
+		this.txtBirthdate = txtBirthdate;
+	}
+
+	public void setTxtPatientName(javax.swing.JTextField txtPatientName) {
+		this.txtPatientName = txtPatientName;
+	}
+
+	public void setTxtPhoneNumber(javax.swing.JTextField txtPhoneNumber) {
+		this.txtPhoneNumber = txtPhoneNumber;
 	}
 }

@@ -28,8 +28,6 @@ public class ManageSchedule extends JPanel implements ActionListener {
 	private JDateChooser txtEndDate;
 	private JDateChooser txtStartDate;
 
-	// End of variables declaration
-
 	public ManageSchedule() {
 		initComponents();
 		addActionListener();
@@ -68,33 +66,7 @@ public class ManageSchedule extends JPanel implements ActionListener {
 		}
 	}
 
-	public boolean isValidFields() {
-		boolean result = true;
-		// Check date
-		Date current = new Date();
-		Date startDate = txtStartDate.getDate();
-		Date endDate = txtEndDate.getDate();
-
-		if (startDate == null) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a valid start date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (endDate == null) {
-			JOptionPane.showMessageDialog(this,
-					"You must put a valid end date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (startDate.compareTo(endDate) > 0) {
-			JOptionPane.showMessageDialog(this,
-					"Start date must be ealier than end date", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		return result;
-	}
+	// End of variables declaration
 
 	private void addActionListener() {
 		btnSave.setActionCommand("Save");
@@ -111,6 +83,14 @@ public class ManageSchedule extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 
+	}
+
+	public JDateChooser getTxtEndDate() {
+		return txtEndDate;
+	}
+
+	public JDateChooser getTxtStartDate() {
+		return txtStartDate;
 	}
 
 	private void initComponents() {
@@ -230,4 +210,40 @@ public class ManageSchedule extends JPanel implements ActionListener {
 								.addGap(1, 1, 1).addComponent(btnSave)
 								.addContainerGap(25, Short.MAX_VALUE)));
 	}// </editor-fold>
+
+	public boolean isValidFields() {
+		boolean result = true;
+		// Check date
+		Date current = new Date();
+		Date startDate = txtStartDate.getDate();
+		Date endDate = txtEndDate.getDate();
+
+		if (startDate == null) {
+			JOptionPane.showMessageDialog(this,
+					"You must put a valid start date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (endDate == null) {
+			JOptionPane.showMessageDialog(this,
+					"You must put a valid end date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (startDate.compareTo(endDate) > 0) {
+			JOptionPane.showMessageDialog(this,
+					"Start date must be ealier than end date", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return result;
+	}
+
+	public void setTxtEndDate(JDateChooser txtEndDate) {
+		this.txtEndDate = txtEndDate;
+	}
+
+	public void setTxtStartDate(JDateChooser txtStartDate) {
+		this.txtStartDate = txtStartDate;
+	}
 }

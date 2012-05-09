@@ -22,8 +22,6 @@ public class LookupPatient extends JPanel implements ActionListener {
 	private javax.swing.JTextField txtPatientID;
 	private javax.swing.JTextField txtPatientName;
 
-	// End of variables declaration
-
 	public LookupPatient() {
 		initComponents();
 		addActionListener();
@@ -33,7 +31,7 @@ public class LookupPatient extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if ("Lookup".equals(e.getActionCommand())) {
 
-			if (!isValidCondition())
+			if (!isValidFields())
 				return;
 
 			int patientID = Integer.parseInt(txtPatientID.getText());
@@ -70,7 +68,25 @@ public class LookupPatient extends JPanel implements ActionListener {
 		btnLookup.addActionListener(this);
 	}
 
-	private void initComponents() {
+	public javax.swing.JRadioButton getRbPatientID() {
+		return rbPatientID;
+	}
+
+	public javax.swing.JRadioButton getRbPatientName() {
+		return rbPatientName;
+	}
+
+	public javax.swing.JTextField getTxtPatientID() {
+		return txtPatientID;
+	}
+
+	public javax.swing.JTextField getTxtPatientName() {
+		return txtPatientName;
+	}
+
+	// End of variables declaration
+
+	public void initComponents() {
 
 		btnGroupChoice = new javax.swing.ButtonGroup();
 		rbPatientID = new javax.swing.JRadioButton();
@@ -151,7 +167,7 @@ public class LookupPatient extends JPanel implements ActionListener {
 								.addContainerGap(19, Short.MAX_VALUE)));
 	}
 
-	public boolean isValidCondition() {
+	public boolean isValidFields() {
 		boolean result = true;
 		// check valid if patient ID is select
 		if (rbPatientID.isSelected()) {
@@ -187,5 +203,21 @@ public class LookupPatient extends JPanel implements ActionListener {
 			return false;
 		}
 		return result;
+	}
+
+	public void setRbPatientID(javax.swing.JRadioButton rbPatientID) {
+		this.rbPatientID = rbPatientID;
+	}
+
+	public void setRbPatientName(javax.swing.JRadioButton rbPatientName) {
+		this.rbPatientName = rbPatientName;
+	}
+
+	public void setTxtPatientID(javax.swing.JTextField txtPatientID) {
+		this.txtPatientID = txtPatientID;
+	}
+
+	public void setTxtPatientName(javax.swing.JTextField txtPatientName) {
+		this.txtPatientName = txtPatientName;
 	}
 }
