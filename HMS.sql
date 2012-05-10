@@ -87,14 +87,15 @@ name nvarchar(50) not null,
 password nvarchar(50) not null,
 email nvarchar(100),
 role nvarchar(20),
+deleted boolean,
 primary key (id)
 );
 
-insert into User values(1,'nhphat',123,'phatpt01@gmail.com','Receptionist');
-insert into User values(2,'lxhoan',123,'lxhoan@gmail.com','Doctor');
-insert into User values(3,'tlnquynh',123,'bachthuconuong@gmail.com','Nurse');
-insert into User values(4,'nmathu',123,'ngominhanhthu@gmail.com','Nurse');
-insert into User values(5,'admin',123,'admin@gmail.com','Administrator');
+insert into User values(1,'nhphat',123,'phatpt01@gmail.com','Receptionist',0);
+insert into User values(2,'lxhoan',123,'lxhoan@gmail.com','Doctor',0);
+insert into User values(3,'tlnquynh',123,'bachthuconuong@gmail.com','Nurse',0);
+insert into User values(4,'nmathu',123,'ngominhanhthu@gmail.com','Nurse',0);
+insert into User values(5,'admin',123,'admin@gmail.com','Administrator',0);
 
 create table Schedule 
 (
