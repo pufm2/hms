@@ -19,13 +19,21 @@ public class User extends HmsEntity {
 	private String email;
 	@DbProp
 	private String role;
+	@DbProp
+	private boolean deleted;
 
-	public User(String name, String password, String email, String role) {
+	public User(String name, String password, String email, String role, boolean deleted) {
 
 		this.name = name;
 		this.password = password;
 		this.email = email;
 		this.role = role;
+		this.deleted = deleted; 
+	}
+	
+	public User(String name, String password, String email, String role) {
+
+		this(name, password, email, role, false);
 	}
 
 	public static User login(String username, String password) {
@@ -39,8 +47,9 @@ public class User extends HmsEntity {
 				int id = rs.getInt("id");
 				User user = USER_MAP.get(id);
 				if (user == null) {
+					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
 					user = new User(username, password, rs.getString("email"),
-							rs.getString("role"));
+							rs.getString("role"), deleted);
 					user.id = id;
 					USER_MAP.put(id, user);
 				}
@@ -103,6 +112,14 @@ public class User extends HmsEntity {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }
