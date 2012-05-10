@@ -34,9 +34,11 @@ public class PhysicianTest extends TestSupport {
 
 			Physician p = Physician.getPhysicianById(100);
 			p.setAvailable(false);
+			p.setDeleted(true);
 			p.update();
 			Physician p1 = Physician.getPhysicianById(100);
-			assertEquals(p1.isAvailable(), false);
+			assertEquals(false, p1.isAvailable());
+			assertEquals(true, p1.isDeleted());
 		} finally {
 			restoreDb();
 		}
@@ -90,6 +92,12 @@ public class PhysicianTest extends TestSupport {
 		Physician p = Physician.getPhysicianById(104);
 		assertEquals(true, p.isAvailable());
 	}
+	
+	@Test
+	public void testIsDeleted() throws PhysicianException {
+		Physician p = Physician.getPhysicianById(102);
+		assertEquals(false, p.isDeleted());
+	}
 
 	@Test
 	public void testSetAvailable() throws PhysicianException {
@@ -98,7 +106,7 @@ public class PhysicianTest extends TestSupport {
 		assertEquals(false, p.isAvailable());
 
 	}
-
+	
 	@Test
 	public void testSetName() throws PhysicianException {
 		Physician p = Physician.getPhysicianById(101);
@@ -111,6 +119,14 @@ public class PhysicianTest extends TestSupport {
 		Physician p = Physician.getPhysicianById(100);
 		p.setRole("Nurse");
 		assertEquals("Nurse", p.getRole());
+	}
+	
+	@Test
+	public void testSetDeleted() throws PhysicianException {
+		Physician p = Physician.getPhysicianById(105);
+		p.setAvailable(true);
+		assertEquals(true, p.isAvailable());
+
 	}
 
 }

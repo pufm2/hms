@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.ScheduleException;
 import puf.m2.hms.utils.DateUtils;

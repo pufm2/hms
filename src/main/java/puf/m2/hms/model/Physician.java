@@ -19,13 +19,22 @@ public class Physician extends HmsEntity {
     private String role;
     @DbProp
     private boolean available;
+    @DbProp
+    private boolean deleted;
 
     public Physician(String name, String role, boolean available) {
+
+        this(name, role, available, false);
+    }
+    
+    public Physician(String name, String role, boolean available, boolean deleted) {
 
         this.name = name;
         this.role = role;
         this.available = available;
+        this.deleted = deleted;
     }
+
 
 	public static List<Physician> getDoctors() throws PhysicianException {
 		List<Physician> doctorList = new ArrayList<Physician>();
@@ -40,12 +49,11 @@ public class Physician extends HmsEntity {
                 Physician physician = PHYSICIAN_MAP.get(id);
 
                 if (physician == null) {
-                    boolean available = true;
-                    if (rs.getInt("available") == 0) {
-                        available = false;
-                    }
+                    boolean available = rs.getInt("available") == 1 ? true : false;
+                    boolean deleted = rs.getInt("deleted") == 1 ? true : false;
+                    
                     physician = new Physician(rs.getString("name"), "Doctor",
-                            available);
+                            available, deleted);
                     physician.id = id;
 
                     PHYSICIAN_MAP.put(id, physician);
@@ -73,12 +81,10 @@ public class Physician extends HmsEntity {
                 Physician physician = PHYSICIAN_MAP.get(id);
 
                 if (physician == null) {
-                    boolean available = true;
-                    if (rs.getInt("available") == 0) {
-                        available = false;
-                    }
+                    boolean available = rs.getInt("available") == 1 ? true : false;
+                    boolean deleted = rs.getInt("deleted") == 1 ? true : false;
                     physician = new Physician(rs.getString("name"), "Nurse",
-                            available);
+                            available, deleted);
                     physician.id = id;
 
                     PHYSICIAN_MAP.put(id, physician);
@@ -108,13 +114,11 @@ public class Physician extends HmsEntity {
             ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
             
             if (rs.next()) {
-                boolean available = true;
-                if (rs.getInt("available") == 0) {
-                    available = false;
-                }
+                boolean available = rs.getInt("available") == 1 ? true : false;
+                boolean deleted = rs.getInt("deleted") == 1 ? true : false;
 
                 physician = new Physician(rs.getString("name"),
-                        rs.getString("role"), available);
+                        rs.getString("role"), available, deleted);
                 physician.id = rs.getInt("id");
                 PHYSICIAN_MAP.put(physician.getId(), physician);
             }
@@ -123,6 +127,25 @@ public class Physician extends HmsEntity {
         }
 
 		return physician;
+	}
+
+	public void save() throws PhysicianException {
+		try {
+            super.save();
+        } catch (HmsException e) {
+            throw new PhysicianException(e);
+        }
+		PHYSICIAN_MAP.put(id, this);
+
+	}
+	
+	public void update() throws PhysicianException {
+		try {
+            super.update();
+        } catch (HmsException e) {
+            throw new PhysicianException(e);
+        }
+
 	}
 
 	public String getName() {
@@ -137,16 +160,6 @@ public class Physician extends HmsEntity {
 		return available;
 	}
 
-	public void save() throws PhysicianException {
-		try {
-            super.save();
-        } catch (HmsException e) {
-            throw new PhysicianException(e);
-        }
-		PHYSICIAN_MAP.put(id, this);
-
-	}
-
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
@@ -159,13 +172,14 @@ public class Physician extends HmsEntity {
 		this.role = role;
 	}
 
-	public void update() throws PhysicianException {
-		try {
-            super.update();
-        } catch (HmsException e) {
-            throw new PhysicianException(e);
-        }
-
+	public boolean isDeleted() {
+		return deleted;
 	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+
 
 }

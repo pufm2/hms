@@ -3,36 +3,37 @@
 id int not null,
 name nvarchar(50) not null,
 dateOfBirth date,
-address nvarchar(100), 
-sex int, 
-phone nvarchar(20), 
+address nvarchar(100),
+sex int,
+phone nvarchar(20),
 biographicHealth nvarchar(2000),
 check (sex = 0 or sex = 1),
 primary key (id)
 );
 
-insert into Patient values(1,'Nguyễn Văn Long',2000,'12 Lê Lai',1,'','None');
-insert into Patient values(2,'Trương Kim Thanh',1993,'3/4 Trần Quang Khải',0,'','');
-insert into Patient values(3,'Hà Ngọc Quốc Vương','21/12/2000','Biên Hòa',1,'','');
-insert into Patient values(4,'Lê Mạnh Giác','30/04/1998','Sài Gòn',1,'','');
-insert into Patient values(5,'Hồ Khải Phong','23/03/1978','Q.1, SG',1,'','');
-insert into Patient values(6,'Nguyễn Hữu Hùng',1994,'4 Phan Tôn',1,0903351857,'None');
+insert into Patient values(1,'Nguyen Van Long',2000,'12 Le Lai',1,'','None');
+insert into Patient values(2,'Truong Kim Thanh',1993,'3/4 Tran Quang Khai',0,'','');
+insert into Patient values(3,'Ha Ngoc Quoc Vuong','21/12/2000','Bien Hoa',1,'','');
+insert into Patient values(4,'Le Manh Giac','30/04/1998','Sai Gon',1,'','');
+insert into Patient values(5,'Ho Khai Phong','23/03/1978','Q.1, SG',1,'','');
+insert into Patient values(6,'Nguyen Huu Hung',1994,'4 Phan Ton',1,0903351857,'None');
 
 create table Physician
 (
 id int not null,
 name nvarchar(50) not null,
-role nvarchar(20), 
-available boolean, 
+role nvarchar(20),
+available boolean,
+deleted boolean,
 primary key (id)
 );
 
-insert into Physician values(100,'Trần Thế Hiển','Doctor',1);
-insert into Physician values(101,'Phạm Minh Khiêm','Doctor',1);
-insert into Physician values(102,'Nguyễn Thị Hồng Hạnh','Nurse',1);
-insert into Physician values(103,'Hà Thị Hoa Mai','Nurse',1);
-insert into Physician values(104,'Võ Thị Anh Thi','Nurse',1);
-insert into Physician values(105,'Hồ Thụy Hương Thủy','Nurse',1);
+insert into Physician values(100,'Tran The Hien','Doctor',1,0);
+insert into Physician values(101,'Pham Minh Khiem','Doctor',1,0);
+insert into Physician values(102,'Nguyen Thi Hong Hanh','Nurse',1,0);
+insert into Physician values(103,'Ha Thi Hoa Mai','Nurse',1,0);
+insert into Physician values(104,'Vo Thi Anh Thi','Nurse',1,0);
+insert into Physician values(105,'Ho Thuy Huong Thuy','Nurse',1,0);
 
 create table PhysicianAssignment
 (
@@ -93,6 +94,7 @@ insert into User values(1,'nhphat',123,'phatpt01@gmail.com','Receptionist');
 insert into User values(2,'lxhoan',123,'lxhoan@gmail.com','Doctor');
 insert into User values(3,'tlnquynh',123,'bachthuconuong@gmail.com','Nurse');
 insert into User values(4,'nmathu',123,'ngominhanhthu@gmail.com','Nurse');
+insert into User values(5,'admin',123,'admin@gmail.com','Administrator');
 
 create table Schedule 
 (
