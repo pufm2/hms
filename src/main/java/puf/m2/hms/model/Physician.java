@@ -13,57 +13,59 @@ public class Physician extends HmsEntity {
 
 	private static final Map<Integer, Physician> PHYSICIAN_MAP = new CacheAwareMap<Integer, Physician>();
 
-    @DbProp
+	@DbProp
 	private String name;
-    @DbProp
-    private String role;
-    @DbProp
-    private boolean available;
-    @DbProp
-    private boolean deleted;
+	@DbProp
+	private String role;
+	@DbProp
+	private boolean available;
+	@DbProp
+	private boolean deleted;
 
-    public Physician(String name, String role, boolean available) {
+	public Physician(String name, String role, boolean available) {
 
-        this(name, role, available, false);
-    }
-    
-    public Physician(String name, String role, boolean available, boolean deleted) {
+		this(name, role, available, false);
+	}
 
-        this.name = name;
-        this.role = role;
-        this.available = available;
-        this.deleted = deleted;
-    }
+	public Physician(String name, String role, boolean available,
+			boolean deleted) {
 
+		this.name = name;
+		this.role = role;
+		this.available = available;
+		this.deleted = deleted;
+	}
 
 	public static List<Physician> getDoctors() throws PhysicianException {
 		List<Physician> doctorList = new ArrayList<Physician>();
 
-		final String query = "select * from Physician where role = 'Doctor'";
+		final String query = "select * from Physician where role = 'Doctor'"
+				+ " and delete = 0";
 
 		try {
-            ResultSet rs = DB.executeQuery(query);
-            
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                Physician physician = PHYSICIAN_MAP.get(id);
+			ResultSet rs = DB.executeQuery(query);
 
-                if (physician == null) {
-                    boolean available = rs.getInt("available") == 1 ? true : false;
-                    boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-                    
-                    physician = new Physician(rs.getString("name"), "Doctor",
-                            available, deleted);
-                    physician.id = id;
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				Physician physician = PHYSICIAN_MAP.get(id);
 
-                    PHYSICIAN_MAP.put(id, physician);
-                }
+				if (physician == null) {
+					boolean available = rs.getInt("available") == 1 ? true
+							: false;
+					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
 
-                doctorList.add(physician);
-            }
-        } catch (Exception e) {
-            throw new PhysicianException(e);
-        }
+					physician = new Physician(rs.getString("name"), "Doctor",
+							available, deleted);
+					physician.id = id;
+
+					PHYSICIAN_MAP.put(id, physician);
+				}
+
+				doctorList.add(physician);
+			}
+		} catch (Exception e) {
+			throw new PhysicianException(e);
+		}
 
 		return doctorList;
 	}
@@ -71,32 +73,33 @@ public class Physician extends HmsEntity {
 	public static List<Physician> getNurses() throws PhysicianException {
 		List<Physician> doctorList = new ArrayList<Physician>();
 
-		final String query = "select * from Physician where role = 'Nurse'";
+		final String query = "select * from Physician where role = 'Nurse'"
+				+ " and delete = 0";
 
 		try {
-            ResultSet rs = DB.executeQuery(query);
-            
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                Physician physician = PHYSICIAN_MAP.get(id);
+			ResultSet rs = DB.executeQuery(query);
 
-                if (physician == null) {
-                    boolean available = rs.getInt("available") == 1 ? true : false;
-                    boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-                    physician = new Physician(rs.getString("name"), "Nurse",
-                            available, deleted);
-                    physician.id = id;
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				Physician physician = PHYSICIAN_MAP.get(id);
 
-                    PHYSICIAN_MAP.put(id, physician);
-                }
+				if (physician == null) {
+					boolean available = rs.getInt("available") == 1 ? true
+							: false;
+					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
+					physician = new Physician(rs.getString("name"), "Nurse",
+							available, deleted);
+					physician.id = id;
 
-                doctorList.add(physician);
-                
+					PHYSICIAN_MAP.put(id, physician);
+				}
 
-            }
-        } catch (Exception e) {
-            throw new PhysicianException(e);
-        }
+				doctorList.add(physician);
+
+			}
+		} catch (Exception e) {
+			throw new PhysicianException(e);
+		}
 
 		return doctorList;
 	}
@@ -108,43 +111,45 @@ public class Physician extends HmsEntity {
 			return physician;
 		}
 
-		final String queryTempl = "SELECT * FROM Physician WHERE id = {0}";
-		
-		try {
-            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
-            
-            if (rs.next()) {
-                boolean available = rs.getInt("available") == 1 ? true : false;
-                boolean deleted = rs.getInt("deleted") == 1 ? true : false;
+		final String queryTempl = "SELECT * FROM Physician WHERE id = {0}"
+				+ " and delete = 0";
 
-                physician = new Physician(rs.getString("name"),
-                        rs.getString("role"), available, deleted);
-                physician.id = rs.getInt("id");
-                PHYSICIAN_MAP.put(physician.getId(), physician);
-            }
-        } catch (Exception e) {
-            throw new PhysicianException(e);
-        }
+		try {
+			ResultSet rs = DB
+					.executeQuery(MessageFormat.format(queryTempl, id));
+
+			if (rs.next()) {
+				boolean available = rs.getInt("available") == 1 ? true : false;
+				boolean deleted = rs.getInt("deleted") == 1 ? true : false;
+
+				physician = new Physician(rs.getString("name"),
+						rs.getString("role"), available, deleted);
+				physician.id = rs.getInt("id");
+				PHYSICIAN_MAP.put(physician.getId(), physician);
+			}
+		} catch (Exception e) {
+			throw new PhysicianException(e);
+		}
 
 		return physician;
 	}
 
 	public void save() throws PhysicianException {
 		try {
-            super.save();
-        } catch (HmsException e) {
-            throw new PhysicianException(e);
-        }
+			super.save();
+		} catch (HmsException e) {
+			throw new PhysicianException(e);
+		}
 		PHYSICIAN_MAP.put(id, this);
 
 	}
-	
+
 	public void update() throws PhysicianException {
 		try {
-            super.update();
-        } catch (HmsException e) {
-            throw new PhysicianException(e);
-        }
+			super.update();
+		} catch (HmsException e) {
+			throw new PhysicianException(e);
+		}
 
 	}
 
@@ -180,6 +185,9 @@ public class Physician extends HmsEntity {
 		this.deleted = deleted;
 	}
 
-
-
+	/* Hoan them ham nay gium */
+	public static Physician getPhysicianByName(String physicianName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

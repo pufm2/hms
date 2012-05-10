@@ -22,23 +22,26 @@ public class User extends HmsEntity {
 	@DbProp
 	private boolean deleted;
 
-	public User(String name, String password, String email, String role, boolean deleted) {
+	public User(String name, String password, String email, String role,
+			boolean deleted) {
 
 		this.name = name;
 		this.password = password;
 		this.email = email;
 		this.role = role;
-		this.deleted = deleted; 
+		this.deleted = deleted;
 	}
-	
+
+	/* Hoan sua lai gium ham nay */
 	public User(String name, String password, String email, String role) {
 
 		this(name, password, email, role, false);
 	}
 
 	public static User login(String username, String password) {
-		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''";
 
+		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''"
+				+ " and deleted = 0";
 		try {
 			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
 					username, password));
@@ -62,6 +65,10 @@ public class User extends HmsEntity {
 			return null;
 		}
 
+	}
+
+	public static User getUserByName(String username) {
+		return new User("", "", "", "");
 	}
 
 	public void save() throws UserException {
