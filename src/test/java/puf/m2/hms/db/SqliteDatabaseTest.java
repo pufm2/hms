@@ -15,17 +15,16 @@ import puf.m2.hms.model.TestSupport;
 
 public class SqliteDatabaseTest {
 
-    private static File dbFile = new File("HMS-test.db3");
-    private static File dbBackupFile = new File("HMS-test.db3.bak");
+    private static File dbFile = new File("HMS-SqliteDatabaseTest.db3");;
 	private static SqliteDatabase db;
 	
 	@BeforeClass
 	public static void beforeClass() throws IOException, DbException, ClassNotFoundException {
 		
     	Class.forName("org.sqlite.JDBC");
-		
-		TestSupport.copyFile(dbFile, dbBackupFile);
-		db = new SqliteDatabase("jdbc:sqlite:HMS.db3");
+
+		TestSupport.copyFile(new File("HMS-test.db3"), dbFile);
+		db = new SqliteDatabase("jdbc:sqlite:HMS-SqliteDatabaseTest.db3");
 		db.createConnection();
 	}
 	
@@ -33,7 +32,7 @@ public class SqliteDatabaseTest {
 	public static void afterClass() throws DbException {
 		db.closeConnection();
 		dbFile.delete();
-		dbBackupFile.renameTo(dbFile);
+
 	}
 	
 	@Test
