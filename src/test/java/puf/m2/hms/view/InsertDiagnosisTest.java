@@ -23,6 +23,7 @@ public class InsertDiagnosisTest {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testIsDuplicateMedicalRecord2() {
 		MedicalRecord medicalRecord_mock = EasyMock

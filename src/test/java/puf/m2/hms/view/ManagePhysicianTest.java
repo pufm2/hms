@@ -23,8 +23,7 @@ public class ManagePhysicianTest {
 	@Test
 	public void testIsDuplicatePhysicianname() {
 		ManagePhysician frm = new ManagePhysician();
-		Assert.assertEquals(false,
-				frm.isDuplicatePhysicianname("Tran The Hien"));
+		Assert.assertEquals(true, frm.isDuplicatePhysicianname("Tran The Hien"));
 
 	}
 }

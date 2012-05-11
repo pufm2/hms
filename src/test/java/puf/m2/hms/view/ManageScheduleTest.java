@@ -19,10 +19,10 @@ public class ManageScheduleTest {
 	@Test
 	public void testIsValidFields_endDateBlank() {
 		ManageSchedule frm = new ManageSchedule();
+		@SuppressWarnings("deprecation")
 		Date startDate = new Date(2012, 02, 02);
 		frm.getTxtStartDate().setDate(startDate);
 
-		Date endDate = frm.getTxtEndDate().getDate();
 		Assert.assertEquals("You must put a valid end date",
 				frm.checkValidField());
 	}
@@ -30,7 +30,9 @@ public class ManageScheduleTest {
 	@Test
 	public void testIsValidFields_invalidStartDate_EndDate() {
 		ManageSchedule frm = new ManageSchedule();
+		@SuppressWarnings("deprecation")
 		Date startDate = new Date(2012, 02, 02);
+		@SuppressWarnings("deprecation")
 		Date endDate = new Date(2011, 02, 02);
 		frm.getTxtStartDate().setDate(startDate);
 		frm.getTxtEndDate().setDate(endDate);
