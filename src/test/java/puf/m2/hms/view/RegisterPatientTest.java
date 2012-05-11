@@ -24,6 +24,7 @@ public class RegisterPatientTest {
 				frm.checkValidFields());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testIsValidFields_birthDate_isLaterThanCurrent() {
 		RegisterPatient frm = new RegisterPatient();

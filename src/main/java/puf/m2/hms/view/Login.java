@@ -35,6 +35,7 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 
 		if ("Login".equals(e.getActionCommand())) {
 			String username = txtUsername.getText();
+			@SuppressWarnings("deprecation")
 			String password = txtPassword.getText();
 			login(username, password);
 		}
@@ -140,6 +141,7 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 
 	public void login(String username, String password) {
 		User user = User.login(username, password);
+
 		if (user != null) {
 			parent.setVisible(false);
 			String role = user.getRole();
@@ -152,6 +154,9 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 			} else if (Role.Doctor.name().equals(role)) {
 				Utils.createAndShowGUI(new JFrame("Doctor role"),
 						new DoctorView());
+			} else if (Role.Admin.name().equals(role)) {
+				Utils.createAndShowGUI(new JFrame("Admin role"),
+						new AdminView());
 			}
 		} else {
 			JOptionPane.showMessageDialog(parent, "Invalid Credential",
