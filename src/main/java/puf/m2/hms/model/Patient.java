@@ -1,17 +1,15 @@
 package puf.m2.hms.model;
 
-import java.sql.ResultSet;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.PatientException;
+import puf.m2.hms.model.support.Condition;
 
 public class Patient extends HmsEntity {
 
-    private static final Map<Integer, Patient> PATIENT_MAP = new CacheAwareMap<Integer, Patient>();
+    protected static final Map<Integer, Patient> MAP = new CacheAwareMap<Integer, Patient>();
 
     @DbProp
     private String name;
@@ -39,104 +37,47 @@ public class Patient extends HmsEntity {
     public Patient(int id) {
         super(id);
     }
+    
+    public Patient() {
+    	
+    }
 
-  public void save() throws PatientException {
+    public void save() throws PatientException {
         try {
             super.save();
         } catch (HmsException e) {
             throw new PatientException(e);
         }
 
-        PATIENT_MAP.put(id, this);
+        MAP.put(id, this);
     }
 
     public static List<Patient> getPatients() throws PatientException {
-        List<Patient> patientList = new ArrayList<Patient>();
-
-        final String query = "select * from Patient";
-
-        try {
-            ResultSet rs = DB.executeQuery(query);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                Patient patient = PATIENT_MAP.get(id);
-    
-                if (patient == null) {
-                    patient = new Patient(rs.getString("name"),
-                            rs.getString("dateOfBirth"), rs.getString("address"),
-                            rs.getInt("sex"), rs.getString("phone"),
-                            rs.getString("biographicHealth"));
-                    patient.id = id;
-    
-                    PATIENT_MAP.put(id, patient);
-                }
-    
-                patientList.add(patient);
-            }
-        } catch (Exception e) {
-            throw new PatientException(e);
-        }
-        return patientList;
+        
+    	try {
+			return getByCondition(null, Patient.class);
+		} catch (HmsException e) {
+			throw new PatientException(e);
+		}
     }
 
     public static Patient getPatientById(int id) throws PatientException {
 
-        Patient patient = PATIENT_MAP.get(id);
-        if (patient != null) {
-            return patient;
-        }
-        final String queryTempl = "SELECT * FROM Patient WHERE id = {0}";
-        
         try {
-            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
-            
-            if (rs.next()) {
-                patient = new Patient(rs.getString("name"),
-                        rs.getString("dateOfBirth"), rs.getString("address"),
-                        rs.getInt("sex"), rs.getString("phone"),
-                        rs.getString("biographicHealth"));
-                patient.id = id;
-
-                PATIENT_MAP.put(patient.getId(), patient);
-            }
-        } catch (Exception e) {
-            throw new PatientException(e);
-        }
-
-        return patient;
+			return getById(id, Patient.class);
+		} catch (HmsException e) {
+			throw new PatientException(e);
+		}
     }
 
-    public static List<Patient> getPatientByName(String patientName)
+    public static List<Patient> getPatientByName(String name)
             throws PatientException {
 
-        List<Patient> patientList = new ArrayList<Patient>();
-
-        final String queryTemplate = "SELECT * FROM Patient WHERE name = ''{0}''";
-
         try {
-            ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-                    patientName));
-            
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                Patient patient = PATIENT_MAP.get(id);
-    
-                if (patient == null) {
-                    patient = new Patient(rs.getString("name"),
-                            rs.getString("dateOfBirth"), rs.getString("address"),
-                            rs.getInt("sex"), rs.getString("phone"),
-                            rs.getString("biographicHealth"));
-                    patient.id = id;
-    
-                    PATIENT_MAP.put(id, patient);
-                }
-                patientList.add(patient);
-            }
-        } catch (Exception e) {
-            throw new PatientException(e);
-        }
-
-        return patientList;
+			return getByCondition(new Condition("name", name), Patient.class);
+		} catch (HmsException e) {
+			throw new PatientException(e); 
+		}
     }
 
     public String getName() {

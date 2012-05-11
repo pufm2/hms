@@ -60,7 +60,7 @@ public class ManageUserTest {
 
 		User mock = EasyMock.createMock(User.class);
 		String username = "nhphat";
-		EasyMock.expect(mock.getUserByName(username)).andReturn(null);
+		EasyMock.expect(User.getUserByName(username)).andReturn(null);
 		EasyMock.replay(mock);
 
 		Assert.assertEquals(false, frm.isDuplicateUsername("nhphat"));

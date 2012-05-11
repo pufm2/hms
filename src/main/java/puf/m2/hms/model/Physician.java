@@ -1,17 +1,15 @@
 package puf.m2.hms.model;
 
-import java.sql.ResultSet;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.PhysicianException;
+import puf.m2.hms.model.support.Condition;
 
 public class Physician extends HmsEntity {
 
-	private static final Map<Integer, Physician> PHYSICIAN_MAP = new CacheAwareMap<Integer, Physician>();
+	protected static final Map<Integer, Physician> MAP = new CacheAwareMap<Integer, Physician>();
 
 	@DbProp
 	private String name;
@@ -22,6 +20,10 @@ public class Physician extends HmsEntity {
 	@DbProp
 	private boolean deleted;
 
+	public Physician() {
+		
+	}
+	
 	public Physician(String name, String role, boolean available) {
 
 		this(name, role, available, false);
@@ -37,127 +39,56 @@ public class Physician extends HmsEntity {
 	}
 
 	public static List<Physician> getDoctors() throws PhysicianException {
-		List<Physician> doctorList = new ArrayList<Physician>();
-
-		final String query = "select * from Physician where role = 'Doctor'"
-				+ " and deleted = 0";
-
+		
+		Condition c = new Condition("role", Role.Doctor.name());
+		c.and(new Condition("deleted", "0"));
 		try {
-			ResultSet rs = DB.executeQuery(query);
-
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				Physician physician = PHYSICIAN_MAP.get(id);
-
-				if (physician == null) {
-					boolean available = rs.getInt("available") == 1 ? true
-							: false;
-					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-
-					physician = new Physician(rs.getString("name"), "Doctor",
-							available, deleted);
-					physician.id = id;
-
-					PHYSICIAN_MAP.put(id, physician);
-				}
-
-				doctorList.add(physician);
-			}
-		} catch (Exception e) {
+			return getByCondition(c, Physician.class);
+		} catch (HmsException e) {
 			throw new PhysicianException(e);
 		}
-
-		return doctorList;
 	}
 
 	public static List<Physician> getNurses() throws PhysicianException {
-		List<Physician> doctorList = new ArrayList<Physician>();
-
-		final String query = "select * from Physician where role = 'Nurse'"
-				+ " and deleted = 0";
-
+		Condition c = new Condition("role", Role.Nurse.name());
+		c.and(new Condition("deleted", "0"));
 		try {
-			ResultSet rs = DB.executeQuery(query);
-
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				Physician physician = PHYSICIAN_MAP.get(id);
-
-				if (physician == null) {
-					boolean available = rs.getInt("available") == 1 ? true
-							: false;
-					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-					physician = new Physician(rs.getString("name"), "Nurse",
-							available, deleted);
-					physician.id = id;
-
-					PHYSICIAN_MAP.put(id, physician);
-				}
-
-				doctorList.add(physician);
-
-			}
-		} catch (Exception e) {
+			return getByCondition(c, Physician.class);
+		} catch (HmsException e) {
 			throw new PhysicianException(e);
 		}
-
-		return doctorList;
 	}
 
 	public static Physician getPhysicianById(int id) throws PhysicianException {
 
-		Physician physician = PHYSICIAN_MAP.get(id);
-		if (physician != null) {
-			return physician;
-		}
-
-		final String queryTempl = "SELECT * FROM Physician WHERE id = {0} and deleted = 0";
-
+		Condition c = new Condition("id", Integer.toString(id));
+		c.and(new Condition("deleted", "0"));
 		try {
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
-
-			if (rs.next()) {
-				boolean available = rs.getInt("available") == 1 ? true : false;
-				boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-
-				physician = new Physician(rs.getString("name"),
-						rs.getString("role"), available, deleted);
-				physician.id = id;
-				PHYSICIAN_MAP.put(physician.getId(), physician);
+			List<Physician> physicians = getByCondition(c, Physician.class);
+			if (physicians.size() == 1) {
+				return physicians.get(0);
+			} else {
+				return null;
 			}
-		} catch (Exception e) {
+		} catch (HmsException e) {
 			throw new PhysicianException(e);
 		}
-
-		return physician;
 	}
 
 	public static Physician getPhysicianByName(String name) {
 
-		final String queryTempl = "SELECT * FROM Physician WHERE name = {0} and deleted = 0";
-
+		Condition c = new Condition("name", name);
+		c.and(new Condition("deleted", "0"));
 		Physician physician = null;
 		try {
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, name));
-			if (rs.next()) {
-				int id = rs.getInt("id");
-				physician = PHYSICIAN_MAP.get(id);
-				if (physician == null) {
-					boolean available = rs.getInt("available") == 1 ? true : false;
-					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-
-					physician = new Physician(rs.getString("name"),
-							rs.getString("role"), available, deleted);
-					physician.id = id;
-					PHYSICIAN_MAP.put(physician.getId(), physician);
-				}
+			List<Physician> physicians = getByCondition(c, Physician.class);
+			if (physicians.size() == 1) {
+				physician = physicians.get(0);
 			}
-
-		} catch (Exception e) {
-
+		} catch (HmsException e) {
+			
 		}
 		return physician;
-
 	}
 
 	public void save() throws PhysicianException {
@@ -166,7 +97,7 @@ public class Physician extends HmsEntity {
 		} catch (HmsException e) {
 			throw new PhysicianException(e);
 		}
-		PHYSICIAN_MAP.put(id, this);
+		MAP.put(id, this);
 
 	}
 

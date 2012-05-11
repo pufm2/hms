@@ -1,15 +1,15 @@
 package puf.m2.hms.model;
 
-import java.sql.ResultSet;
-import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.UserException;
+import puf.m2.hms.model.support.Condition;
 
 public class User extends HmsEntity {
 
-	private static final Map<Integer, User> USER_MAP = new CacheAwareMap<Integer, User>();
+	protected static final Map<Integer, User> MAP = new CacheAwareMap<Integer, User>();
 
 	@DbProp
 	private String name;
@@ -22,6 +22,10 @@ public class User extends HmsEntity {
 	@DbProp
 	private boolean deleted;
 
+	public User() {
+		
+	}
+	
 	public User(String name, String password, String email, String role,
 			boolean deleted) {
 
@@ -39,55 +43,40 @@ public class User extends HmsEntity {
 
 	public static User login(String username, String password) {
 
-		final String queryTemplate = "select * from User where name = ''{0}'' and password = ''{1}''"
-				+ " and deleted = 0";
+		Condition c = new Condition("name", username);
+		c.and(new Condition("password", password)).and(new Condition("deleted", "0"));
+		
+		User user = null;
 		try {
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-					username, password));
-
-			User user = null;
-			if (rs.next()) {
-				int id = rs.getInt("id");
-				user = USER_MAP.get(id);
-				if (user == null) {
-					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-					user = new User(username, password, rs.getString("email"),
-							rs.getString("role"), deleted);
-					user.id = id;
-					USER_MAP.put(id, user);
-				}
+			List<User> userList = getByCondition(c, User.class);
+			if (userList.size() == 1) {
+				user = userList.get(0);
 			}
-			return user;
-
-		} catch (Exception e) {
-			return null;
+		} catch (HmsException e) {
+			
 		}
+		
+		return user;
 
 	}
 
 	public static User getUserByName(String username) {
-		final String queryTemplate = "select * from User where name = ''{0}'' and deleted = 0";
+		
+		Condition c = new Condition("name", username);
+		c.and(new Condition("deleted", "0"));
 		
 		User user = null;
 		try {
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, username));
-
-			if (rs.next()) {
-				int id = rs.getInt("id");
-				user = USER_MAP.get(id);
-				if (user == null) {
-					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
-					user = new User(username, rs.getString("password"), rs.getString("email"),
-							rs.getString("role"), deleted);
-					user.id = id;
-					USER_MAP.put(id, user);
-				}
+			List<User> userList = getByCondition(c, User.class);
+			if (userList.size() == 1) {
+				user = userList.get(0);
 			}
-			return user;
-		} catch (Exception e) {
+		} catch (HmsException e) {
 			
 		}
+		
 		return user;
+
 	}
 
 	public void save() throws UserException {
@@ -96,7 +85,7 @@ public class User extends HmsEntity {
 		} catch (HmsException e) {
 			throw new UserException(e);
 		}
-		USER_MAP.put(id, this);
+		MAP.put(id, this);
 	}
 
 	public void update() throws UserException {

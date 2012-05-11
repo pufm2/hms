@@ -1,19 +1,16 @@
 package puf.m2.hms.model;
 
-import java.sql.ResultSet;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.ScheduleException;
-import puf.m2.hms.utils.DateUtils;
+import puf.m2.hms.model.support.Condition;
 
 public class Schedule extends HmsEntity {
 
-	private static final Map<Integer, Schedule> SCHEDULE_MAP = new CacheAwareMap<Integer, Schedule>();
+	protected static final Map<Integer, Schedule> MAP = new CacheAwareMap<Integer, Schedule>();
 
 	@DbProp
 	private Physician physician;
@@ -24,6 +21,10 @@ public class Schedule extends HmsEntity {
 	@DbProp
 	private boolean available;
 
+	public Schedule() {
+		
+	}
+	
 	public Schedule(Physician physician, Date startDate, Date endDate,
 			boolean available) {
 
@@ -41,7 +42,7 @@ public class Schedule extends HmsEntity {
 			throw new ScheduleException(e);
 		}
 
-		SCHEDULE_MAP.put(id, this);
+		MAP.put(id, this);
 	}
 
 	public void update() throws ScheduleException {
@@ -56,7 +57,14 @@ public class Schedule extends HmsEntity {
 	public static List<Schedule> loadSchedule(Physician doctor)
 			throws ScheduleException {
 
-		List<Schedule> scheduleList = new ArrayList<Schedule>();
+		Condition c = new Condition("physicianid", Integer.toString(doctor.id));
+		try {
+			return getByCondition(c, Schedule.class);
+		} catch (HmsException e) {
+			throw new ScheduleException(e);
+		}
+		
+		/*List<Schedule> scheduleList = new ArrayList<Schedule>();
 		final String queryTemplate = "SELECT * FROM Schedule WHERE physicianId = {0}";
 
 		try {
@@ -88,7 +96,7 @@ public class Schedule extends HmsEntity {
 		} catch (Exception e) {
 			throw new ScheduleException(e);
 		}
-		return scheduleList;
+		return scheduleList;*/
 	}
 	
 	public Physician getPhysician() {

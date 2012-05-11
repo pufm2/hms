@@ -3,14 +3,17 @@ package puf.m2.hms.model;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import puf.m2.hms.db.Database;
 import puf.m2.hms.db.DatabaseFactory;
 import puf.m2.hms.db.DbException;
 import puf.m2.hms.exception.HmsException;
+import puf.m2.hms.model.support.Condition;
 import puf.m2.hms.utils.DateUtils;
 
 public abstract class HmsEntity {
@@ -28,7 +31,7 @@ public abstract class HmsEntity {
     public HmsEntity(int id) {
         this.id = id;
     }
-
+    
     protected int getNextFreeId() throws HmsException {
         int freeId = 1;
         String query = "select max(id) as maxId from " + getClass().getSimpleName();
@@ -120,8 +123,78 @@ public abstract class HmsEntity {
         } catch (DbException e) {
             throw new HmsException(e);
         }
-
-        
+    }
+    
+    public static <T extends HmsEntity> T getById(int id, Class<T> clazz) throws HmsException {
+    	try {
+			Map<Integer, T> map = (Map<Integer, T>) clazz.getDeclaredField("MAP").get(null);
+			T entity = map.get(id);
+			if (entity == null) {
+				List<T> entityList = getByCondition(new Condition("id", Integer.toString(id)), clazz);
+				if (entityList.size() == 1) {
+					entity = entityList.get(0);
+				}
+			}
+			
+			return entity;
+		} catch (Exception e) {
+			throw new HmsException(e);
+		}
+    }
+    
+    public static <T extends HmsEntity> List<T> getByCondition(Condition c, Class<T> clazz) throws HmsException {
+    	
+    	String where = "";
+    	if (c != null) {
+    		where = " where " + c;
+    	}
+    	final String query ="select * from " + clazz.getSimpleName() + where;
+    	
+    	try {
+    		List<T> entityList = new ArrayList<T>();
+    		List<Field> fields = new ArrayList<Field>();
+    		for (Field field : clazz.getDeclaredFields()) {
+    			if (field.getAnnotation(DbProp.class) != null) {
+    				fields.add(field);
+    			}
+    		}
+    		
+    		Map<Integer, T> map = (Map<Integer, T>) clazz.getDeclaredField("MAP").get(null);
+    		ResultSet rs = DB.executeQuery(query);
+    		while (rs.next()) {
+    			int id = rs.getInt("id");
+    			T entity = map.get(id);
+    			if (entity == null) {
+    				entity = clazz.newInstance();
+        			for (Field field : fields) {
+	                    String name = field.getName();
+	                    String type = field.getType().getSimpleName();
+	                    Object val = null;
+	                    if ("String".equals(type)) {
+	                    	val = rs.getString(name);
+	                    } else if ("int".equals(type)) {
+	                    	val = rs.getInt(name);
+	                    } else if ("boolean".equals(type)) {
+	                    	val = rs.getInt(name) == 1 ? true : false;
+	                    } else if ("Date".equals(type)) {
+	                    	val = DateUtils.parseDate(rs.getString(name));
+	                    } else if (HmsEntity.class.isAssignableFrom(field.getType())) {
+	                    	int fId = Integer.parseInt(rs.getString(name + "Id"));
+	                    	val = getById(fId, (Class<T>) field.getType());
+	                    }
+	                	field.setAccessible(true);
+	                	field.set(entity, val);
+	                    
+        	        }
+        			entity.id = id;
+        			map.put(id, entity);
+    			}
+    			entityList.add(entity);
+    		}
+    		return entityList;
+    	} catch (Exception e) {
+            throw new HmsException(e);
+        }
     }
 
     public static boolean isCached() {
