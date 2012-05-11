@@ -115,8 +115,7 @@ public class Physician extends HmsEntity {
 				+ " and delete = 0";
 
 		try {
-			ResultSet rs = DB
-					.executeQuery(MessageFormat.format(queryTempl, id));
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
 
 			if (rs.next()) {
 				boolean available = rs.getInt("available") == 1 ? true : false;
@@ -124,7 +123,7 @@ public class Physician extends HmsEntity {
 
 				physician = new Physician(rs.getString("name"),
 						rs.getString("role"), available, deleted);
-				physician.id = rs.getInt("id");
+				physician.id = id;
 				PHYSICIAN_MAP.put(physician.getId(), physician);
 			}
 		} catch (Exception e) {
@@ -132,6 +131,34 @@ public class Physician extends HmsEntity {
 		}
 
 		return physician;
+	}
+
+	public static Physician getPhysicianByName(String name) {
+
+		final String queryTempl = "SELECT * FROM Physician WHERE name = {0} and delete = 0";
+
+		Physician physician = null;
+		try {
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, name));
+			if (rs.next()) {
+				int id = rs.getInt("id");
+				physician = PHYSICIAN_MAP.get(id);
+				if (physician == null) {
+					boolean available = rs.getInt("available") == 1 ? true : false;
+					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
+
+					physician = new Physician(rs.getString("name"),
+							rs.getString("role"), available, deleted);
+					physician.id = id;
+					PHYSICIAN_MAP.put(physician.getId(), physician);
+				}
+			}
+
+		} catch (Exception e) {
+
+		}
+		return physician;
+
 	}
 
 	public void save() throws PhysicianException {
@@ -183,11 +210,5 @@ public class Physician extends HmsEntity {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
-	}
-
-	/* Hoan them ham nay gium */
-	public static Physician getPhysicianByName(String physicianName) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
