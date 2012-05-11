@@ -40,7 +40,7 @@ public class Physician extends HmsEntity {
 		List<Physician> doctorList = new ArrayList<Physician>();
 
 		final String query = "select * from Physician where role = 'Doctor'"
-				+ " and delete = 0";
+				+ " and deleted = 0";
 
 		try {
 			ResultSet rs = DB.executeQuery(query);
@@ -74,7 +74,7 @@ public class Physician extends HmsEntity {
 		List<Physician> doctorList = new ArrayList<Physician>();
 
 		final String query = "select * from Physician where role = 'Nurse'"
-				+ " and delete = 0";
+				+ " and deleted = 0";
 
 		try {
 			ResultSet rs = DB.executeQuery(query);
@@ -111,8 +111,7 @@ public class Physician extends HmsEntity {
 			return physician;
 		}
 
-		final String queryTempl = "SELECT * FROM Physician WHERE id = {0}"
-				+ " and delete = 0";
+		final String queryTempl = "SELECT * FROM Physician WHERE id = {0} and deleted = 0";
 
 		try {
 			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTempl, id));
@@ -135,7 +134,7 @@ public class Physician extends HmsEntity {
 
 	public static Physician getPhysicianByName(String name) {
 
-		final String queryTempl = "SELECT * FROM Physician WHERE name = {0} and delete = 0";
+		final String queryTempl = "SELECT * FROM Physician WHERE name = {0} and deleted = 0";
 
 		Physician physician = null;
 		try {
