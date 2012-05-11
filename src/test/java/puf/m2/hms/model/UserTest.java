@@ -33,7 +33,6 @@ public class UserTest extends TestSupport {
         try {
             User user = User.login("lxhoan", "123");
             user.setPassword("abc");
-            user.setDeleted(true);
             user.update();
             
             User user1 = User.login("lxhoan", "123");
@@ -41,7 +40,12 @@ public class UserTest extends TestSupport {
             
             user1 = User.login("lxhoan", "abc");
             assertEquals("lxhoan", user1.getUsername());
-            assertEquals(true, user1.isDeleted());
+            
+            user.setDeleted(true);
+            user.update();
+            
+            user1 = User.login("lxhoan", "abc");
+            assertNull(user1);
         } finally {
             restoreDb();
         }

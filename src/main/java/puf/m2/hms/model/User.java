@@ -45,9 +45,10 @@ public class User extends HmsEntity {
 			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
 					username, password));
 
-			if (rs != null) {
+			User user = null;
+			if (rs.next()) {
 				int id = rs.getInt("id");
-				User user = USER_MAP.get(id);
+				user = USER_MAP.get(id);
 				if (user == null) {
 					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
 					user = new User(username, password, rs.getString("email"),
@@ -55,10 +56,8 @@ public class User extends HmsEntity {
 					user.id = id;
 					USER_MAP.put(id, user);
 				}
-				return user;
-			} else {
-				return null;
 			}
+			return user;
 
 		} catch (Exception e) {
 			return null;
@@ -67,7 +66,28 @@ public class User extends HmsEntity {
 	}
 
 	public static User getUserByName(String username) {
-		return new User("", "", "", "");
+		final String queryTemplate = "select * from User where name = ''{0}'' and deleted = 0";
+		
+		User user = null;
+		try {
+			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate, username));
+
+			if (rs.next()) {
+				int id = rs.getInt("id");
+				user = USER_MAP.get(id);
+				if (user == null) {
+					boolean deleted = rs.getInt("deleted") == 1 ? true : false;
+					user = new User(username, rs.getString("password"), rs.getString("email"),
+							rs.getString("role"), deleted);
+					user.id = id;
+					USER_MAP.put(id, user);
+				}
+			}
+			return user;
+		} catch (Exception e) {
+			
+		}
+		return user;
 	}
 
 	public void save() throws UserException {

@@ -1,6 +1,6 @@
 package puf.m2.hms.model;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,11 +34,16 @@ public class PhysicianTest extends TestSupport {
 
 			Physician p = Physician.getPhysicianById(100);
 			p.setAvailable(false);
-			p.setDeleted(true);
 			p.update();
+			
 			Physician p1 = Physician.getPhysicianById(100);
 			assertEquals(false, p1.isAvailable());
-			assertEquals(true, p1.isDeleted());
+			
+			p.setDeleted(true);
+			p.update();
+			
+			p1 = Physician.getPhysicianById(100);
+			assertNull(p1);
 		} finally {
 			restoreDb();
 		}
