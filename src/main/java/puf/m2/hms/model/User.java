@@ -32,7 +32,6 @@ public class User extends HmsEntity {
 		this.deleted = deleted;
 	}
 
-	/* Hoan sua lai gium ham nay */
 	public User(String name, String password, String email, String role) {
 
 		this(name, password, email, role, false);
