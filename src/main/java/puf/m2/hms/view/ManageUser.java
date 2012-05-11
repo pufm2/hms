@@ -52,11 +52,16 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 		String password = txtPassword.getText();
 		String email = txtEmail.getText();
 
-		if (checkValidFields() != "True") {
-			return;
-		}
+		String checkValidFields = checkValidFields();
 
 		if ("Insert".equals(e.getActionCommand())) {
+
+			if (checkValidFields() != "True") {
+				JOptionPane.showMessageDialog(this, checkValidFields, "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
 			if (isDuplicateUsername(username)) {
 				JOptionPane
 						.showMessageDialog(
@@ -84,16 +89,14 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 				txtUsername.setText(user.getUsername());
 				txtPassword.setText(user.getPassword());
 				txtEmail.setText(user.getUseremail());
-
-				if (user.getRole() == "Admin")
+				String sa = user.getRole();
+				if ("Admin".equals(user.getRole()))
 					cboRole.setSelectedIndex(0);
-				else if (user.getRole() == "Admin")
-					cboRole.setSelectedIndex(0);
-				else if (user.getRole() == "Doctor")
+				else if ("Doctor".equals(user.getRole()))
 					cboRole.setSelectedIndex(1);
-				else if (user.getRole() == "Nurse")
+				else if ("Nurse".equals(user.getRole()))
 					cboRole.setSelectedIndex(2);
-				else if (user.getRole() == "Receptionist")
+				else if ("Receptionist".equals(user.getRole()))
 					cboRole.setSelectedIndex(3);
 			} else {
 				JOptionPane.showMessageDialog(this, "User name " + username
@@ -102,6 +105,12 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 			}
 
 		} else if ("Update".equals(e.getActionCommand())) {
+			if (checkValidFields() != "True") {
+				JOptionPane.showMessageDialog(this, checkValidFields, "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
 			User user = User.getUserByName(username);
 			if (user != null) {
 				try {
@@ -118,6 +127,12 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		} else if ("Delete".equals(e.getActionCommand())) {
+			if (checkValidFields() != "True") {
+				JOptionPane.showMessageDialog(this, checkValidFields, "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
 			if (JOptionPane.showConfirmDialog(this,
 					"Do you want delete this user?", "Alert",
 					JOptionPane.OK_CANCEL_OPTION) == 0) { // click OK

@@ -1,10 +1,7 @@
 package puf.m2.hms.view;
 
-import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
-
-import puf.m2.hms.model.User;
 
 public class ManageUserTest {
 
@@ -58,13 +55,7 @@ public class ManageUserTest {
 		frm.getTxtPassword().setText("123");
 		frm.getTxtEmail().setText("phatpt01@gmail.com");
 
-		User mock = EasyMock.createMock(User.class);
-		String username = "nhphat";
-		EasyMock.expect(mock.getUserByName(username)).andReturn(null);
-		EasyMock.replay(mock);
-
-		Assert.assertEquals(false, frm.isDuplicateUsername("nhphat"));
-		EasyMock.verify(mock);
+		Assert.assertEquals(true, frm.isDuplicateUsername("nhphat"));
 	}
 
 }

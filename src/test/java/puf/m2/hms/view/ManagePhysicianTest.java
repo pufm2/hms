@@ -1,10 +1,7 @@
 package puf.m2.hms.view;
 
-import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
-
-import puf.m2.hms.model.Physician;
 
 public class ManagePhysicianTest {
 
@@ -26,13 +23,8 @@ public class ManagePhysicianTest {
 	@Test
 	public void testIsDuplicatePhysicianname() {
 		ManagePhysician frm = new ManagePhysician();
-
-		Physician mock = EasyMock.createMock(Physician.class);
-		String physicianName = "Tran The Hien";
-		EasyMock.expect(mock.getPhysicianByName(physicianName)).andReturn(null);
-
-		EasyMock.replay(mock);
-		Assert.assertEquals(false, frm.isDuplicatePhysicianname(physicianName));
+		Assert.assertEquals(false,
+				frm.isDuplicatePhysicianname("Tran The Hien"));
 
 	}
 }

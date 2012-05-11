@@ -154,7 +154,7 @@ public class Login extends javax.swing.JPanel implements ActionListener {
 			} else if (Role.Doctor.name().equals(role)) {
 				Utils.createAndShowGUI(new JFrame("Doctor role"),
 						new DoctorView());
-			} else if (Role.Admin.name().equals(role)) {
+			} else if (Role.Administrator.name().equals(role)) {
 				Utils.createAndShowGUI(new JFrame("Admin role"),
 						new AdminView());
 			}
