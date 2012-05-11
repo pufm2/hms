@@ -1,24 +1,28 @@
 package puf.m2.hms.model;
 
-import java.sql.ResultSet;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import puf.m2.hms.db.DbException;
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.MedicalRecordException;
-import puf.m2.hms.utils.DateUtils;
+import puf.m2.hms.model.support.Condition;
 
 public class MedicalRecord extends HmsEntity {
 
-	private static Map<Integer, MedicalRecord> MR_MAP = new CacheAwareMap<Integer, MedicalRecord>();
+	protected static Map<Integer, MedicalRecord> MAP = new CacheAwareMap<Integer, MedicalRecord>();
 
+	@DbProp
 	private Patient patient;
+	@DbProp
 	private Date dateAffect;
+	@DbProp
 	private String detail;
 
+	public MedicalRecord() {
+		
+	}
+	
 	public MedicalRecord(Patient patient, Date dateAffect, String detail) {
 		this.patient = patient;
 		this.dateAffect = dateAffect;
@@ -26,25 +30,19 @@ public class MedicalRecord extends HmsEntity {
 	}
 
 	public void save() throws MedicalRecordException {
-		final String queryTemplate = "insert into MedicalRecord values({0}, {1}, ''{2}'', ''{3}'')";
-
 		try {
-			id = getNextFreeId();
-			DB.executeUpdate(MessageFormat.format(queryTemplate, id,
-					patient.getId(), DateUtils.dateToString(dateAffect), detail));
-		} catch (Exception e) {
+			super.save();
+		} catch (HmsException e) {
 			throw new MedicalRecordException(e);
 		}
-		MR_MAP.put(id, this);
+		MAP.put(id, this);
 	}
 
 	public void update() throws MedicalRecordException {
-		final String queryTemplate = "update MedicalRecord set patientId = {0}, dateAffect = ''{1}'', detail = ''{2}'' where id = {3}";
+		
 		try {
-			DB.executeUpdate(MessageFormat.format(queryTemplate,
-					patient.getId(), DateUtils.dateToString(dateAffect),
-					detail, id));
-		} catch (DbException e) {
+			super.update();
+		} catch (HmsException e) {
 			throw new MedicalRecordException(e);
 		}
 	}
@@ -52,65 +50,22 @@ public class MedicalRecord extends HmsEntity {
 	public static List<MedicalRecord> loadMedicalRecord(Patient patient)
 			throws MedicalRecordException {
 
-		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE patientId = {0}";
-		List<MedicalRecord> mrList = new ArrayList<MedicalRecord>();
-
+		Condition c = new Condition("patientId", Integer.toString(patient.id));
 		try {
-			ResultSet rs = DB.executeQuery(MessageFormat.format(queryTemplate,
-					patient.getId()));
-
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				MedicalRecord mr = MR_MAP.get(id);
-
-				if (mr == null) {
-					Date dateAffect = DateUtils.parseDate(rs
-							.getString("dateAffect"));
-
-					mr = new MedicalRecord(patient, dateAffect,
-							rs.getString("detail"));
-					mr.id = id;
-
-					MR_MAP.put(id, mr);
-				}
-
-				mrList.add(mr);
-			}
-		} catch (Exception e) {
+			return getByCondition(c, MedicalRecord.class);
+		} catch (HmsException e) {
 			throw new MedicalRecordException(e);
 		}
-		return mrList;
 	}
 
 	public static MedicalRecord loadMedicalRecordById(int id)
 			throws MedicalRecordException {
 
-		final String queryTemplate = "SELECT * FROM MedicalRecord WHERE id = {0}";
-
-		MedicalRecord mr = MR_MAP.get(id);
-		if (mr == null) {
-
-			try {
-				ResultSet rs = DB.executeQuery(MessageFormat.format(
-						queryTemplate, id));
-
-				if (rs.next()) {
-					Date dateAffect = DateUtils.parseDate(rs
-							.getString("dateAffect"));
-					int patientId = rs.getInt("patientId");
-
-					mr = new MedicalRecord(Patient.getPatientById(patientId),
-							dateAffect, rs.getString("detail"));
-					mr.id = id;
-
-					MR_MAP.put(id, mr);
-
-				}
-			} catch (Exception e) {
-				throw new MedicalRecordException(e);
-			}
+		try {
+			return getById(id, MedicalRecord.class);
+		} catch (HmsException e) {
+			throw new MedicalRecordException(e);
 		}
-		return mr;
 	}
 
 	public Date getDateAffect() {

@@ -9,7 +9,9 @@ import java.util.List;
 import org.junit.Test;
 
 import puf.m2.hms.db.DbException;
+import puf.m2.hms.exception.HmsException;
 import puf.m2.hms.exception.PatientException;
+import puf.m2.hms.model.support.Condition;
 
 public class PatientTest extends TestSupport {
 

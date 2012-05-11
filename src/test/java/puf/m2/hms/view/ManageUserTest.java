@@ -56,6 +56,7 @@ public class ManageUserTest {
 		frm.getTxtEmail().setText("phatpt01@gmail.com");
 
 		Assert.assertEquals(true, frm.isDuplicateUsername("nhphat"));
+
 	}
 
 }
