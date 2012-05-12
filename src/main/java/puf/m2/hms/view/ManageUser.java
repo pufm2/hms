@@ -50,8 +50,8 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 		String username = txtUsername.getText();
 		@SuppressWarnings("deprecation")
 		String password = txtPassword.getText();
-		String email = txtEmail.getText();
-
+		String useremail = txtEmail.getText();
+		String role = cboRole.getSelectedItem().toString();
 		String checkValidFields = checkValidFields();
 
 		if ("Insert".equals(e.getActionCommand())) {
@@ -71,8 +71,8 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 				return;
 			} else {
 				// save new user
-				String role = cboRole.getSelectedItem().toString();
-				User user = new User(username, password, email, role);
+				// String role = cboRole.getSelectedItem().toString();
+				User user = new User(username, password, useremail, role);
 				try {
 					user.save();
 					JOptionPane.showMessageDialog(this, "Save successful",
@@ -114,7 +114,11 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 			User user = User.getUserByName(username);
 			if (user != null) {
 				try {
+					user.setPassword(password);
+					user.setUseremail(useremail);
+					user.setRole(role);
 					user.update();
+					// user.save();
 					JOptionPane.showMessageDialog(this, "Update successful",
 							"Success", JOptionPane.INFORMATION_MESSAGE);
 				} catch (UserException e1) {
@@ -137,11 +141,12 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 					"Do you want delete this user?", "Alert",
 					JOptionPane.OK_CANCEL_OPTION) == 0) { // click OK
 				// delete user
-				String role = cboRole.getSelectedItem().toString();
-				User user = new User(username, password, email, role);
-				user.setDeleted(true);
+				User user = User.getUserByName(username);
+
 				try {
+					user.setDeleted(true);
 					user.update();
+					// user.save();
 					JOptionPane.showMessageDialog(this, "Delete successful",
 							"Success", JOptionPane.INFORMATION_MESSAGE);
 				} catch (UserException e1) {
