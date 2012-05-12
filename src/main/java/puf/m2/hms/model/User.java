@@ -23,9 +23,9 @@ public class User extends HmsEntity {
 	private boolean deleted;
 
 	public User() {
-		
+
 	}
-	
+
 	public User(String name, String password, String email, String role,
 			boolean deleted) {
 
@@ -44,8 +44,9 @@ public class User extends HmsEntity {
 	public static User login(String username, String password) {
 
 		Condition c = new Condition("name", username);
-		c.and(new Condition("password", password)).and(new Condition("deleted", "0"));
-		
+		c.and(new Condition("password", password)).and(
+				new Condition("deleted", "0"));
+
 		User user = null;
 		try {
 			List<User> userList = getByCondition(c, User.class);
@@ -53,18 +54,18 @@ public class User extends HmsEntity {
 				user = userList.get(0);
 			}
 		} catch (HmsException e) {
-			
+
 		}
-		
+
 		return user;
 
 	}
 
 	public static User getUserByName(String username) {
-		
+
 		Condition c = new Condition("name", username);
 		c.and(new Condition("deleted", "0"));
-		
+
 		User user = null;
 		try {
 			List<User> userList = getByCondition(c, User.class);
@@ -72,9 +73,9 @@ public class User extends HmsEntity {
 				user = userList.get(0);
 			}
 		} catch (HmsException e) {
-			
+
 		}
-		
+
 		return user;
 
 	}

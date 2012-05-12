@@ -77,6 +77,7 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 					user.save();
 					JOptionPane.showMessageDialog(this, "Save successful",
 							"Success", JOptionPane.INFORMATION_MESSAGE);
+					clearFields();
 				} catch (UserException e1) {
 					JOptionPane.showMessageDialog(this, "Can not save user",
 							"Error", JOptionPane.ERROR_MESSAGE);
@@ -118,9 +119,9 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 					user.setUseremail(useremail);
 					user.setRole(role);
 					user.update();
-					// user.save();
 					JOptionPane.showMessageDialog(this, "Update successful",
 							"Success", JOptionPane.INFORMATION_MESSAGE);
+					clearFields();
 				} catch (UserException e1) {
 					JOptionPane.showMessageDialog(this, "Can not update user",
 							"Error", JOptionPane.ERROR_MESSAGE);
@@ -146,9 +147,9 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 				try {
 					user.setDeleted(true);
 					user.update();
-					// user.save();
 					JOptionPane.showMessageDialog(this, "Delete successful",
 							"Success", JOptionPane.INFORMATION_MESSAGE);
+					clearFields();
 				} catch (UserException e1) {
 					JOptionPane.showMessageDialog(this, "Can not delete user",
 							"Error", JOptionPane.ERROR_MESSAGE);
@@ -156,6 +157,14 @@ public class ManageUser extends javax.swing.JPanel implements ActionListener {
 			}
 		}
 
+	}
+
+	private void clearFields() {
+		txtUsername.setText("");
+		txtPassword.setText("");
+		txtEmail.setText("");
+		cboRole.setSelectedIndex(0);
+		txtUsername.setFocusable(true);
 	}
 
 	private void addActionListener() {
