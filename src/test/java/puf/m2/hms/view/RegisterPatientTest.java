@@ -8,7 +8,7 @@ import org.junit.Test;
 public class RegisterPatientTest {
 
 	@Test
-	public void testIsValidFields_patientName() {
+	public void testIsValidFields_blankPatientName() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("");
 		Assert.assertEquals("You must put name of patient",
@@ -16,7 +16,7 @@ public class RegisterPatientTest {
 	}
 
 	@Test
-	public void testIsValidFields_birthDate_isBlank() {
+	public void testIsValidFields_blankBirthDate() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(null);
@@ -35,7 +35,7 @@ public class RegisterPatientTest {
 	}
 
 	@Test
-	public void testIsValidFields_address_isBlank() {
+	public void testIsValidFields_blankAddress() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(new Date());
@@ -45,7 +45,7 @@ public class RegisterPatientTest {
 	}
 
 	@Test
-	public void testIsValidFields_phoneNumber_isBlank() {
+	public void testIsValidFields_blankPhoneNumber() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(new Date());
@@ -56,7 +56,7 @@ public class RegisterPatientTest {
 	}
 
 	@Test
-	public void testIsValidFields_phoneNumber_isString() {
+	public void testIsValidFields_phoneNumber_is_string() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(new Date());
@@ -69,7 +69,7 @@ public class RegisterPatientTest {
 	}
 
 	@Test
-	public void testIsValidFields_BioprahicHealth_isBlank() {
+	public void testIsValidFields_blankBioprahicHealth() {
 		RegisterPatient frm = new RegisterPatient();
 		frm.getTxtPatientName().setText("nhphat");
 		frm.getTxtBirthdate().setDate(new Date());

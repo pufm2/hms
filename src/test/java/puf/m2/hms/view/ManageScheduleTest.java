@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ManageScheduleTest {
 
 	@Test
-	public void testIsValidFields_startDateBlank() {
+	public void testIsValidFields_blankStartDate() {
 		ManageSchedule frm = new ManageSchedule();
 		Date startDate = frm.getTxtStartDate().getDate();
 		Assert.assertEquals("You must put a valid start date",
@@ -17,7 +17,7 @@ public class ManageScheduleTest {
 	}
 
 	@Test
-	public void testIsValidFields_endDateBlank() {
+	public void testIsValidFields_blankEndDate() {
 		ManageSchedule frm = new ManageSchedule();
 		@SuppressWarnings("deprecation")
 		Date startDate = new Date(2012, 02, 02);

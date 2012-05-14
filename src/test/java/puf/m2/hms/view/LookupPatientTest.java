@@ -7,7 +7,7 @@ import org.junit.Test;
 public class LookupPatientTest {
 
 	@Test
-	public void testIsValidCondition_blankPatientIDField() {
+	public void testIsValidCondition_blankPatientID() {
 		LookupPatient frm = new LookupPatient();
 		frm.getRbPatientID().setSelected(true);
 		frm.getTxtPatientID().setText("");

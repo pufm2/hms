@@ -148,6 +148,15 @@ public class ManagePhysician extends javax.swing.JPanel implements
 
 	}
 
+	public String checkValidFields() {
+		// check physician name does not blank
+		String physicianName = txtName.getText();
+		if (physicianName.equals("")) {
+			return "You must put physician name";
+		}
+		return "True";
+	}
+
 	public javax.swing.JTextField getTxtName() {
 		return txtName;
 	}
@@ -302,15 +311,6 @@ public class ManagePhysician extends javax.swing.JPanel implements
 			return true;
 		else
 			return false;
-	}
-
-	public String checkValidFields() {
-		// check physician name does not blank
-		String physicianName = txtName.getText();
-		if (physicianName.equals("")) {
-			return "You must put physician name";
-		}
-		return "True";
 	}
 
 	public void setTxtName(javax.swing.JTextField txtName) {

@@ -6,14 +6,14 @@ import org.junit.Test;
 public class ManageUserTest {
 
 	@Test
-	public void testIsValidFields_username_is_blank() {
+	public void testIsValidFields_blankUsername() {
 		ManageUser frm = new ManageUser();
 		frm.getTxtUsername().setText("");
 		Assert.assertEquals("You must put user name", frm.checkValidFields());
 	}
 
 	@Test
-	public void testIsValidFields_password_is_blank() {
+	public void testIsValidFields_blankPassword() {
 		ManageUser frm = new ManageUser();
 		frm.getTxtUsername().setText("nhphat");
 		frm.getTxtPassword().setText("");
@@ -21,7 +21,7 @@ public class ManageUserTest {
 	}
 
 	@Test
-	public void testIsValidFields_email_is_blank() {
+	public void testIsValidFields_blankEmail() {
 		ManageUser frm = new ManageUser();
 		frm.getTxtUsername().setText("nhphat");
 		frm.getTxtPassword().setText("123");
@@ -30,7 +30,7 @@ public class ManageUserTest {
 	}
 
 	@Test
-	public void testIsValidFields_email_invalid() {
+	public void testIsValidFields_invalidEmail() {
 		ManageUser frm = new ManageUser();
 		frm.getTxtUsername().setText("nhphat");
 		frm.getTxtPassword().setText("123");
@@ -40,7 +40,7 @@ public class ManageUserTest {
 	}
 
 	@Test
-	public void testIsValidFields_valid() {
+	public void testIsValidFields_validFields() {
 		ManageUser frm = new ManageUser();
 		frm.getTxtUsername().setText("nhphat");
 		frm.getTxtPassword().setText("123");

@@ -6,7 +6,7 @@ import org.junit.Test;
 public class ManagePhysicianTest {
 
 	@Test
-	public void testIsValidFields_name_is_blank() {
+	public void testIsValidFields_blankPhysicanName() {
 		ManagePhysician frm = new ManagePhysician();
 		frm.getTxtName().setText("");
 		Assert.assertEquals("You must put physician name",

@@ -13,7 +13,7 @@ import puf.m2.hms.model.Patient;
 public class InsertDiagnosisTest {
 
 	@Test
-	public void testIsDuplicateMedicalRecord() {
+	public void testIsDuplicateMedicalRecord_mockPatient() {
 		Patient patient = EasyMock.createMock(Patient.class);
 		InsertDiagnosis mock = EasyMock.createMock(InsertDiagnosis.class);
 		Date newDate = new Date();
@@ -23,9 +23,8 @@ public class InsertDiagnosisTest {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
-	public void testIsDuplicateMedicalRecord2() {
+	public void testIsDuplicateMedicalRecord_mockMedicalRecord() {
 		MedicalRecord medicalRecord_mock = EasyMock
 				.createMock(MedicalRecord.class);
 		medicalRecord_mock.setDateAffect(new Date(2012, 02, 02));
