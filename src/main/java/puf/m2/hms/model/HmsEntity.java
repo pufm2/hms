@@ -32,6 +32,11 @@ public abstract class HmsEntity {
         this.id = id;
     }
     
+    /**
+     * This method returns the next free id of a table
+     * @return
+     * @throws HmsException
+     */
     protected int getNextFreeId() throws HmsException {
         int freeId = 1;
         String query = "select max(id) as maxId from " + getClass().getSimpleName();
@@ -47,6 +52,10 @@ public abstract class HmsEntity {
         return freeId;
     }
 
+    /**
+     * this method inserts an instance of an HmsEntity-subclass to db
+     * @throws HmsException
+     */
     public void save() throws HmsException {
         Map<String, Object> dbPropFields = getDbPropFields();
         
@@ -90,6 +99,10 @@ public abstract class HmsEntity {
 
     }
 
+    /**
+     * this method update an instance of an HmsEntity-subclass to db
+     * @throws HmsException
+     */
     public void update() throws HmsException {
         Map<String, Object> dbPropFields = getDbPropFields();
         String props = "";
@@ -125,6 +138,12 @@ public abstract class HmsEntity {
         }
     }
     
+    /**
+     * this method query an instance of an HmsEntity-subclass by id from db
+     * @param id
+     * @param clazz HmsEntity-subclass
+     * @throws HmsException
+     */
     public static <T extends HmsEntity> T getById(int id, Class<T> clazz) throws HmsException {
     	try {
 			Map<Integer, T> map = (Map<Integer, T>) clazz.getDeclaredField("MAP").get(null);
@@ -142,6 +161,12 @@ public abstract class HmsEntity {
 		}
     }
     
+    /**
+     * this method query an instance of an HmsEntity-subclass by a condition from db
+     * @param c Condition to search
+     * @param clazz HmsEntity-subclass
+     * @throws HmsException
+     */
     public static <T extends HmsEntity> List<T> getByCondition(Condition c, Class<T> clazz) throws HmsException {
     	
     	String where = "";
